@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+
+    kotlin("plugin.serialization") version "1.8.10"
 }
 
 android {
@@ -67,4 +69,13 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.content.negotiation)
+    implementation(libs.ktor.serialization)
 }
