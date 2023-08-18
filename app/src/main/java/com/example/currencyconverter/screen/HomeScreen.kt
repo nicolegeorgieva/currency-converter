@@ -51,6 +51,14 @@ fun HomeScreen() {
             exchangeRates = fetchExchangeRates()
         }
 
+        val date = exchangeRates?.date
+
+        if (date != null) {
+            Text(text = "Conversions are up to this date: $date")
+
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
         val eurToUsd = exchangeRates?.eur?.usd ?: 1.0
         val eurToBgn = exchangeRates?.eur?.bgn ?: 1.0
         val usdHourlyRateToEur = (hourlyRateInUsd.toDoubleOrNull() ?: 1.0) / eurToUsd

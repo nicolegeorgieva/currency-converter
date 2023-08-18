@@ -19,6 +19,8 @@ val client = HttpClient {
 suspend fun fetchExchangeRates(): ExchangeRatesResponse {
     val response =
         client.get("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json")
+
+
     val rates = response.body<ExchangeRatesResponse>()
 
     return rates

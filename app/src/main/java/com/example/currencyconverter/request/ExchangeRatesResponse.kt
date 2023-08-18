@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExchangeRatesResponse(
+    val date: String,
     val eur: Rates
 )
 
