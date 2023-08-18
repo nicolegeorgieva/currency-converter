@@ -29,6 +29,7 @@ import com.example.currencyconverter.request.ExchangeRatesResponse
 import com.example.currencyconverter.request.fetchExchangeRates
 import com.example.currencyconverter.utility.calculateMonthlySalaryInUsd
 import com.example.currencyconverter.utility.monthlyHours
+import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,13 +52,11 @@ fun HomeScreen() {
         }
 
         val eurToUsd = exchangeRates?.eur?.usd ?: 1.0
+        val eurToBgn = exchangeRates?.eur?.bgn ?: 1.0
         val usdHourlyRateToEur = (hourlyRateInUsd.toDoubleOrNull() ?: 1.0) / eurToUsd
-        val eurToBgn = usdHourlyRateToEur * (exchangeRates?.eur?.bgn ?: 1.0)
-        monthlySalaryInBgn = (eurToBgn * calculateMonthlySalaryInUsd(
-            (hourlyRateInUsd.toDoubleOrNull() ?: 1.0),
-            monthlyHours
-        )).toString()
+        val eurToBgnHourlyRes = usdHourlyRateToEur * eurToBgn
 
+        monthlySalaryInBgn = calculateMonthlySalaryInUsd(eurToBgnHourlyRes, monthlyHours).toString()
 
         Text(text = "Hourly rate:")
 
@@ -81,12 +80,17 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        Row(verticalAlignment = Alignment.Bottom) {
-            Text(text = monthlySalaryInBgn)
+        if (hourlyRateInUsd.isNotBlank()) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                val formatter = DecimalFormat("###,###.00")
+                val formattedSalary = formatter.format(monthlySalaryInBgn.toDoubleOrNull() ?: 1.0)
 
-            Spacer(modifier = Modifier.width(8.dp))
+                Text(text = formattedSalary)
 
-            Text(text = "BGN", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(text = "BGN", fontWeight = FontWeight.Bold)
+            }
         }
 
         Spacer(modifier = Modifier.height(6.dp))
