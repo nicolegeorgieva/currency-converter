@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.currencyconverter.request.ExchangeRatesResponse
 import com.example.currencyconverter.request.fetchExchangeRates
-import com.example.currencyconverter.utility.calculateMonthlySalaryInUsd
+import com.example.currencyconverter.utility.calculateMonthlySalary
 import com.example.currencyconverter.utility.monthlyHours
 import java.text.DecimalFormat
 
@@ -54,9 +54,9 @@ fun HomeScreen() {
         val eurToUsd = exchangeRates?.eur?.usd ?: 1.0
         val eurToBgn = exchangeRates?.eur?.bgn ?: 1.0
         val usdHourlyRateToEur = (hourlyRateInUsd.toDoubleOrNull() ?: 1.0) / eurToUsd
-        val eurToBgnHourlyRes = usdHourlyRateToEur * eurToBgn
+        val eurToBgnHourlyRate = usdHourlyRateToEur * eurToBgn
 
-        monthlySalaryInBgn = calculateMonthlySalaryInUsd(eurToBgnHourlyRes, monthlyHours).toString()
+        monthlySalaryInBgn = calculateMonthlySalary(eurToBgnHourlyRate, monthlyHours).toString()
 
         Text(text = "Hourly rate:")
 
