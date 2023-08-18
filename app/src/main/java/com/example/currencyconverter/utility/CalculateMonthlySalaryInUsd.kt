@@ -1,5 +1,5 @@
 package com.example.currencyconverter.utility
 
-fun calculateMonthlySalaryInUsd(hourlyRate: Int, monthlyHours: Double): Double {
+fun calculateMonthlySalaryInUsd(hourlyRate: Double, monthlyHours: Double): Double {
     return hourlyRate * monthlyHours
 }

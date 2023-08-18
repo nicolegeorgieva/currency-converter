@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.currencyconverter.request.ExchangeRatesResponse
 import com.example.currencyconverter.request.fetchExchangeRates
+import com.example.currencyconverter.utility.calculateMonthlySalaryInUsd
+import com.example.currencyconverter.utility.monthlyHours
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +49,15 @@ fun HomeScreen() {
         LaunchedEffect(Unit) {
             exchangeRates = fetchExchangeRates()
         }
+
+        val eurToUsd = exchangeRates?.eur?.usd ?: 1.0
+        val usdHourlyRateToEur = (hourlyRateInUsd.toDoubleOrNull() ?: 1.0) / eurToUsd
+        val eurToBgn = usdHourlyRateToEur * (exchangeRates?.eur?.bgn ?: 1.0)
+        monthlySalaryInBgn = (eurToBgn * calculateMonthlySalaryInUsd(
+            (hourlyRateInUsd.toDoubleOrNull() ?: 1.0),
+            monthlyHours
+        )).toString()
+
 
         Text(text = "Hourly rate:")
 
@@ -71,11 +82,7 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(6.dp))
 
         Row(verticalAlignment = Alignment.Bottom) {
-            TextField(
-                value = monthlySalaryInBgn,
-                onValueChange = { monthlySalaryInBgn = it },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
+            Text(text = monthlySalaryInBgn)
 
             Spacer(modifier = Modifier.width(8.dp))
 
