@@ -41,7 +41,7 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         var hourlyRateInUsd by rememberSaveable { mutableStateOf("") }
-        var convertTo by rememberSaveable { mutableStateOf("") }
+        var monthlySalaryInBgn by rememberSaveable { mutableStateOf("") }
         var exchangeRates by remember { mutableStateOf<ExchangeRatesResponse?>(null) }
 
         LaunchedEffect(Unit) {
@@ -72,8 +72,8 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = convertTo,
-                onValueChange = { convertTo = it },
+                value = monthlySalaryInBgn,
+                onValueChange = { monthlySalaryInBgn = it },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
