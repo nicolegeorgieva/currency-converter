@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,7 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        var convertFrom by rememberSaveable { mutableStateOf("") }
+        var hourlyRateInUsd by rememberSaveable { mutableStateOf("") }
         var convertTo by rememberSaveable { mutableStateOf("") }
         var exchangeRates by remember { mutableStateOf<ExchangeRatesResponse?>(null) }
 
@@ -48,13 +49,14 @@ fun HomeScreen() {
         }
 
         Text(text = "$exchangeRates")
+        Text(text = "Hourly rate:")
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = convertFrom,
-                onValueChange = { convertFrom = it },
+                value = hourlyRateInUsd,
+                onValueChange = { hourlyRateInUsd = it },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -80,5 +82,9 @@ fun HomeScreen() {
 
             Text(text = "BGN", fontWeight = FontWeight.Bold)
         }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(text = "monthly salary", fontStyle = FontStyle.Italic)
     }
 }
