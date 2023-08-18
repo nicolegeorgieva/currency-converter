@@ -48,7 +48,6 @@ fun HomeScreen() {
             exchangeRates = fetchExchangeRates()
         }
 
-        Text(text = "$exchangeRates")
         Text(text = "Hourly rate:")
 
         Spacer(modifier = Modifier.height(24.dp))
