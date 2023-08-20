@@ -57,6 +57,7 @@ fun RequestPlayground() {
             coroutineScope.launch {
                 createToDo(newToDo)
                 toDosState = getToDos()
+                newToDo = ""
             }
         }) {
             Text(text = "Add")
