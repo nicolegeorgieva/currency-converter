@@ -50,14 +50,18 @@ suspend fun getToDos(): List<String> {
 
 suspend fun removeToDo(item: Int): List<String> {
     return withContext(Dispatchers.IO) {
-        val response =
-            client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/remove-todo") {
-                contentType(ContentType.Application.Json)
-                setBody(RemoveToDoRequest(item))
-            }
+        try {
+            val response =
+                client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/remove-todo") {
+                    contentType(ContentType.Application.Json)
+                    setBody(RemoveToDoRequest(item))
+                }
 
-        val toDoResponse = response.body<ToDoResponse>()
+            val toDoResponse = response.body<ToDoResponse>()
 
-        toDoResponse.toDo
+            toDoResponse.toDo
+        } catch (e: Exception) {
+            getToDos()
+        }
     }
 }
