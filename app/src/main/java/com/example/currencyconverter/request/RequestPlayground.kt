@@ -18,6 +18,11 @@ data class ToDoResponse(
     val toDo: List<String>
 )
 
+@Serializable
+data class RemoveToDoRequest(
+    val item: Int
+)
+
 suspend fun createToDo(task: String) {
     client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/add-todo") {
         contentType(ContentType.Application.Json)
@@ -31,4 +36,11 @@ suspend fun getToDos(): List<String> {
     val toDoResponse = response.body<ToDoResponse>()
 
     return toDoResponse.toDo
+}
+
+suspend fun removeToDo(item: Int) {
+    client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/remove-todo") {
+        contentType(ContentType.Application.Json)
+        setBody(RemoveToDoRequest(item))
+    }
 }

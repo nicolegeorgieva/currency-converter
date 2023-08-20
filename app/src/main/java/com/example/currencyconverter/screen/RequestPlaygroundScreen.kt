@@ -1,11 +1,13 @@
 package com.example.currencyconverter.screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -21,11 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.currencyconverter.request.createToDo
 import com.example.currencyconverter.request.getToDos
+import com.example.currencyconverter.request.removeToDo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RequestPlayground() {
+fun RequestPlaygroundScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +45,14 @@ fun RequestPlayground() {
         val toDos = toDosState
 
         if (toDos != null) {
-            Text(text = toDos.joinToString(", "))
+            for (i in toDos.indices) {
+                TaskCard(task = toDos[i]) {
+                    coroutineScope.launch {
+                        removeToDo(i)
+                        toDosState = getToDos()
+                    }
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -63,4 +73,23 @@ fun RequestPlayground() {
             Text(text = "Add")
         }
     }
+}
+
+@Composable
+fun TaskCard(task: String, onDelete: () -> Unit) {
+    Card {
+        Row {
+            Text(text = task)
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(onClick = {
+                onDelete()
+            }) {
+                Text(text = "Delete")
+            }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(12.dp))
 }

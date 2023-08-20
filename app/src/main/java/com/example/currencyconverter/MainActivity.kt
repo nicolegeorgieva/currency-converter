@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.currencyconverter.screen.RequestPlayground
+import com.example.currencyconverter.screen.RequestPlaygroundScreen
 import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RequestPlayground()
+                    RequestPlaygroundScreen()
                 }
             }
         }
