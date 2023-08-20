@@ -48,8 +48,7 @@ fun RequestPlaygroundScreen() {
             for (i in toDos.indices) {
                 TaskCard(task = toDos[i]) {
                     coroutineScope.launch {
-                        removeToDo(i)
-                        toDosState = getToDos()
+                        toDosState = removeToDo(i)
                     }
                 }
             }
@@ -65,8 +64,7 @@ fun RequestPlaygroundScreen() {
 
         Button(onClick = {
             coroutineScope.launch {
-                createToDo(newToDo)
-                toDosState = getToDos()
+                toDosState = createToDo(newToDo)
                 newToDo = ""
             }
         }) {
