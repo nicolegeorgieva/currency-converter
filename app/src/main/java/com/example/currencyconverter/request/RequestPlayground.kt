@@ -6,6 +6,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,23 +26,30 @@ data class RemoveToDoRequest(
 )
 
 suspend fun createToDo(task: String) {
-    client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/add-todo") {
-        contentType(ContentType.Application.Json)
-        setBody(AddToDoRequest(task))
+    withContext(Dispatchers.IO) {
+        client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/add-todo") {
+            contentType(ContentType.Application.Json)
+            setBody(AddToDoRequest(task))
+        }
     }
 }
 
 suspend fun getToDos(): List<String> {
-    val response = client.get("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/todo") {}
+    return withContext(Dispatchers.IO) {
+        val response =
+            client.get("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/todo") {}
 
-    val toDoResponse = response.body<ToDoResponse>()
+        val toDoResponse = response.body<ToDoResponse>()
 
-    return toDoResponse.toDo
+        toDoResponse.toDo
+    }
 }
 
 suspend fun removeToDo(item: Int) {
-    client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/remove-todo") {
-        contentType(ContentType.Application.Json)
-        setBody(RemoveToDoRequest(item))
+    withContext(Dispatchers.IO) {
+        client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/remove-todo") {
+            contentType(ContentType.Application.Json)
+            setBody(RemoveToDoRequest(item))
+        }
     }
 }
