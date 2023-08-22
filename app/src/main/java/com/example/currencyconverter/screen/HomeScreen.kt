@@ -25,10 +25,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.currencyconverter.domain.calculateMonthlySalary
+import com.example.currencyconverter.domain.monthlyHours
 import com.example.currencyconverter.request.ExchangeRatesResponse
 import com.example.currencyconverter.request.fetchExchangeRates
-import com.example.currencyconverter.utility.calculateMonthlySalary
-import com.example.currencyconverter.utility.monthlyHours
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
