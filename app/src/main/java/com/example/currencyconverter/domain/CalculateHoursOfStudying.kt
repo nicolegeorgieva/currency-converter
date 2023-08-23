@@ -5,7 +5,7 @@ fun formatTime(number: Double): String {
     val formattedMins = if (formattedList[1].first() == '0')
         formattedList[1] else "${formattedList[1]}0"
 
-    return "${formattedList[0]}h ${formattedMins}m"
+    return "${formattedList[0]}h ${formattedMins.take(2)}m"
 }
 
 fun totalStudyTime(
