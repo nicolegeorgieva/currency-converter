@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
+import com.example.currencyconverter.domain.formatTime
 import com.example.currencyconverter.domain.totalStudyTime
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -104,7 +105,7 @@ fun CountStudyTime() {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(text = "${totalStudyTimeState.value}", fontWeight = FontWeight.Bold)
+            Text(text = formatTime(totalStudyTimeState.value ?: 0.0), fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.weight(1f))
 

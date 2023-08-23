@@ -1,5 +1,13 @@
 package com.example.currencyconverter.domain
 
+fun formatTime(number: Double): String {
+    val formattedList = number.toString().split(".")
+    val formattedMins = if (formattedList[1].first() == '0')
+        formattedList[1] else "${formattedList[1]}0"
+
+    return "${formattedList[0]}h ${formattedMins}m"
+}
+
 fun totalStudyTime(
     startHour: String,
     startMins: String,
