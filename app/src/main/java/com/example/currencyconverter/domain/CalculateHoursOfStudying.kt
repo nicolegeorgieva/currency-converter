@@ -4,7 +4,7 @@ fun main() {
     var calculatedTime: Double = 3.00
 
     val currentStudyMins = try {
-        calculateCurrentTimeOfStudyingInMin("20:53", "")
+        calculateCurrentTimeOfStudyingInMin("20", "00", "22", "20")
     } catch (e: Exception) {
         0
     }
@@ -55,14 +55,19 @@ fun calculateCurrentTimeOfStudying(mins: Int, cutMins: Int = 0): Double {
  * This fun receives startTime (e.g. 15:20) and endTime (e.g. 16:40) and calculates current time of studying in mins
  * (80 for this example).
  */
-fun calculateCurrentTimeOfStudyingInMin(startTime: String, endTime: String): Int {
+fun calculateCurrentTimeOfStudyingInMin(
+    startHour: String,
+    startMins: String,
+    endHour: String,
+    endMins: String
+): Int {
     val minutesPerHour = 60
 
-    val startHourInMins = startTime.removeRange(2, 5).toInt() * minutesPerHour
-    val totalStartTimeInMins = startHourInMins + startTime.removeRange(0, 3).toInt()
+    val startHourInMins = startHour.toInt() * minutesPerHour
+    val totalStartTimeInMins = startHourInMins + startMins.toInt()
 
-    val endHourInMins = endTime.removeRange(2, 5).toInt() * minutesPerHour
-    val totalEndTimeInMins = endHourInMins + endTime.removeRange(0, 3).toInt()
+    val endHourInMins = endHour.toInt() * minutesPerHour
+    val totalEndTimeInMins = endHourInMins + endMins.toInt()
 
     return totalEndTimeInMins - totalStartTimeInMins
 }
