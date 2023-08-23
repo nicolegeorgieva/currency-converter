@@ -82,7 +82,7 @@ fun CountStudyTime() {
 
             IconButton(
                 onClick = {
-                    totalStudyTime.value = ""
+                    totalStudyTime.value = "0h 0m"
                 }
             ) {
                 Icon(
