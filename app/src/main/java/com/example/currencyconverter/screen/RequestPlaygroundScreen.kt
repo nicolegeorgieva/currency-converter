@@ -25,9 +25,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.currencyconverter.Screen
+import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.request.createToDo
 import com.example.currencyconverter.request.getToDos
 import com.example.currencyconverter.request.removeToDo
+import com.example.currencyconverter.screenState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +48,12 @@ fun RequestPlaygroundScreen() {
         LaunchedEffect(Unit) {
             toDosState = getToDos()
         }
+
+        BackButton {
+            screenState.value = Screen.MenuScreen
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         Row {
             Spacer(modifier = Modifier.weight(1f))

@@ -25,10 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.currencyconverter.Screen
+import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.domain.calculateMonthlySalary
 import com.example.currencyconverter.domain.monthlyHours
 import com.example.currencyconverter.request.ExchangeRatesResponse
 import com.example.currencyconverter.request.fetchExchangeRates
+import com.example.currencyconverter.screenState
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +42,12 @@ fun HomeScreen() {
             .fillMaxSize()
             .padding(12.dp)
     ) {
+        BackButton {
+            screenState.value = Screen.MenuScreen
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         Text(text = "Hello, User!", fontWeight = FontWeight.Bold, fontSize = 32.sp)
 
         Spacer(modifier = Modifier.height(24.dp))

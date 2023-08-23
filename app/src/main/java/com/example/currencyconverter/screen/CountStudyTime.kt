@@ -30,10 +30,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
+import com.example.currencyconverter.Screen
+import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
 import com.example.currencyconverter.domain.formatTime
 import com.example.currencyconverter.domain.totalStudyTime
+import com.example.currencyconverter.screenState
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -55,6 +58,12 @@ fun CountStudyTime() {
         val totalStudyTimeState = remember {
             context.dataStore.data.map { it[TOTAL_STUDY_TIME_KEY] }
         }.collectAsState(initial = null)
+
+        BackButton {
+            screenState.value = Screen.MenuScreen
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         TimeInputRow(
             hours = startHoursInput.value,
