@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -27,16 +29,37 @@ fun CountStudyTime() {
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        val hoursInput = rememberSaveable { mutableStateOf("") }
-        val minsInput = rememberSaveable { mutableStateOf("") }
+        val startHoursInput = rememberSaveable { mutableStateOf("") }
+        val startMinsInput = rememberSaveable { mutableStateOf("") }
+        val endHoursInput = rememberSaveable { mutableStateOf("") }
+        val endMinsInput = rememberSaveable { mutableStateOf("") }
 
         TimeInputRow(
-            hours = hoursInput.value,
-            onHoursChange = { hoursInput.value = it },
-            mins = minsInput.value,
-            onMinsChange = { minsInput.value = it }
+            hours = startHoursInput.value,
+            onHoursChange = { startHoursInput.value = it },
+            mins = startMinsInput.value,
+            onMinsChange = { startMinsInput.value = it }
         )
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        TimeInputRow(
+            hours = endHoursInput.value,
+            onHoursChange = { endHoursInput.value = it },
+            mins = endMinsInput.value,
+            onMinsChange = { endMinsInput.value = it }
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = {
+            startHoursInput.value = ""
+            startMinsInput.value = ""
+            endHoursInput.value = ""
+            endMinsInput.value = ""
+        }) {
+            Text(text = "Add")
+        }
     }
 }
 
@@ -56,7 +79,7 @@ fun TimeInputRow(
             onValueChange = {
                 onHoursChange(it)
             },
-            label = { Text("Hours") },
+            label = { Text("Hour") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true
         )
