@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.data.START_HOUR_KEY
+import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
 import com.example.currencyconverter.domain.formatTime
@@ -47,13 +49,23 @@ fun CountStudyTime() {
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        val startHoursInput = rememberSaveable { mutableStateOf("") }
-        val startMinsInput = rememberSaveable { mutableStateOf("") }
-        val endHoursInput = rememberSaveable { mutableStateOf("") }
+        val endHourInput = rememberSaveable { mutableStateOf("") }
         val endMinsInput = rememberSaveable { mutableStateOf("") }
 
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
+
+        val startHourInputState = remember {
+            context.dataStore.data.map {
+                it[START_HOUR_KEY]
+            }
+        }.collectAsState(initial = "")
+
+        val startMinsInputState = remember {
+            context.dataStore.data.map {
+                it[START_MINS_KEY]
+            }
+        }.collectAsState(initial = "")
 
         val totalStudyTimeState = remember {
             context.dataStore.data.map { it[TOTAL_STUDY_TIME_KEY] }
@@ -66,17 +78,29 @@ fun CountStudyTime() {
         Spacer(modifier = Modifier.height(12.dp))
 
         TimeInputRow(
-            hours = startHoursInput.value,
-            onHoursChange = { startHoursInput.value = it },
-            mins = startMinsInput.value,
-            onMinsChange = { startMinsInput.value = it }
+            hours = startHourInputState.value ?: "",
+            onHoursChange = { newHours ->
+                coroutineScope.launch {
+                    context.dataStore.edit {
+                        it[START_HOUR_KEY] = newHours
+                    }
+                }
+            },
+            mins = startMinsInputState.value ?: "",
+            onMinsChange = { newMins ->
+                coroutineScope.launch {
+                    context.dataStore.edit {
+                        it[START_MINS_KEY] = newMins
+                    }
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         TimeInputRow(
-            hours = endHoursInput.value,
-            onHoursChange = { endHoursInput.value = it },
+            hours = endHourInput.value,
+            onHoursChange = { endHourInput.value = it },
             mins = endMinsInput.value,
             onMinsChange = { endMinsInput.value = it }
         )
@@ -85,20 +109,22 @@ fun CountStudyTime() {
 
         Button(onClick = {
             val totalStudy = totalStudyTime(
-                startHoursInput.value,
-                startMinsInput.value,
-                endHoursInput.value,
+                (startHourInputState.value ?: "").toString(),
+                (startMinsInputState.value ?: "").toString(),
+                endHourInput.value,
                 endMinsInput.value,
                 totalStudyTimeState.value ?: 0.0
             )
 
             coroutineScope.launch {
-                context.dataStore.edit { it[TOTAL_STUDY_TIME_KEY] = totalStudy }
+                context.dataStore.edit {
+                    it[TOTAL_STUDY_TIME_KEY] = totalStudy
+                    it[START_HOUR_KEY] = ""
+                    it[START_MINS_KEY] = ""
+                }
             }
 
-            startHoursInput.value = ""
-            startMinsInput.value = ""
-            endHoursInput.value = ""
+            endHourInput.value = ""
             endMinsInput.value = ""
         }) {
             Text(text = "Add")
