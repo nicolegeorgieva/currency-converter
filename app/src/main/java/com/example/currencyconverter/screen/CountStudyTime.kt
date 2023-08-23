@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -33,6 +37,7 @@ fun CountStudyTime() {
         val startMinsInput = rememberSaveable { mutableStateOf("") }
         val endHoursInput = rememberSaveable { mutableStateOf("") }
         val endMinsInput = rememberSaveable { mutableStateOf("") }
+        val totalStudyTime = rememberSaveable { mutableStateOf("1h 20m") }
 
         TimeInputRow(
             hours = startHoursInput.value,
@@ -59,6 +64,32 @@ fun CountStudyTime() {
             endMinsInput.value = ""
         }) {
             Text(text = "Add")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Total time of studying: ")
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Text(text = totalStudyTime.value, fontWeight = FontWeight.Bold)
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(
+                onClick = {
+                    totalStudyTime.value = ""
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Clear,
+                    contentDescription = "Menu"
+                )
+            }
         }
     }
 }
