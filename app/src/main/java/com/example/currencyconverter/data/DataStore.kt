@@ -11,5 +11,6 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "my
 
 val START_HOUR_KEY = stringPreferencesKey("start-hour")
 val START_MINS_KEY = stringPreferencesKey("start-min")
+val CUT_MINS_KEY = stringPreferencesKey("cut-mins")
 
 val TOTAL_STUDY_TIME_KEY = doublePreferencesKey("total-study-time")

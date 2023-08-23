@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.data.CUT_MINS_KEY
 import com.example.currencyconverter.data.START_HOUR_KEY
 import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
@@ -42,6 +43,7 @@ import com.example.currencyconverter.screenState
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountStudyTime() {
     Column(
@@ -64,6 +66,12 @@ fun CountStudyTime() {
         val startMinsInputState = remember {
             context.dataStore.data.map {
                 it[START_MINS_KEY]
+            }
+        }.collectAsState(initial = "")
+
+        val cutMinsState = remember {
+            context.dataStore.data.map {
+                it[CUT_MINS_KEY]
             }
         }.collectAsState(initial = "")
 
@@ -107,12 +115,29 @@ fun CountStudyTime() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        TextField(
+            modifier = Modifier.width(124.dp),
+            value = cutMinsState.value ?: "",
+            onValueChange = { newCutMinsInput ->
+                coroutineScope.launch {
+                    context.dataStore.edit {
+                        it[CUT_MINS_KEY] = newCutMinsInput
+                    }
+                }
+            },
+            label = { Text("Cut mins") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Button(onClick = {
             val totalStudy = totalStudyTime(
                 (startHourInputState.value ?: "").toString(),
                 (startMinsInputState.value ?: "").toString(),
                 endHourInput.value,
                 endMinsInput.value,
+                cutMinsState.value ?: "",
                 totalStudyTimeState.value ?: 0.0
             )
 
@@ -121,6 +146,7 @@ fun CountStudyTime() {
                     it[TOTAL_STUDY_TIME_KEY] = totalStudy
                     it[START_HOUR_KEY] = ""
                     it[START_MINS_KEY] = ""
+                    it[CUT_MINS_KEY] = ""
                 }
             }
 
