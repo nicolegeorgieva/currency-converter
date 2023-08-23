@@ -125,7 +125,7 @@ fun CountStudyTime() {
                     }
                 }
             },
-            label = { Text("Cut mins") },
+            label = { Text("Cut mins*") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 

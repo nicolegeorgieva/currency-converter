@@ -23,7 +23,7 @@ fun totalStudyTime(
     }
 
     val currentStudy = try {
-        calculateCurrentTimeOfStudying(currentStudyMins, cutMins?.toInt() ?: 0)
+        calculateCurrentTimeOfStudying(currentStudyMins, cutMins?.toIntOrNull() ?: 0)
     } catch (e: Exception) {
         0.0
     }
