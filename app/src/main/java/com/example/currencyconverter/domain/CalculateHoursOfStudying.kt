@@ -1,10 +1,14 @@
 package com.example.currencyconverter.domain
 
-fun main() {
-    var calculatedTime: Double = 3.00
-
+fun totalStudyTime(
+    startHour: String,
+    startMins: String,
+    endHour: String,
+    endMins: String,
+    calculatedTime: Double
+): Double {
     val currentStudyMins = try {
-        calculateCurrentTimeOfStudyingInMin("20", "00", "22", "20")
+        calculateCurrentTimeOfStudyingInMin(startHour, startMins, endHour, endMins)
     } catch (e: Exception) {
         0
     }
@@ -15,12 +19,7 @@ fun main() {
         0.0
     }
 
-    calculatedTime = calculateTotalTimeOfStudying(calculatedTime, currentStudy)
-
-    println(calculatedTime.toString().split(".").let { parts ->
-        val mins = (parts[1] + "0").take(2)
-        "${parts[0]}h ${mins}m"
-    })
+    return calculateTotalTimeOfStudying(calculatedTime, currentStudy)
 }
 
 /**
