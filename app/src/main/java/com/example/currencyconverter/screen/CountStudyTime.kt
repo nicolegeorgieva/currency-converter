@@ -141,17 +141,19 @@ fun CountStudyTime() {
                 totalStudyTimeState.value ?: 0.0
             )
 
-            coroutineScope.launch {
-                context.dataStore.edit {
-                    it[TOTAL_STUDY_TIME_KEY] = totalStudy
-                    it[START_HOUR_KEY] = ""
-                    it[START_MINS_KEY] = ""
-                    it[CUT_MINS_KEY] = ""
+            if (totalStudy != 0.0) {
+                coroutineScope.launch {
+                    context.dataStore.edit {
+                        it[TOTAL_STUDY_TIME_KEY] = totalStudy
+                        it[START_HOUR_KEY] = ""
+                        it[START_MINS_KEY] = ""
+                        it[CUT_MINS_KEY] = ""
+                    }
                 }
-            }
 
-            endHourInput.value = ""
-            endMinsInput.value = ""
+                endHourInput.value = ""
+                endMinsInput.value = ""
+            }
         }) {
             Text(text = "Add")
         }
