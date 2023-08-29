@@ -36,34 +36,26 @@ fun totalStudyTime(
  * returns a Double representing the sum of both values (3.2 in this example, which means 3h 20m).
  */
 fun calculateTotalTimeOfStudying(calculatedTime: Double, currentTime: Double): Double {
-    val sum = calculatedTime + currentTime
-    var sumHour = sum.toString().split(".")[0].toInt()
-    var sumMin = sum.toString().split(".")[1]
-    var sumMinToInt = sumMin.toInt()
+    var sumHour = calculatedTime.toString().split(".")[0].toInt() +
+            currentTime.toString().split(".")[0].toInt()
+    var sumMin = calculatedTime.toString().split(".")[1].toInt() +
+            currentTime.toString().split(".")[1].toInt()
+    var sumMinToString = sumMin.toString()
 
-    println("Calculated time: $calculatedTime")
-    println("Current time: $currentTime")
-    println("SUM: $sum")
-    println("SUM Hour: $sumHour")
-    println("SUM Min>: $sumMin")
-
-    if (sumMin[0].toString().toInt() > 5 || sumMinToInt > 59) {
+    if (sumMin.toString()[0].toString().toInt() > 5 || sumMin > 59) {
         println("in the if")
         sumHour += 1
 
-        if (sumMin.length == 2) {
-            sumMinToInt -= 60
+        if (sumMin.toString().length >= 2) {
+            sumMin -= 60
         } else {
-            sumMin += "0"
-            sumMinToInt = sumMin.toInt() - 60
+            sumMinToString += "0"
+            sumMin = sumMinToString.toInt() - 60
         }
     }
 
-    println("SUM Hour 2 after: $sumHour")
-    println("SUM Min 2 after: $sumMin")
-
     val transformedHour = sumHour.toString()
-    val transformedMin = sumMinToInt.toString()
+    val transformedMin = sumMin.toString()
 
     return ("$transformedHour.$transformedMin").toDouble()
 }
