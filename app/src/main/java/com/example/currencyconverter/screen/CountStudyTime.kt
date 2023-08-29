@@ -145,6 +145,8 @@ fun CountStudyTime() {
             )
 
             if (totalStudy != totalStudyTimeState.value) {
+                errorOccuredState.value = false
+
                 coroutineScope.launch {
                     context.dataStore.edit {
                         it[TOTAL_STUDY_TIME_KEY] = totalStudy
