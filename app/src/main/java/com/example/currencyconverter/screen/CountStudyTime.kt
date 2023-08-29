@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -78,6 +79,8 @@ fun CountStudyTime() {
         val totalStudyTimeState = remember {
             context.dataStore.data.map { it[TOTAL_STUDY_TIME_KEY] }
         }.collectAsState(initial = null)
+
+        val errorOccuredState = remember { mutableStateOf(false) }
 
         BackButton {
             screenState.value = Screen.MenuScreen
@@ -141,7 +144,7 @@ fun CountStudyTime() {
                 totalStudyTimeState.value ?: 0.0
             )
 
-            if (totalStudy != 0.0) {
+            if (totalStudy != totalStudyTimeState.value) {
                 coroutineScope.launch {
                     context.dataStore.edit {
                         it[TOTAL_STUDY_TIME_KEY] = totalStudy
@@ -153,9 +156,17 @@ fun CountStudyTime() {
 
                 endHourInput.value = ""
                 endMinsInput.value = ""
+            } else {
+                errorOccuredState.value = true
             }
         }) {
             Text(text = "Add")
+        }
+
+        if (errorOccuredState.value) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(text = "Invalid input!", color = Color.Red)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
