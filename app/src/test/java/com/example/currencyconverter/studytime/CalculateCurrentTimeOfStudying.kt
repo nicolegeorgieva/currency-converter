@@ -10,4 +10,10 @@ class CalculateCurrentTimeOfStudying : FreeSpec({
             calculateCurrentTimeOfStudying(80) shouldBe 1.2
         }
     }
+
+    "With cut mins argument" - {
+        "Should return 45 for input 50, 5" {
+            calculateCurrentTimeOfStudying(50, 5) shouldBe 0.45
+        }
+    }
 })
