@@ -36,7 +36,19 @@ fun totalStudyTime(
  * returns a Double representing the sum of both values (3.2 in this example, which means 3h 20m).
  */
 fun calculateTotalTimeOfStudying(calculatedTime: Double, currentTime: Double): Double {
-    return calculatedTime + currentTime
+    val sum = calculatedTime + currentTime
+    var sumHour = sum.toString().split(".")[0].toInt()
+    var sumMin = sum.toString().split(".")[1].toInt()
+
+    if (sumMin > 59) {
+        sumHour += 1
+        sumMin %= 60
+    }
+
+    val transformedHour = sumHour.toString()
+    val transformedMin = sumMin.toString()
+
+    return ("$transformedHour.$transformedMin").toDouble()
 }
 
 /**
