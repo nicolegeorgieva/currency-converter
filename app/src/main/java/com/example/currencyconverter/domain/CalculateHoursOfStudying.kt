@@ -38,15 +38,32 @@ fun totalStudyTime(
 fun calculateTotalTimeOfStudying(calculatedTime: Double, currentTime: Double): Double {
     val sum = calculatedTime + currentTime
     var sumHour = sum.toString().split(".")[0].toInt()
-    var sumMin = sum.toString().split(".")[1].toInt()
+    var sumMin = sum.toString().split(".")[1]
+    var sumMinToInt = sumMin.toInt()
 
-    if (sumMin > 59) {
+    println("Calculated time: $calculatedTime")
+    println("Current time: $currentTime")
+    println("SUM: $sum")
+    println("SUM Hour: $sumHour")
+    println("SUM Min>: $sumMin")
+
+    if (sumMin[0].toString().toInt() > 5 || sumMinToInt > 59) {
+        println("in the if")
         sumHour += 1
-        sumMin %= 60
+
+        if (sumMin.length == 2) {
+            sumMinToInt -= 60
+        } else {
+            sumMin += "0"
+            sumMinToInt = sumMin.toInt() - 60
+        }
     }
 
+    println("SUM Hour 2 after: $sumHour")
+    println("SUM Min 2 after: $sumMin")
+
     val transformedHour = sumHour.toString()
-    val transformedMin = sumMin.toString()
+    val transformedMin = sumMinToInt.toString()
 
     return ("$transformedHour.$transformedMin").toDouble()
 }
