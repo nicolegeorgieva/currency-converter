@@ -38,8 +38,8 @@ import com.example.currencyconverter.data.START_HOUR_KEY
 import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
-import com.example.currencyconverter.domain.oldfunctions.formatTime
-import com.example.currencyconverter.domain.oldfunctions.totalStudyTime
+import com.example.currencyconverter.domain.studytime.convertStringTotalTimeToInt
+import com.example.currencyconverter.domain.studytime.totalStudyTimeRes
 import com.example.currencyconverter.screenState
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -135,13 +135,13 @@ fun CountStudyTime() {
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            val totalStudy = totalStudyTime(
+            val totalStudy = totalStudyTimeRes(
                 (startHourInputState.value ?: "").toString(),
                 (startMinsInputState.value ?: "").toString(),
                 endHourInput.value,
                 endMinsInput.value,
                 cutMinsState.value ?: "",
-                totalStudyTimeState.value ?: 0.0
+                convertStringTotalTimeToInt(totalStudyTimeState.value ?: "")
             )
 
             if (totalStudy != totalStudyTimeState.value) {
@@ -181,14 +181,14 @@ fun CountStudyTime() {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(text = formatTime(totalStudyTimeState.value ?: 0.0), fontWeight = FontWeight.Bold)
+            Text(text = totalStudyTimeState.value ?: "0h 00m", fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
                 onClick = {
                     coroutineScope.launch {
-                        context.dataStore.edit { it[TOTAL_STUDY_TIME_KEY] = 0.0 }
+                        context.dataStore.edit { it[TOTAL_STUDY_TIME_KEY] = "0h 00m" }
                     }
                 }
             ) {

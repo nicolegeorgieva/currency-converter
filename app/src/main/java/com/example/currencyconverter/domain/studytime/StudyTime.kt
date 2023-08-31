@@ -63,3 +63,12 @@ fun totalStudyTimeRes(
 
     return res
 }
+
+// from 1h 01m to 61m
+fun convertStringTotalTimeToInt(totalTime: String?): Int {
+    val transformedTime = totalTime?.split(" ")
+    val hourToMin = (transformedTime?.get(0)?.dropLast(1)?.toIntOrNull() ?: 0) * 60
+    val mins = transformedTime?.get(1)?.dropLast(1)?.toIntOrNull() ?: 0
+
+    return hourToMin + mins
+}
