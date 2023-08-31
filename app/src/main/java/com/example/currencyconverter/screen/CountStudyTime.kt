@@ -39,6 +39,7 @@ import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
 import com.example.currencyconverter.domain.studytime.convertStringTotalTimeToInt
+import com.example.currencyconverter.domain.studytime.currentStudyMins
 import com.example.currencyconverter.domain.studytime.totalStudyTimeRes
 import com.example.currencyconverter.screenState
 import kotlinx.coroutines.flow.map
@@ -144,7 +145,16 @@ fun CountStudyTime() {
                 convertStringTotalTimeToInt(totalStudyTimeState.value ?: "")
             )
 
-            if (totalStudy != totalStudyTimeState.value) {
+            if (currentStudyMins(
+                    (startHourInputState.value ?: "").toString(),
+                    (startMinsInputState.value ?: "").toString(),
+                    endHourInput.value,
+                    endMinsInput.value,
+                    cutMinsState.value ?: ""
+                ) < 0
+            ) {
+                errorOccuredState.value = true
+            } else if (totalStudy != totalStudyTimeState.value) {
                 errorOccuredState.value = false
 
                 coroutineScope.launch {
