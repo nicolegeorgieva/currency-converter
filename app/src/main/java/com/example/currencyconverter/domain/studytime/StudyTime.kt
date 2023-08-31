@@ -9,13 +9,13 @@ fun currentStudyMins(
     startMin: String, // 10
     endHour: String,
     endMin: String,
-    cutTime: String
+    cutMins: String
 ): Int {
     val startTimeMins = startHour.toInt() * 60 + startMin.toInt()
     val endTimeMins = endHour.toInt() * 60 + endMin.toInt()
 
     val res = try {
-        endTimeMins - startTimeMins - cutTime.toInt()
+        endTimeMins - startTimeMins - (cutMins.toIntOrNull() ?: 0)
     } catch (e: Exception) {
         0
     }

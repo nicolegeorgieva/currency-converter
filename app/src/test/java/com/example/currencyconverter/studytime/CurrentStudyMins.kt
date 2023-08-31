@@ -12,7 +12,7 @@ class CurrentStudyMins : FreeSpec({
                 startMin = "00",
                 endHour = "11",
                 endMin = "00",
-                cutTime = "00"
+                cutMins = "00"
             ) shouldBe 60
         }
 
@@ -22,7 +22,7 @@ class CurrentStudyMins : FreeSpec({
                 startMin = "00",
                 endHour = "12",
                 endMin = "30",
-                cutTime = "00"
+                cutMins = "00"
             ) shouldBe 150
         }
     }
@@ -34,7 +34,7 @@ class CurrentStudyMins : FreeSpec({
                 startMin = "00",
                 endHour = "11",
                 endMin = "00",
-                cutTime = "10"
+                cutMins = "10"
             ) shouldBe 50
         }
     }
