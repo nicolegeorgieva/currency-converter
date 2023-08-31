@@ -41,10 +41,8 @@ fun totalStudyTimeMins(currentStudyTimeMins: Int, existingStudyTimeMins: Int): I
 Transforms the total time in mins to the readable format - e.g 60m to 1h 00m.
  */
 fun totalStudyTimeFormatted(totalStudyTimeMins: Int): String {
-    val hour: Double = (totalStudyTimeMins / 60).toDouble() // 150 / 60 = 2.5
-    val hourPart = hour.toString().split(".")[0] // "2"
-    val minPart = hour.toString().split(".")[1] // "5"
-    val mins = 0.0 + "0.$minPart".toDouble() * 60
+    val hour = totalStudyTimeMins / 60
+    val mins = totalStudyTimeMins % 60
 
-    return "${hourPart}h ${mins}m"
+    return if (mins.toString().length > 1) "${hour}h ${mins}m" else "${hour}h 0${mins}m"
 }
