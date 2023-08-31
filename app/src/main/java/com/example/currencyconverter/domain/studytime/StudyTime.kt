@@ -14,7 +14,13 @@ fun currentStudyMins(
     val startTimeMins = startHour.toInt() * 60 + startMin.toInt()
     val endTimeMins = endHour.toInt() * 60 + endMin.toInt()
 
-    return endTimeMins - startTimeMins - cutTime.toInt()
+    val res = try {
+        endTimeMins - startTimeMins - cutTime.toInt()
+    } catch (e: Exception) {
+        0
+    }
+
+    return res
 }
 
 /*
@@ -22,7 +28,13 @@ Adds the "currentStudy Time in mins" to the "Existing Study Time in mins".
 Returns the result (total study time in mins).
  */
 fun totalStudyTimeMins(currentStudyTimeMins: Int, existingStudyTimeMins: Int): Int {
-    return currentStudyTimeMins + existingStudyTimeMins
+    val res = try {
+        currentStudyTimeMins + existingStudyTimeMins
+    } catch (e: Exception) {
+        0
+    }
+
+    return res
 }
 
 /*
