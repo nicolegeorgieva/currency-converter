@@ -1,4 +1,4 @@
-package com.example.currencyconverter.domain
+package com.example.currencyconverter.domain.oldfunctions
 
 fun formatTime(number: Double): String {
     val formattedList = number.toString().split(".")

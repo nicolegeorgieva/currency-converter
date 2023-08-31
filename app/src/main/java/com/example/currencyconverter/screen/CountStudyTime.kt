@@ -38,8 +38,8 @@ import com.example.currencyconverter.data.START_HOUR_KEY
 import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
-import com.example.currencyconverter.domain.formatTime
-import com.example.currencyconverter.domain.totalStudyTime
+import com.example.currencyconverter.domain.oldfunctions.formatTime
+import com.example.currencyconverter.domain.oldfunctions.totalStudyTime
 import com.example.currencyconverter.screenState
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

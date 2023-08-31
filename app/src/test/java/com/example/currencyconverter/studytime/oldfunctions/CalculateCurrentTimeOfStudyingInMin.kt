@@ -1,6 +1,6 @@
-package com.example.currencyconverter.studytime
+package com.example.currencyconverter.studytime.oldfunctions
 
-import com.example.currencyconverter.domain.calculateCurrentTimeOfStudyingInMin
+import com.example.currencyconverter.domain.oldfunctions.calculateCurrentTimeOfStudyingInMin
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

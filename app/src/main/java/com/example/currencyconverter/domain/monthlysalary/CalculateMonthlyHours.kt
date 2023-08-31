@@ -1,4 +1,4 @@
-package com.example.currencyconverter.domain
+package com.example.currencyconverter.domain.monthlysalary
 
 const val HOURSPERWEEK = 40
 const val WEEKSPERYEAR = 52

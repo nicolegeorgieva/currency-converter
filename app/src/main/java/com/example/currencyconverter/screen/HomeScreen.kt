@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.domain.calculateMonthlySalary
-import com.example.currencyconverter.domain.monthlyHours
+import com.example.currencyconverter.domain.monthlysalary.calculateMonthlySalary
+import com.example.currencyconverter.domain.monthlysalary.monthlyHours
 import com.example.currencyconverter.request.ExchangeRatesResponse
 import com.example.currencyconverter.request.fetchExchangeRates
 import com.example.currencyconverter.screenState
