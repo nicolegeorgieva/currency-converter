@@ -28,13 +28,7 @@ Adds the "currentStudy Time in mins" to the "Existing Study Time in mins".
 Returns the result (total study time in mins).
  */
 fun totalStudyTimeMins(currentStudyTimeMins: Int, existingStudyTimeMins: Int): Int {
-    val res = try {
-        currentStudyTimeMins + existingStudyTimeMins
-    } catch (e: Exception) {
-        0
-    }
-
-    return res
+    return currentStudyTimeMins + existingStudyTimeMins
 }
 
 /*
@@ -45,4 +39,27 @@ fun totalStudyTimeFormatted(totalStudyTimeMins: Int): String {
     val mins = totalStudyTimeMins % 60
 
     return if (mins.toString().length > 1) "${hour}h ${mins}m" else "${hour}h 0${mins}m"
+}
+
+fun totalStudyTimeRes(
+    startHour: String,
+    startMin: String,
+    endHour: String,
+    endMin: String,
+    cutMins: String,
+    existingStudyTimeMins: Int
+): String {
+    val res = totalStudyTimeFormatted(
+        totalStudyTimeMins(
+            currentStudyMins(
+                startHour = startHour,
+                startMin = startMin,
+                endHour = endHour,
+                endMin = endMin,
+                cutMins = cutMins
+            ), existingStudyTimeMins
+        )
+    )
+
+    return res
 }
