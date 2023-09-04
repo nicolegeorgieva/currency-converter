@@ -1,5 +1,6 @@
 package com.example.currencyconverter.screen
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +25,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.request.Request
 import com.example.currencyconverter.request.createToDo
 import com.example.currencyconverter.request.getToDos
 import com.example.currencyconverter.request.removeToDo
@@ -41,7 +44,7 @@ fun RequestPlaygroundScreen() {
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        var toDosState by remember { mutableStateOf<List<String>?>(null) }
+        var toDosState by remember { mutableStateOf<Request>(Request.Loading) }
 
         val coroutineScope = rememberCoroutineScope()
 
@@ -66,23 +69,48 @@ fun RequestPlaygroundScreen() {
             ) {
                 Icon(
                     imageVector = Icons.Filled.Refresh,
-                    contentDescription = "Menu"
+                    contentDescription = "Refresh"
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        val toDos = toDosState
+        var visible by remember { mutableStateOf(false) }
 
-        if (toDos != null) {
-            for (i in toDos.indices) {
-                TaskCard(task = toDos[i]) {
-                    coroutineScope.launch {
-                        toDosState = removeToDo(i)
-                    }
+        Crossfade(
+            targetState = visible,
+            label = "crossfade content"
+        ) { state ->
+            when (state) {
+                true -> {
+                    Text(text = "Loading...")
+                }
+
+                false -> {
+                    Text(text = "")
                 }
             }
+        }
+
+        when (toDosState) {
+            is Request.Success ->
+                for (i in (toDosState as Request.Success).data.indices) {
+                    visible = false
+
+                    TaskCard(task = (toDosState as Request.Success).data[i]) {
+                        coroutineScope.launch {
+                            toDosState = removeToDo(i)
+                        }
+                    }
+                }
+
+            Request.Error -> {
+                visible = false
+                Text(text = "Error!", color = Color.Red)
+            }
+
+            Request.Loading -> visible = true
         }
 
         Spacer(modifier = Modifier.height(24.dp))

@@ -25,30 +25,37 @@ data class RemoveToDoRequest(
     val item: Int
 )
 
-suspend fun createToDo(task: String): List<String> {
+suspend fun createToDo(task: String): Request {
     return withContext(Dispatchers.IO) {
-        val response =
-            client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/add-todo") {
-                contentType(ContentType.Application.Json)
-                setBody(AddToDoRequest(task))
-            }
-
-        response.body<ToDoResponse>().toDo
+        try {
+            val response =
+                client.post("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/add-todo") {
+                    contentType(ContentType.Application.Json)
+                    setBody(AddToDoRequest(task))
+                }
+            Request.Success(response.body<ToDoResponse>().toDo)
+        } catch (e: Exception) {
+            Request.Error
+        }
     }
 }
 
-suspend fun getToDos(): List<String> {
+suspend fun getToDos(): Request {
     return withContext(Dispatchers.IO) {
-        val response =
-            client.get("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/todo")
+        try {
+            val response =
+                client.get("https://nicole-georgieva-ktor-f408de41c386.herokuapp.com/todo")
 
-        val toDoResponse = response.body<ToDoResponse>()
+            val toDoResponse = response.body<ToDoResponse>()
 
-        toDoResponse.toDo
+            Request.Success(toDoResponse.toDo)
+        } catch (e: Exception) {
+            Request.Error
+        }
     }
 }
 
-suspend fun removeToDo(item: Int): List<String> {
+suspend fun removeToDo(item: Int): Request {
     return withContext(Dispatchers.IO) {
         try {
             val response =
@@ -59,9 +66,15 @@ suspend fun removeToDo(item: Int): List<String> {
 
             val toDoResponse = response.body<ToDoResponse>()
 
-            toDoResponse.toDo
+            Request.Success(toDoResponse.toDo)
         } catch (e: Exception) {
             getToDos()
         }
     }
+}
+
+sealed interface Request {
+    data class Success(val data: List<String>) : Request
+    object Error : Request
+    object Loading : Request
 }
