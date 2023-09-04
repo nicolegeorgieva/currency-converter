@@ -63,6 +63,7 @@ fun RequestPlaygroundScreen() {
             IconButton(
                 onClick = {
                     coroutineScope.launch {
+                        toDosState = Request.Loading
                         toDosState = getToDos()
                     }
                 }
@@ -76,41 +77,29 @@ fun RequestPlaygroundScreen() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        var visible by remember { mutableStateOf(false) }
-
         Crossfade(
-            targetState = visible,
+            targetState = toDosState,
             label = "crossfade content"
         ) { state ->
-            when (state) {
-                true -> {
-                    Text(text = "Loading...")
-                }
-
-                false -> {
-                    Text(text = "")
-                }
-            }
-        }
-
-        when (toDosState) {
-            is Request.Success ->
-                for (i in (toDosState as Request.Success).data.indices) {
-                    visible = false
-
-                    TaskCard(task = (toDosState as Request.Success).data[i]) {
-                        coroutineScope.launch {
-                            toDosState = removeToDo(i)
+            Column {
+                when (state) {
+                    is Request.Success ->
+                        for (i in state.data.indices) {
+                            TaskCard(task = state.data[i]) {
+                                coroutineScope.launch {
+                                    toDosState = Request.Loading
+                                    toDosState = removeToDo(i)
+                                }
+                            }
                         }
+
+                    Request.Error -> {
+                        Text(text = "Error!", color = Color.Red)
                     }
+
+                    Request.Loading -> Text(text = "Loading...")
                 }
-
-            Request.Error -> {
-                visible = false
-                Text(text = "Error!", color = Color.Red)
             }
-
-            Request.Loading -> visible = true
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -123,6 +112,7 @@ fun RequestPlaygroundScreen() {
 
         Button(onClick = {
             coroutineScope.launch {
+                toDosState = Request.Loading
                 toDosState = createToDo(newToDo)
                 newToDo = ""
             }
