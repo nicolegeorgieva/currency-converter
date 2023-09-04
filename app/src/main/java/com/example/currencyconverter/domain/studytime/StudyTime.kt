@@ -65,7 +65,7 @@ fun totalStudyTimeRes(
 }
 
 // from 1h 01m to 61m
-fun convertStringTotalTimeToInt(totalTime: String?): Int {
+fun convertTotalTimeToMins(totalTime: String?): Int {
     var res = 0
 
     try {
