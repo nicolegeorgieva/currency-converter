@@ -13,3 +13,5 @@ val START_MINS_KEY = stringPreferencesKey("start-min")
 val CUT_MINS_KEY = stringPreferencesKey("cut-mins")
 
 val TOTAL_STUDY_TIME_KEY = stringPreferencesKey("total-study-time")
+
+val FIRST_NAME_KEY = stringPreferencesKey("first-name")
