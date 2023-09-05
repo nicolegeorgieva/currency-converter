@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    id("com.google.dagger.hilt.android") version libs.versions.hilt.get() apply false
+    id("com.google.dagger.hilt.android")
 
 
     id("kotlin-kapt")
@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -90,8 +90,14 @@ dependencies {
 
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
+    implementation(libs.compose.viewmodel)
 
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.property)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

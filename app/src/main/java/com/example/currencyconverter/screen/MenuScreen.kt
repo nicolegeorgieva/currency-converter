@@ -43,5 +43,13 @@ fun MenuScreen() {
         }
 
         Spacer(modifier = Modifier.weight(1f))
+
+        Button(onClick = {
+            screenState.value = Screen.DemoScreen
+        }) {
+            Text(text = "Demo")
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
