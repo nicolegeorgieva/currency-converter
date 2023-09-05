@@ -2,7 +2,10 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    id("com.google.dagger.hilt.android") version libs.versions.hilt.get() apply false
 
+
+    id("kotlin-kapt")
     kotlin("plugin.serialization") version "1.8.10"
 }
 
@@ -84,6 +87,9 @@ dependencies {
     implementation(libs.ktor.content.negotiation)
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client.okhttp)
+
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)

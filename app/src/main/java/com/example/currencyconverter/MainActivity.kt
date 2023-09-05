@@ -13,6 +13,7 @@ import com.example.currencyconverter.screen.HomeScreen
 import com.example.currencyconverter.screen.MenuScreen
 import com.example.currencyconverter.screen.RequestPlaygroundScreen
 import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 var screenState = mutableStateOf<Screen>(Screen.MenuScreen)
 
@@ -23,6 +24,7 @@ sealed interface Screen {
     object RequestPlaygroundScreen : Screen
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
