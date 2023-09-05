@@ -19,9 +19,9 @@ class DemoViewModel @Inject constructor(
         return if (name.isNotBlank()) "Hi, $name!" else ""
     }
 
-    fun setName() {
+    fun setName(newName: String) {
         viewModelScope.launch {
-            greeter.updateName()
+            greeter.updateName(newName)
         }
     }
 

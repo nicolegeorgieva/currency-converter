@@ -17,9 +17,9 @@ class Greeter @Inject constructor(
 
     fun greet(): Flow<String> = dataStore.data.map { it[FIRST_NAME_KEY] ?: "" }
 
-    suspend fun updateName() {
+    suspend fun updateName(newName: String) {
         dataStore.edit {
-            it[FIRST_NAME_KEY] = "Nicole"
+            it[FIRST_NAME_KEY] = newName
         }
     }
 
