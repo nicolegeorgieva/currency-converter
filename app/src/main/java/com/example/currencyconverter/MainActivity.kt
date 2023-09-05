@@ -12,6 +12,7 @@ import com.example.currencyconverter.screen.CountStudyTime
 import com.example.currencyconverter.screen.HomeScreen
 import com.example.currencyconverter.screen.MenuScreen
 import com.example.currencyconverter.screen.RequestPlaygroundScreen
+import com.example.currencyconverter.screen.age.AgeScreen
 import com.example.currencyconverter.screen.demo.DemoScreen
 import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ sealed interface Screen {
     object CountStudyTime : Screen
     object RequestPlaygroundScreen : Screen
     object DemoScreen : Screen
+    object AgeScreen : Screen
 }
 
 @AndroidEntryPoint
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         Screen.HomeScreen -> HomeScreen()
                         Screen.RequestPlaygroundScreen -> RequestPlaygroundScreen()
                         Screen.DemoScreen -> DemoScreen()
+                        Screen.AgeScreen -> AgeScreen()
                     }
                 }
             }
