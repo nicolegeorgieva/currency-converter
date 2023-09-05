@@ -5,6 +5,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DemoViewModel @Inject constructor() : ViewModel() {
-    val greeting = "Hello"
+class DemoViewModel @Inject constructor(
+    private val greeter: Greeter
+) : ViewModel() {
+    val greeting = greeter.greet()
 }
