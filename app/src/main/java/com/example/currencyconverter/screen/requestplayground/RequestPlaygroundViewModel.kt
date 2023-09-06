@@ -17,6 +17,8 @@ class RequestPlaygroundViewModel @Inject constructor(
 
     fun fetchToDos() {
         viewModelScope.launch {
+            toDosState.value = RequestPlayground.Request.Loading
+
             val res = requestPlayground.getToDos()
             toDosState.value = res
         }
@@ -32,15 +34,6 @@ class RequestPlaygroundViewModel @Inject constructor(
 
     fun onToDoWriting(task: String) {
         newToDo.value = task
-    }
-
-    fun onRefresh() {
-        toDosState.value = RequestPlayground.Request.Loading
-
-        viewModelScope.launch {
-            val res = requestPlayground.getToDos()
-            toDosState.value = res
-        }
     }
 
     fun onDelete(item: Int) {

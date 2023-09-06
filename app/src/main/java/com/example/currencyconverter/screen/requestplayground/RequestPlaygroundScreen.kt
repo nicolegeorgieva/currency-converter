@@ -50,7 +50,7 @@ fun RequestPlaygroundScreen() {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 onClick = {
-                    viewModel.onRefresh()
+                    viewModel.fetchToDos()
                 }
             )
             {
