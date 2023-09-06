@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.request.Request
 import com.example.currencyconverter.screenState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,18 +69,18 @@ fun RequestPlaygroundScreen() {
         ) { state ->
             Column {
                 when (state) {
-                    is Request.Success ->
+                    is RequestPlayground.Request.Success ->
                         for (i in state.data.indices) {
                             TaskCard(task = state.data[i]) {
                                 viewModel.onDelete(i)
                             }
                         }
 
-                    Request.Error -> {
+                    RequestPlayground.Request.Error -> {
                         Text(text = "Error!", color = Color.Red)
                     }
 
-                    Request.Loading -> Text(text = "Loading...")
+                    RequestPlayground.Request.Loading -> Text(text = "Loading...")
                 }
             }
         }

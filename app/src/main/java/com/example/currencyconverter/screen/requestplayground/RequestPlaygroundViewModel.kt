@@ -3,10 +3,6 @@ package com.example.currencyconverter.screen.requestplayground
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.currencyconverter.request.Request
-import com.example.currencyconverter.request.createToDo
-import com.example.currencyconverter.request.getToDos
-import com.example.currencyconverter.request.removeToDo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,12 +11,13 @@ import javax.inject.Inject
 class RequestPlaygroundViewModel @Inject constructor(
     private val requestPlayground: RequestPlayground
 ) : ViewModel() {
-    private var toDosState = mutableStateOf<Request>(Request.Loading)
+    private var toDosState =
+        mutableStateOf<RequestPlayground.Request>(RequestPlayground.Request.Loading)
     private var newToDo = mutableStateOf("")
 
-    fun getToDosState(): Request {
+    fun getToDosState(): RequestPlayground.Request {
         viewModelScope.launch {
-            val res = getToDos()
+            val res = requestPlayground.getToDos()
 
             toDosState.value = res
         }
@@ -39,33 +36,33 @@ class RequestPlaygroundViewModel @Inject constructor(
         return res
     }
 
-    fun onRefresh(): Request {
-        toDosState.value = Request.Loading
+    fun onRefresh(): RequestPlayground.Request {
+        toDosState.value = RequestPlayground.Request.Loading
 
         viewModelScope.launch {
-            val res = getToDos()
+            val res = requestPlayground.getToDos()
             toDosState.value = res
         }
 
         return toDosState.value
     }
 
-    fun onDelete(item: Int): Request {
-        toDosState.value = Request.Loading
+    fun onDelete(item: Int): RequestPlayground.Request {
+        toDosState.value = RequestPlayground.Request.Loading
 
         viewModelScope.launch {
-            val res = removeToDo(item)
+            val res = requestPlayground.removeToDo(item)
             toDosState.value = res
         }
 
         return toDosState.value
     }
 
-    fun onAddToDo(): Request {
-        toDosState.value = Request.Loading
+    fun onAddToDo(): RequestPlayground.Request {
+        toDosState.value = RequestPlayground.Request.Loading
 
         viewModelScope.launch {
-            val res = createToDo(newToDo.value)
+            val res = requestPlayground.createToDo(newToDo.value)
 
             toDosState.value = res
         }
