@@ -9,6 +9,7 @@ import com.example.currencyconverter.domain.studytime.convertTotalTimeToMins
 import com.example.currencyconverter.domain.studytime.currentStudyMins
 import com.example.currencyconverter.domain.studytime.totalStudyTimeRes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,18 +17,49 @@ import javax.inject.Inject
 class CountStudyTimeViewModel @Inject constructor(
     private val studyTimeDataStore: CountStudyTimeDataStore
 ) : ViewModel() {
-    private var startHourInputState = mutableStateOf("")
+    private val startHourInputState = mutableStateOf("")
+    private val startMinsInputState = mutableStateOf("")
+    private val endHourInputState = mutableStateOf("")
+    private val endMinsInputState = mutableStateOf("")
+    private val cutMinsState = mutableStateOf("")
+    private val totalStudyTimeState = mutableStateOf<String?>(null)
+    private val errorOccurredState = mutableStateOf(false)
+
+    fun onStart() {
+        viewModelScope.launch {
+            startHourInputState.value = studyTimeDataStore.startHourInput.firstOrNull() ?: ""
+            startMinsInputState.value = studyTimeDataStore.startMinsInput.firstOrNull() ?: ""
+        }
+    }
 
     @Composable
     fun getStartHour(): String {
-        return studyTimeDataStore.startHourInput.collectAsState(initial = "").value ?: ""
+        return startHourInputState.value
     }
-
-    private var startMinsInputState = mutableStateOf("")
 
     @Composable
     fun getStartMins(): String {
-        return studyTimeDataStore.startMinsInput.collectAsState(initial = "").value ?: ""
+        return startMinsInputState.value
+    }
+
+    @Composable
+    fun getEndHour(): String {
+        return endHourInputState.value
+    }
+
+    @Composable
+    fun getEndMins(): String {
+        return endMinsInputState.value
+    }
+
+    @Composable
+    fun getErrorOccuredState(): Boolean {
+        return errorOccurredState.value
+    }
+
+    @Composable
+    fun getTotalStudyTimeState(): String {
+        return totalStudyTimeState.value ?: "0h 00m"
     }
 
     fun editStartHour(newHour: String) {
@@ -46,11 +78,13 @@ class CountStudyTimeViewModel @Inject constructor(
         }
     }
 
-    var endHourInputState = mutableStateOf("")
-    var endMinsInputState = mutableStateOf("")
-    private var cutMinsState = mutableStateOf("")
-    var totalStudyTimeState = mutableStateOf<String?>(null)
-    var errorOccurredState = mutableStateOf(false)
+    fun editEndHour(newHour: String) {
+        endHourInputState.value = newHour
+    }
+
+    fun editEndMins(newMins: String) {
+        endMinsInputState.value = newMins
+    }
 
     @Composable
     fun getCutMins(): String {

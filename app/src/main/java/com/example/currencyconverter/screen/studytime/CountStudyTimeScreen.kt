@@ -18,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +40,10 @@ fun CountStudyTimeScreen() {
     ) {
         val viewModel: CountStudyTimeViewModel = viewModel()
 
+        LaunchedEffect(Unit) {
+            viewModel.onStart()
+        }
+
         BackButton {
             screenState.value = Screen.MenuScreen
         }
@@ -59,10 +64,14 @@ fun CountStudyTimeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         TimeInputRow(
-            hours = viewModel.endHourInputState.value,
-            onHoursChange = { viewModel.endHourInputState.value = it },
-            mins = viewModel.endMinsInputState.value,
-            onMinsChange = { viewModel.endMinsInputState.value = it }
+            hours = viewModel.getEndHour(),
+            onHoursChange = {
+                viewModel.editEndHour(it)
+            },
+            mins = viewModel.getEndMins(),
+            onMinsChange = {
+                viewModel.editEndMins(it)
+            }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -85,7 +94,7 @@ fun CountStudyTimeScreen() {
             Text(text = "Add")
         }
 
-        if (viewModel.errorOccurredState.value) {
+        if (viewModel.getErrorOccuredState()) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(text = "Invalid input!", color = Color.Red)
@@ -102,7 +111,7 @@ fun CountStudyTimeScreen() {
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = viewModel.totalStudyTimeState.value ?: "0h 00m",
+                text = viewModel.getTotalStudyTimeState(),
                 fontWeight = FontWeight.Bold
             )
 
