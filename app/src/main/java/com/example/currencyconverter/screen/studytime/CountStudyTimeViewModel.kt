@@ -99,24 +99,6 @@ class CountStudyTimeViewModel @Inject constructor(
         }
     }
 
-    fun totalStudy(
-        startHourInputState: String,
-        startMinsInputState: String,
-        endHourInputState: String,
-        endMinsInputState: String,
-        cutMinsState: String,
-        totalStudyTimeState: String?
-    ): String {
-        return totalStudyTimeRes(
-            startHourInputState,
-            startMinsInputState,
-            endHourInputState,
-            endMinsInputState,
-            cutMinsState,
-            convertTotalTimeToMins(totalStudyTimeState)
-        )
-    }
-
     fun addCurrentStudyToTotal() {
         val currentStudyMins = currentStudyMins(
             startHourInputState.value,
@@ -153,6 +135,24 @@ class CountStudyTimeViewModel @Inject constructor(
         } else {
             errorOccurredState.value = true
         }
+    }
+
+    private fun totalStudy(
+        startHourInputState: String,
+        startMinsInputState: String,
+        endHourInputState: String,
+        endMinsInputState: String,
+        cutMinsState: String,
+        totalStudyTimeState: String?
+    ): String {
+        return totalStudyTimeRes(
+            startHourInputState,
+            startMinsInputState,
+            endHourInputState,
+            endMinsInputState,
+            cutMinsState,
+            convertTotalTimeToMins(totalStudyTimeState)
+        )
     }
 
     fun totalTimeReset() {
