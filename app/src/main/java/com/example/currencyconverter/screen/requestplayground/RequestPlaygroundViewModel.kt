@@ -70,6 +70,7 @@ class RequestPlaygroundViewModel @Inject constructor(
             toDosState.value = res
         }
 
+        newToDo.value = ""
         return toDosState.value
     }
 }
