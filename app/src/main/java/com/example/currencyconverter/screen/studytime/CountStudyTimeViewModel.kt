@@ -29,6 +29,7 @@ class CountStudyTimeViewModel @Inject constructor(
         viewModelScope.launch {
             startHourInputState.value = studyTimeDataStore.startHourInput.firstOrNull() ?: ""
             startMinsInputState.value = studyTimeDataStore.startMinsInput.firstOrNull() ?: ""
+            cutMinsState.value = studyTimeDataStore.cutMins.firstOrNull() ?: ""
             totalStudyTimeState.value = studyTimeDataStore.totalStudyTime.firstOrNull() ?: "0h 00m"
         }
     }
