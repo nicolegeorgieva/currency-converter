@@ -1,4 +1,4 @@
-package com.example.currencyconverter.screen
+package com.example.currencyconverter.screen.requestplayground
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
@@ -18,38 +18,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.request.Request
-import com.example.currencyconverter.request.createToDo
-import com.example.currencyconverter.request.getToDos
-import com.example.currencyconverter.request.removeToDo
 import com.example.currencyconverter.screenState
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestPlaygroundScreen() {
+    val viewModel: RequestPlaygroundViewModel = viewModel()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        var toDosState by remember { mutableStateOf<Request>(Request.Loading) }
-
-        val coroutineScope = rememberCoroutineScope()
-
         LaunchedEffect(Unit) {
-            toDosState = getToDos()
+            viewModel.getToDosState()
         }
 
         BackButton {
@@ -62,12 +51,10 @@ fun RequestPlaygroundScreen() {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 onClick = {
-                    coroutineScope.launch {
-                        toDosState = Request.Loading
-                        toDosState = getToDos()
-                    }
+                    viewModel.onRefresh()
                 }
-            ) {
+            )
+            {
                 Icon(
                     imageVector = Icons.Filled.Refresh,
                     contentDescription = "Refresh"
@@ -78,7 +65,7 @@ fun RequestPlaygroundScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Crossfade(
-            targetState = toDosState,
+            targetState = viewModel.getToDosState(),
             label = "crossfade content"
         ) { state ->
             Column {
@@ -86,10 +73,7 @@ fun RequestPlaygroundScreen() {
                     is Request.Success ->
                         for (i in state.data.indices) {
                             TaskCard(task = state.data[i]) {
-                                coroutineScope.launch {
-                                    toDosState = Request.Loading
-                                    toDosState = removeToDo(i)
-                                }
+                                viewModel.onDelete(i)
                             }
                         }
 
@@ -104,18 +88,17 @@ fun RequestPlaygroundScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        var newToDo by rememberSaveable { mutableStateOf("") }
-
-        TextField(value = newToDo, onValueChange = { newToDo = it })
+        TextField(
+            value = viewModel.getToDo(),
+            onValueChange = {
+                viewModel.onToDoWriting(it)
+            }
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(onClick = {
-            coroutineScope.launch {
-                toDosState = Request.Loading
-                toDosState = createToDo(newToDo)
-                newToDo = ""
-            }
+            viewModel.onAddToDo()
         }) {
             Text(text = "Add")
         }
