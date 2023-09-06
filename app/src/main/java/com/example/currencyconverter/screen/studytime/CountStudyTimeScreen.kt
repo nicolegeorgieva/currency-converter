@@ -24,15 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
-import com.example.currencyconverter.data.dataStore
-import com.example.currencyconverter.domain.studytime.currentStudyMins
 import com.example.currencyconverter.screenState
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,34 +80,12 @@ fun CountStudyTimeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            if (currentStudyMins(
-                    (startHourInputState.value ?: "").toString(),
-                    (startMinsInputState.value ?: "").toString(),
-                    endHourInput.value,
-                    endMinsInput.value,
-                    cutMinsState.value ?: ""
-                ) < 0
-            ) {
-                errorOccuredState.value = true
-            } else if (totalStudy != totalStudyTimeState.value) {
-                errorOccuredState.value = false
-
-                coroutineScope.launch {
-                    context.dataStore.edit {
-
-                    }
-                }
-
-                endHourInput.value = ""
-                endMinsInput.value = ""
-            } else {
-                errorOccuredState.value = true
-            }
+            viewModel.addCurrentStudyToTotal()
         }) {
             Text(text = "Add")
         }
 
-        if (errorOccuredState.value) {
+        if (viewModel.errorOccurredState.value) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(text = "Invalid input!", color = Color.Red)
@@ -128,15 +101,16 @@ fun CountStudyTimeScreen() {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(text = totalStudyTimeState.value ?: "0h 00m", fontWeight = FontWeight.Bold)
+            Text(
+                text = viewModel.totalStudyTimeState.value ?: "0h 00m",
+                fontWeight = FontWeight.Bold
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
                 onClick = {
-                    coroutineScope.launch {
-                        context.dataStore.edit { it[TOTAL_STUDY_TIME_KEY] = "0h 00m" }
-                    }
+                    viewModel.totalTimeReset()
                 }
             ) {
                 Icon(

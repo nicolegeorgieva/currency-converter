@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.domain.studytime.convertTotalTimeToMins
+import com.example.currencyconverter.domain.studytime.currentStudyMins
 import com.example.currencyconverter.domain.studytime.totalStudyTimeRes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -48,8 +49,8 @@ class CountStudyTimeViewModel @Inject constructor(
     var endHourInputState = mutableStateOf("")
     var endMinsInputState = mutableStateOf("")
     private var cutMinsState = mutableStateOf("")
-    var totalStudyTimeState = mutableStateOf("")
-    var errorOccuredState = mutableStateOf(false)
+    var totalStudyTimeState = mutableStateOf<String?>(null)
+    var errorOccurredState = mutableStateOf(false)
 
     @Composable
     fun getCutMins(): String {
@@ -70,9 +71,9 @@ class CountStudyTimeViewModel @Inject constructor(
         endHourInputState: String,
         endMinsInputState: String,
         cutMinsState: String,
-        totalStudyTimeState: String
-    ) {
-        totalStudyTimeRes(
+        totalStudyTimeState: String?
+    ): String {
+        return totalStudyTimeRes(
             startHourInputState,
             startMinsInputState,
             endHourInputState,
@@ -80,5 +81,51 @@ class CountStudyTimeViewModel @Inject constructor(
             cutMinsState,
             convertTotalTimeToMins(totalStudyTimeState)
         )
+    }
+
+    fun addCurrentStudyToTotal() {
+        val currentStudyMins = currentStudyMins(
+            startHourInputState.value,
+            startMinsInputState.value,
+            endHourInputState.value,
+            endMinsInputState.value,
+            cutMinsState.value
+        )
+
+        val totalStudyTime = totalStudy(
+            startHourInputState.value,
+            startMinsInputState.value,
+            endHourInputState.value,
+            endMinsInputState.value,
+            cutMinsState.value,
+            totalStudyTimeState.value
+        )
+
+        if (currentStudyMins < 0) {
+            errorOccurredState.value = true
+        } else if (totalStudyTime != totalStudyTimeState.value) {
+            errorOccurredState.value = false
+
+            viewModelScope.launch {
+                studyTimeDataStore.addTotalStudyTime(totalStudyTime)
+            }
+
+            startHourInputState.value = ""
+            startMinsInputState.value = ""
+            cutMinsState.value = ""
+            endHourInputState.value = ""
+            endMinsInputState.value = ""
+            totalStudyTimeState.value = totalStudyTime
+        } else {
+            errorOccurredState.value = true
+        }
+    }
+
+    fun totalTimeReset() {
+        totalStudyTimeState.value = "0h 00m"
+
+        viewModelScope.launch {
+            studyTimeDataStore.totalTimeReset()
+        }
     }
 }

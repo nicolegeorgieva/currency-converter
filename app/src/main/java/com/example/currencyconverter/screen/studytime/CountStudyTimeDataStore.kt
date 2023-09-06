@@ -7,10 +7,12 @@ import com.example.currencyconverter.data.START_HOUR_KEY
 import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CountStudyTimeDataStore @Inject constructor(
+    @ApplicationContext
     private val context: Context
 ) {
     val startHourInput = context.dataStore.data.map {
