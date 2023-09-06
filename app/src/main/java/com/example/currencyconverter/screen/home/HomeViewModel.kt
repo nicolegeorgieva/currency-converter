@@ -7,6 +7,7 @@ import com.example.currencyconverter.domain.monthlysalary.calculateMonthlySalary
 import com.example.currencyconverter.domain.monthlysalary.monthlyHours
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,15 +17,17 @@ class HomeViewModel @Inject constructor(
     private var hourlyRateInUsd = mutableStateOf("")
     private var monthlySalaryInBgn = mutableStateOf("")
     private var exchangeRatesResponse = mutableStateOf<ExchangeRates.ExchangeRatesResponse?>(null)
+    private var date = mutableStateOf<Date?>(null)
 
     fun onStart() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRates.fetchExchangeRates()
+            date.value = exchangeRates.getDate()
         }
     }
 
-    fun getDate(): String? {
-        return exchangeRatesResponse.value?.date
+    fun getDate(): Date? {
+        return date.value
     }
 
     val eurToUsd = exchangeRatesResponse.value?.eur?.usd ?: 1.0
