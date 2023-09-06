@@ -15,13 +15,14 @@ class RequestPlaygroundViewModel @Inject constructor(
         mutableStateOf<RequestPlayground.Request>(RequestPlayground.Request.Loading)
     private val newToDo = mutableStateOf("")
 
-    fun getToDosState(): RequestPlayground.Request {
+    fun fetchToDos() {
         viewModelScope.launch {
             val res = requestPlayground.getToDos()
-
             toDosState.value = res
         }
+    }
 
+    fun getToDosState(): RequestPlayground.Request {
         return toDosState.value
     }
 

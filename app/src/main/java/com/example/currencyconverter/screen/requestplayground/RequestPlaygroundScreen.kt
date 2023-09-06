@@ -37,7 +37,7 @@ fun RequestPlaygroundScreen() {
             .padding(12.dp)
     ) {
         LaunchedEffect(Unit) {
-            viewModel.getToDosState()
+            viewModel.fetchToDos()
         }
 
         BackButton {
