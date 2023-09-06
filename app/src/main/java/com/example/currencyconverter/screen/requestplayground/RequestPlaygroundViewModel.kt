@@ -11,9 +11,9 @@ import javax.inject.Inject
 class RequestPlaygroundViewModel @Inject constructor(
     private val requestPlayground: RequestPlayground
 ) : ViewModel() {
-    private var toDosState =
+    private val toDosState =
         mutableStateOf<RequestPlayground.Request>(RequestPlayground.Request.Loading)
-    private var newToDo = mutableStateOf("")
+    private val newToDo = mutableStateOf("")
 
     fun getToDosState(): RequestPlayground.Request {
         viewModelScope.launch {
@@ -29,36 +29,29 @@ class RequestPlaygroundViewModel @Inject constructor(
         return newToDo.value
     }
 
-    fun onToDoWriting(task: String): String {
+    fun onToDoWriting(task: String) {
         newToDo.value = task
-
-        val res = newToDo.value
-        return res
     }
 
-    fun onRefresh(): RequestPlayground.Request {
+    fun onRefresh() {
         toDosState.value = RequestPlayground.Request.Loading
 
         viewModelScope.launch {
             val res = requestPlayground.getToDos()
             toDosState.value = res
         }
-
-        return toDosState.value
     }
 
-    fun onDelete(item: Int): RequestPlayground.Request {
+    fun onDelete(item: Int) {
         toDosState.value = RequestPlayground.Request.Loading
 
         viewModelScope.launch {
             val res = requestPlayground.removeToDo(item)
             toDosState.value = res
         }
-
-        return toDosState.value
     }
 
-    fun onAddToDo(): RequestPlayground.Request {
+    fun onAddToDo() {
         toDosState.value = RequestPlayground.Request.Loading
 
         viewModelScope.launch {
@@ -68,6 +61,5 @@ class RequestPlaygroundViewModel @Inject constructor(
         }
 
         newToDo.value = ""
-        return toDosState.value
     }
 }
