@@ -82,7 +82,7 @@ fun CountStudyTimeScreen() {
             onValueChange = { newCutMinsInput ->
                 viewModel.editCutMins(newCutMinsInput)
             },
-            label = { Text("Cut mins*") },
+            label = { Text("Cut mins") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
