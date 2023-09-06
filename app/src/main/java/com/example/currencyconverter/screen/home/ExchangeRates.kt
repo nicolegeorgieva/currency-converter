@@ -1,12 +1,14 @@
 package com.example.currencyconverter.screen.home
 
-import com.example.currencyconverter.request.client
+import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
-class ExchangeRates @Inject constructor() {
+class ExchangeRates @Inject constructor(
+    private val client: HttpClient
+) {
     @Serializable
     data class ExchangeRatesResponse(
         val date: String,

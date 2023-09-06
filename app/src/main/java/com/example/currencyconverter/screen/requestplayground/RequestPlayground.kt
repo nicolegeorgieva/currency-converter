@@ -1,6 +1,6 @@
 package com.example.currencyconverter.screen.requestplayground
 
-import com.example.currencyconverter.request.client
+import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -12,7 +12,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
-class RequestPlayground @Inject constructor() {
+class RequestPlayground @Inject constructor(
+    private val client: HttpClient
+) {
     @Serializable
     data class AddToDoRequest(
         val task: String
