@@ -8,12 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import com.example.currencyconverter.screen.CountStudyTime
 import com.example.currencyconverter.screen.HomeScreen
 import com.example.currencyconverter.screen.MenuScreen
 import com.example.currencyconverter.screen.RequestPlaygroundScreen
 import com.example.currencyconverter.screen.age.AgeScreen
 import com.example.currencyconverter.screen.demo.DemoScreen
+import com.example.currencyconverter.screen.studytime.CountStudyTimeScreen
 import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when (screenState.value) {
                         Screen.MenuScreen -> MenuScreen()
-                        Screen.CountStudyTime -> CountStudyTime()
+                        Screen.CountStudyTime -> CountStudyTimeScreen()
                         Screen.HomeScreen -> HomeScreen()
                         Screen.RequestPlaygroundScreen -> RequestPlaygroundScreen()
                         Screen.DemoScreen -> DemoScreen()

@@ -1,4 +1,4 @@
-package com.example.currencyconverter.screen
+package com.example.currencyconverter.screen.studytime
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,70 +18,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.data.CUT_MINS_KEY
-import com.example.currencyconverter.data.START_HOUR_KEY
-import com.example.currencyconverter.data.START_MINS_KEY
 import com.example.currencyconverter.data.TOTAL_STUDY_TIME_KEY
 import com.example.currencyconverter.data.dataStore
-import com.example.currencyconverter.domain.studytime.convertTotalTimeToMins
 import com.example.currencyconverter.domain.studytime.currentStudyMins
-import com.example.currencyconverter.domain.studytime.totalStudyTimeRes
 import com.example.currencyconverter.screenState
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CountStudyTime() {
+fun CountStudyTimeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        val endHourInput = rememberSaveable { mutableStateOf("") }
-        val endMinsInput = rememberSaveable { mutableStateOf("") }
-
-        val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
-
-        val startHourInputState = remember {
-            context.dataStore.data.map {
-                it[START_HOUR_KEY]
-            }
-        }.collectAsState(initial = "")
-
-        val startMinsInputState = remember {
-            context.dataStore.data.map {
-                it[START_MINS_KEY]
-            }
-        }.collectAsState(initial = "")
-
-        val cutMinsState = remember {
-            context.dataStore.data.map {
-                it[CUT_MINS_KEY]
-            }
-        }.collectAsState(initial = "")
-
-        val totalStudyTimeState = remember {
-            context.dataStore.data.map { it[TOTAL_STUDY_TIME_KEY] }
-        }.collectAsState(initial = null)
-
-        val errorOccuredState = remember { mutableStateOf(false) }
+        val viewModel: CountStudyTimeViewModel = viewModel()
 
         BackButton {
             screenState.value = Screen.MenuScreen
@@ -90,44 +51,32 @@ fun CountStudyTime() {
         Spacer(modifier = Modifier.height(12.dp))
 
         TimeInputRow(
-            hours = startHourInputState.value ?: "",
-            onHoursChange = { newHours ->
-                coroutineScope.launch {
-                    context.dataStore.edit {
-                        it[START_HOUR_KEY] = newHours
-                    }
-                }
+            hours = viewModel.getStartHour(),
+            onHoursChange = { newHour ->
+                viewModel.editStartHour(newHour)
             },
-            mins = startMinsInputState.value ?: "",
+            mins = viewModel.getStartMins(),
             onMinsChange = { newMins ->
-                coroutineScope.launch {
-                    context.dataStore.edit {
-                        it[START_MINS_KEY] = newMins
-                    }
-                }
+                viewModel.editStartMins(newMins)
             }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         TimeInputRow(
-            hours = endHourInput.value,
-            onHoursChange = { endHourInput.value = it },
-            mins = endMinsInput.value,
-            onMinsChange = { endMinsInput.value = it }
+            hours = viewModel.endHourInputState.value,
+            onHoursChange = { viewModel.endHourInputState.value = it },
+            mins = viewModel.endMinsInputState.value,
+            onMinsChange = { viewModel.endMinsInputState.value = it }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         TextField(
             modifier = Modifier.width(124.dp),
-            value = cutMinsState.value ?: "",
+            value = viewModel.getCutMins(),
             onValueChange = { newCutMinsInput ->
-                coroutineScope.launch {
-                    context.dataStore.edit {
-                        it[CUT_MINS_KEY] = newCutMinsInput
-                    }
-                }
+                viewModel.editCutMins(newCutMinsInput)
             },
             label = { Text("Cut mins*") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -136,15 +85,6 @@ fun CountStudyTime() {
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            val totalStudy = totalStudyTimeRes(
-                (startHourInputState.value ?: "").toString(),
-                (startMinsInputState.value ?: "").toString(),
-                endHourInput.value,
-                endMinsInput.value,
-                cutMinsState.value ?: "",
-                convertTotalTimeToMins(totalStudyTimeState.value ?: "")
-            )
-
             if (currentStudyMins(
                     (startHourInputState.value ?: "").toString(),
                     (startMinsInputState.value ?: "").toString(),
@@ -159,10 +99,7 @@ fun CountStudyTime() {
 
                 coroutineScope.launch {
                     context.dataStore.edit {
-                        it[TOTAL_STUDY_TIME_KEY] = totalStudy
-                        it[START_HOUR_KEY] = ""
-                        it[START_MINS_KEY] = ""
-                        it[CUT_MINS_KEY] = ""
+
                     }
                 }
 
@@ -204,7 +141,7 @@ fun CountStudyTime() {
             ) {
                 Icon(
                     imageVector = Icons.Filled.Clear,
-                    contentDescription = "Menu"
+                    contentDescription = "Clear"
                 )
             }
         }
