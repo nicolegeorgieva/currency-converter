@@ -8,10 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import com.example.currencyconverter.screen.HomeScreen
 import com.example.currencyconverter.screen.MenuScreen
 import com.example.currencyconverter.screen.age.AgeScreen
 import com.example.currencyconverter.screen.demo.DemoScreen
+import com.example.currencyconverter.screen.home.HomeScreen
 import com.example.currencyconverter.screen.requestplayground.RequestPlaygroundScreen
 import com.example.currencyconverter.screen.studytime.CountStudyTimeScreen
 import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
