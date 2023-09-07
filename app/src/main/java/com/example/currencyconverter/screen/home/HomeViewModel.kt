@@ -9,11 +9,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val monthlySalaryCalculator: MonthlySalaryCalculator,
+    private val monthlyGrossSalaryCalculator: MonthlyGrossSalaryCalculator,
     private val exchangeRatesDataSource: ExchangeRatesDataSource,
     private val currencyConverter: CurrencyConverter
 ) : ViewModel() {
-    private val monthlySalaryInBgn = mutableStateOf("")
+    private val monthlyGrossSalaryInBgn = mutableStateOf("")
     val hourlyRateInUsd = mutableStateOf("")
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
@@ -40,14 +40,14 @@ class HomeViewModel @Inject constructor(
             hourlyRateInUsd.value.toDoubleOrNull()
         )
 
-        monthlySalaryInBgn.value =
-            monthlySalaryCalculator.calculateMonthlySalary(
+        monthlyGrossSalaryInBgn.value =
+            monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
                 usdToBgn ?: 1.0,
-                monthlySalaryCalculator.monthlyHours
+                monthlyGrossSalaryCalculator.monthlyHours
             ).toString()
     }
 
     fun getMontlySalary(): Double {
-        return monthlySalaryInBgn.value.toDoubleOrNull() ?: 1.0
+        return monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 1.0
     }
 }
