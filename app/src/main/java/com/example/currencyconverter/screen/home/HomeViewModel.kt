@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,12 +43,19 @@ class HomeViewModel @Inject constructor(
             .collectAsState(initial = "").value
 
         taxPercentage.value = remember { homeDataStore.getTaxPercentage() }
-            .collectAsState()
+            .collectAsState(initial = 0.0).value
 
-        socialSecurityAmount.value = homeDataStore.getSocialSecurityAmount()
-        companyExpensesAmount.value = homeDataStore.getCompanyExpensesAmount()
-        monthlyGrossSalaryInBgn.value = homeDataStore.getMonthlyGrossSalary()
-        monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
+        socialSecurityAmount.value = remember { homeDataStore.getSocialSecurityAmount() }
+            .collectAsState(initial = 0.0).value
+
+        companyExpensesAmount.value = remember { homeDataStore.getCompanyExpensesAmount() }
+            .collectAsState(initial = 0.0).value
+
+        monthlyGrossSalaryInBgn.value = remember { homeDataStore.getMonthlyGrossSalary() }
+            .collectAsState(initial = "").value
+
+        monthlyNetSalaryInBgn.value = remember { homeDataStore.getMonthlyNetSalary() }
+            .collectAsState(initial = 0.0).value
     }
 
     fun getDate(): String? {
@@ -122,7 +130,7 @@ class HomeViewModel @Inject constructor(
                     socialSecurityAmount.value ?: 0.0
                 )
             )
-            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
     }
 
@@ -139,7 +147,7 @@ class HomeViewModel @Inject constructor(
                     socialSecurityAmount.value ?: 0.0
                 )
             )
-            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
     }
 
@@ -156,7 +164,7 @@ class HomeViewModel @Inject constructor(
                     socialSecurityAmount.value ?: 0.0
                 )
             )
-            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
     }
 
