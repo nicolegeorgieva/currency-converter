@@ -16,13 +16,21 @@ class HomeViewModel @Inject constructor(
     private val homeDataStore: HomeDataStore
 ) : ViewModel() {
     private val monthlyGrossSalaryInBgn = mutableStateOf("")
+    private val monthlyNetSalaryInBgn = mutableStateOf<Double?>(null)
     val hourlyRateInUsd = mutableStateOf("")
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
+    private val taxPercentage = mutableStateOf<Double?>(null)
+    private val socialSecurityAmount = mutableStateOf<Double?>(null)
+    private val companyExpensesAmount = mutableStateOf<Double?>(null)
 
     fun onStart() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
+            hourlyRateInUsd.value = homeDataStore.getHourlyRate()
+            taxPercentage.value = homeDataStore.getTaxPercentage()
+            socialSecurityAmount.value = homeDataStore.getSocialSecurityAmount()
+            companyExpensesAmount.value = homeDataStore.getCompanyExpensesAmount()
         }
     }
 
@@ -37,6 +45,10 @@ class HomeViewModel @Inject constructor(
     fun onChangeHourlyRateInUsd(newRate: String) {
         hourlyRateInUsd.value = newRate
 
+        viewModelScope.launch {
+            homeDataStore.editHourlyRate(newRate)
+        }
+
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
             exchangeRatesResponse.value,
             hourlyRateInUsd.value.toDoubleOrNull()
@@ -49,7 +61,37 @@ class HomeViewModel @Inject constructor(
             ).toString()
     }
 
-    fun getMontlySalary(): Double {
+    fun onChangeTaxPercentage(newTaxPercentage: Double) {
+        taxPercentage.value = newTaxPercentage
+
+        viewModelScope.launch {
+            homeDataStore.editTaxPercentage(newTaxPercentage)
+        }
+
+        monthlyNetSalaryInBgn.value =
+    }
+
+    fun onChangeSocialSecurityAmount(newSocialSecurityAmount: Double) {
+        socialSecurityAmount.value = newSocialSecurityAmount
+
+        viewModelScope.launch {
+            homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
+        }
+    }
+
+    fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
+        companyExpensesAmount.value = newCompanyExpensesAmount
+
+        viewModelScope.launch {
+            homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount)
+        }
+    }
+
+    fun getMontlyBgnGrossSalary(): Double {
         return monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 1.0
+    }
+
+    fun getMonthlyBgnNetSalary(): Double {
+        return monthlyNetSalaryInBgn.value ?: 1.0
     }
 }

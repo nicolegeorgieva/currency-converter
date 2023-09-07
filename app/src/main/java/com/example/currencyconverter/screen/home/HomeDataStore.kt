@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.currencyconverter.data.COMPANY_EXPENSES_AMOUNT_KEY
 import com.example.currencyconverter.data.HOURLY_RATE_KEY
+import com.example.currencyconverter.data.MONTHLY_GROSS_SALARY_KEY
+import com.example.currencyconverter.data.MONTHLY_NET_SALARY_KEY
 import com.example.currencyconverter.data.SOCIAL_SECURITY_AMOUNT_KEY
 import com.example.currencyconverter.data.TAX_PERCENTAGE_KEY
 import com.example.currencyconverter.data.dataStore
@@ -56,5 +58,13 @@ class HomeDataStore @Inject constructor(
         dataStore.edit {
             it[COMPANY_EXPENSES_AMOUNT_KEY] = newCompanyExpensesAmount
         }
+    }
+
+    suspend fun getMonthlyGrossSalary(): String {
+        return dataStore.data.map { it[MONTHLY_GROSS_SALARY_KEY] }.firstOrNull() ?: ""
+    }
+
+    suspend fun getMonthlyNetSalary(): Double {
+        return dataStore.data.map { it[MONTHLY_NET_SALARY_KEY] }.firstOrNull() ?: 0.0
     }
 }
