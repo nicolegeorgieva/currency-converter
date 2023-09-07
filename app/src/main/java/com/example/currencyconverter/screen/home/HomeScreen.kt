@@ -157,7 +157,7 @@ fun HomeScreen() {
         if (viewModel.getHourlyRateInUsd().isNotBlank()) {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
-                val formattedSalary = formatter.format(viewModel.getMontlyBgnGrossSalary())
+                val formattedSalary = formatter.format(viewModel.getMonthlyBgnNetSalary())
 
                 Text(text = formattedSalary, color = Color.Green)
 
