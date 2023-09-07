@@ -10,6 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val monthlyGrossSalaryCalculator: MonthlyGrossSalaryCalculator,
+    private val monthlyNetSalaryCalculator: MonthlyNetSalaryCalculator,
     private val exchangeRatesDataSource: ExchangeRatesDataSource,
     private val currencyConverter: CurrencyConverter
 ) : ViewModel() {
