@@ -7,7 +7,7 @@ class TaxCalculator @Inject constructor() {
         income: Double,
         socialSecurityAmount: Double,
         companyExpenses: Double,
-        taxPercentage: Int
+        taxPercentage: Double
     ): Double {
         return (income - socialSecurityAmount - companyExpenses) * taxPercentage
     }
