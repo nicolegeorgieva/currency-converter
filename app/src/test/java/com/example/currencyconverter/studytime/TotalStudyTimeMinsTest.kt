@@ -4,7 +4,7 @@ import com.example.currencyconverter.domain.studytime.totalStudyTimeMins
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class TotalStudyTimeMins : FreeSpec({
+class TotalStudyTimeMinsTest : FreeSpec({
     "60m, 20m -> 80m" {
         totalStudyTimeMins(60, 20) shouldBe 80
     }

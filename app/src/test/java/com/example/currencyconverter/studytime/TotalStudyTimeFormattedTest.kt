@@ -4,7 +4,7 @@ import com.example.currencyconverter.domain.studytime.totalStudyTimeFormatted
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class TotalStudyTimeFormatted : FreeSpec({
+class TotalStudyTimeFormattedTest : FreeSpec({
     "150m -> \"2h 30m\"" {
         totalStudyTimeFormatted(150) shouldBe "2h 30m"
     }

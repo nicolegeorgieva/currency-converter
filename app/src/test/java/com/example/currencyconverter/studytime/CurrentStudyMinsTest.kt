@@ -4,7 +4,7 @@ import com.example.currencyconverter.domain.studytime.currentStudyMins
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class CurrentStudyMins : FreeSpec({
+class CurrentStudyMinsTest : FreeSpec({
     "without cut mins" - {
         "10:00 - 11:00 -> 60m" {
             currentStudyMins(
