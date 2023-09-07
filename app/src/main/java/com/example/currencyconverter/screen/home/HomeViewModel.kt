@@ -10,16 +10,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val exchangeRates: ExchangeRates,
-    private val monthlyHoursProvider: MonthlyHoursProvider
+    private val monthlyHoursProvider: MonthlyHoursProvider,
+    private val exchangeRatesDataSource: ExchangeRatesDataSource,
+    private val exchangeLogic: ExchangeLogic
 ) : ViewModel() {
-    private val hourlyRateInUsd = mutableStateOf("")
     private val monthlySalaryInBgn = mutableStateOf("")
-    private val exchangeRatesResponse = mutableStateOf<ExchangeRates.ExchangeRatesResponse?>(null)
+    val hourlyRateInUsd = mutableStateOf("")
+    private val exchangeRatesResponse =
+        mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
 
     fun onStart() {
         viewModelScope.launch {
-            exchangeRatesResponse.value = exchangeRates.fetchExchangeRates()
+            exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
         }
     }
 
@@ -34,13 +36,13 @@ class HomeViewModel @Inject constructor(
     fun onChangeHourlyRateInUsd(newRate: String) {
         hourlyRateInUsd.value = newRate
 
-        val eurToUsd = exchangeRatesResponse.value?.eur?.usd ?: 1.0
-        val eurToBgn = exchangeRatesResponse.value?.eur?.bgn ?: 1.0
-        val usdHourlyRateToEur = (hourlyRateInUsd.value.toDoubleOrNull() ?: 1.0) / eurToUsd
-        val eurToBgnHourlyRate = usdHourlyRateToEur * eurToBgn
-
         monthlySalaryInBgn.value =
-            calculateMonthlySalary(eurToBgnHourlyRate, monthlyHoursProvider.monthlyHours).toString()
+            calculateMonthlySalary(
+                exchangeLogic.exchangeUsdToBgn(
+                    exchangeRatesResponse.value,
+                    hourlyRateInUsd.value
+                ), monthlyHoursProvider.monthlyHours
+            ).toString()
     }
 
     fun getMontlySalary(): Double {

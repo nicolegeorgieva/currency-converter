@@ -6,7 +6,7 @@ import io.ktor.client.request.get
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
-class ExchangeRates @Inject constructor(
+class ExchangeRatesDataSource @Inject constructor(
     private val client: HttpClient
 ) {
     @Serializable
