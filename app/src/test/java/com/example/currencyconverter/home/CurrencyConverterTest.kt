@@ -49,5 +49,4 @@ class CurrencyConverterTest : FreeSpec({
             ) shouldBe null
         }
     }
-
 })
