@@ -62,9 +62,9 @@ class HomeViewModel @Inject constructor(
             income = monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
             taxAmount = taxCalculator.calculateTaxAmount(
                 income = monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
-                socialSecurityAmount = socialSecurityAmount.value,
-                companyExpenses = companyExpensesAmount.value,
-                taxPercentage = taxPercentage.value
+                socialSecurityAmount = socialSecurityAmount.value ?: 0.0,
+                companyExpenses = companyExpensesAmount.value ?: 0.0,
+                taxPercentage = taxPercentage.value ?: 0.0
             ),
             companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
             socialSecurityAmount = socialSecurityAmount.value ?: 0.0
