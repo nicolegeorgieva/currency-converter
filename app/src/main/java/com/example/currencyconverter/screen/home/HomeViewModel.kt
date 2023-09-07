@@ -48,15 +48,20 @@ class HomeViewModel @Inject constructor(
 
     fun onChangeHourlyRateInUsd(newRate: String) {
         hourlyRateInUsd.value = newRate
-        val monthlyGrossSalary = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
-            hourlyRateInUsd.value.toDoubleOrNull(),
-            monthlyGrossSalaryCalculator.monthlyHours
+        val usdToBgn = currencyConverter.exchangeUsdToBgn(
+            exchangeRatesResponse.value,
+            hourlyRateInUsd.value.toDoubleOrNull()
         )
 
+        monthlyGrossSalaryInBgn.value = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
+            usdToBgn,
+            monthlyGrossSalaryCalculator.monthlyHours
+        ).toString()
+
         val monthlyNetSalary = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
-            income = monthlyGrossSalary,
+            income = monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
             taxAmount = taxCalculator.calculateTaxAmount(
-                income = monthlyGrossSalary,
+                income = monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
                 socialSecurityAmount = socialSecurityAmount.value,
                 companyExpenses = companyExpensesAmount.value,
                 taxPercentage = taxPercentage.value
@@ -68,15 +73,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeDataStore.editHourlyRate(newRate)
             homeDataStore.editMonthlyGrossSalary(
-                monthlyGrossSalary.toString()
+                monthlyGrossSalaryInBgn.toString()
             )
             homeDataStore.editMonthlyNetSalary(monthlyNetSalary)
         }
-
-        val usdToBgn = currencyConverter.exchangeUsdToBgn(
-            exchangeRatesResponse.value,
-            hourlyRateInUsd.value.toDoubleOrNull()
-        )
 
         monthlyGrossSalaryInBgn.value =
             monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
