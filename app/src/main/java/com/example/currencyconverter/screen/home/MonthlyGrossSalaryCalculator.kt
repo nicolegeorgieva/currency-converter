@@ -9,7 +9,7 @@ class MonthlyGrossSalaryCalculator @Inject constructor() {
 
     val monthlyHours = (hoursPerWeek * weeksPerYear) / monthsPerYear
 
-    fun calculateMonthlyGrossSalary(hourlyRate: Double, monthlyHours: Double): Double {
-        return hourlyRate * monthlyHours
+    fun calculateMonthlyGrossSalary(hourlyRate: Double?, monthlyHours: Double): Double {
+        return (hourlyRate ?: 1.0) * monthlyHours
     }
 }

@@ -13,7 +13,8 @@ class HomeViewModel @Inject constructor(
     private val monthlyNetSalaryCalculator: MonthlyNetSalaryCalculator,
     private val exchangeRatesDataSource: ExchangeRatesDataSource,
     private val currencyConverter: CurrencyConverter,
-    private val homeDataStore: HomeDataStore
+    private val homeDataStore: HomeDataStore,
+    private val taxCalculator: TaxCalculator
 ) : ViewModel() {
     private val monthlyGrossSalaryInBgn = mutableStateOf("")
     private val monthlyNetSalaryInBgn = mutableStateOf<Double?>(null)
@@ -31,6 +32,8 @@ class HomeViewModel @Inject constructor(
             taxPercentage.value = homeDataStore.getTaxPercentage()
             socialSecurityAmount.value = homeDataStore.getSocialSecurityAmount()
             companyExpensesAmount.value = homeDataStore.getCompanyExpensesAmount()
+            monthlyGrossSalaryInBgn.value = homeDataStore.getMonthlyGrossSalary()
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
         }
     }
 
@@ -44,9 +47,29 @@ class HomeViewModel @Inject constructor(
 
     fun onChangeHourlyRateInUsd(newRate: String) {
         hourlyRateInUsd.value = newRate
+        val monthlyGrossSalary = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
+            hourlyRateInUsd.value.toDoubleOrNull(),
+            monthlyGrossSalaryCalculator.monthlyHours
+        )
+
+        val monthlyNetSalary = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+            income = monthlyGrossSalary,
+            taxAmount = taxCalculator.calculateTaxAmount(
+                income = monthlyGrossSalary,
+                socialSecurityAmount = socialSecurityAmount.value,
+                companyExpenses = companyExpensesAmount.value,
+                taxPercentage = taxPercentage.value
+            ),
+            companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
+            socialSecurityAmount = socialSecurityAmount.value ?: 0.0
+        )
 
         viewModelScope.launch {
             homeDataStore.editHourlyRate(newRate)
+            homeDataStore.editMonthlyGrossSalary(
+                monthlyGrossSalary.toString()
+            )
+            homeDataStore.editMonthlyNetSalary()
         }
 
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
@@ -66,9 +89,16 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             homeDataStore.editTaxPercentage(newTaxPercentage)
+            homeDataStore.editMonthlyNetSalary(
+                monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+                    monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
+                    taxPercentage.value ?: 0.0,
+                    companyExpensesAmount.value ?: 0.0,
+                    socialSecurityAmount.value ?: 0.0
+                )
+            )
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
         }
-
-        monthlyNetSalaryInBgn.value =
     }
 
     fun onChangeSocialSecurityAmount(newSocialSecurityAmount: Double) {
@@ -76,6 +106,15 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
+            homeDataStore.editMonthlyNetSalary(
+                monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+                    monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
+                    taxPercentage.value ?: 0.0,
+                    companyExpensesAmount.value ?: 0.0,
+                    socialSecurityAmount.value ?: 0.0
+                )
+            )
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
         }
     }
 
@@ -84,6 +123,15 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount)
+            homeDataStore.editMonthlyNetSalary(
+                monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+                    monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 0.0,
+                    taxPercentage.value ?: 0.0,
+                    companyExpensesAmount.value ?: 0.0,
+                    socialSecurityAmount.value ?: 0.0
+                )
+            )
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
         }
     }
 

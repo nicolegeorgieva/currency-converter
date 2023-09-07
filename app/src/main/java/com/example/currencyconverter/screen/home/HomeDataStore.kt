@@ -64,7 +64,19 @@ class HomeDataStore @Inject constructor(
         return dataStore.data.map { it[MONTHLY_GROSS_SALARY_KEY] }.firstOrNull() ?: ""
     }
 
+    suspend fun editMonthlyGrossSalary(newMonthlyGrossSalary: String) {
+        dataStore.edit {
+            it[MONTHLY_GROSS_SALARY_KEY] = newMonthlyGrossSalary
+        }
+    }
+
     suspend fun getMonthlyNetSalary(): Double {
         return dataStore.data.map { it[MONTHLY_NET_SALARY_KEY] }.firstOrNull() ?: 0.0
+    }
+
+    suspend fun editMonthlyNetSalary(newMonthlyNetSalary: Double) {
+        dataStore.edit {
+            it[MONTHLY_NET_SALARY_KEY] = newMonthlyNetSalary
+        }
     }
 }

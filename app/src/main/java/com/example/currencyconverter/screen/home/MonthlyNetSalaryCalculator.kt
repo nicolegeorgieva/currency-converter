@@ -8,9 +8,9 @@ class MonthlyNetSalaryCalculator @Inject constructor(
     fun calculateMonthlyNetSalary(
         income: Double,
         taxAmount: Double,
-        companyExpenses: Double,
+        companyExpensesAmount: Double,
         socialSecurityAmount: Double
     ): Double {
-        return income - taxAmount - companyExpenses - socialSecurityAmount
+        return income - taxAmount - companyExpensesAmount - socialSecurityAmount
     }
 }
