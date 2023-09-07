@@ -10,7 +10,7 @@ import com.example.currencyconverter.data.SOCIAL_SECURITY_AMOUNT_KEY
 import com.example.currencyconverter.data.TAX_PERCENTAGE_KEY
 import com.example.currencyconverter.data.dataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,8 +20,8 @@ class HomeDataStore @Inject constructor(
 ) {
     val dataStore = context.dataStore
 
-    suspend fun getHourlyRate(): String {
-        return dataStore.data.map { it[HOURLY_RATE_KEY] }.firstOrNull() ?: ""
+    fun getHourlyRate(): Flow<String> {
+        return dataStore.data.map { it[HOURLY_RATE_KEY] ?: "" }
     }
 
     suspend fun editHourlyRate(newHourlyRate: String) {
@@ -30,8 +30,8 @@ class HomeDataStore @Inject constructor(
         }
     }
 
-    suspend fun getTaxPercentage(): Double {
-        return dataStore.data.map { it[TAX_PERCENTAGE_KEY] }.firstOrNull() ?: 0.0
+    fun getTaxPercentage(): Flow<Double> {
+        return dataStore.data.map { it[TAX_PERCENTAGE_KEY] ?: 0.0 }
     }
 
     suspend fun editTaxPercentage(newTaxPercentage: Double) {
@@ -40,8 +40,8 @@ class HomeDataStore @Inject constructor(
         }
     }
 
-    suspend fun getSocialSecurityAmount(): Double {
-        return dataStore.data.map { it[SOCIAL_SECURITY_AMOUNT_KEY] }.firstOrNull() ?: 0.0
+    fun getSocialSecurityAmount(): Flow<Double> {
+        return dataStore.data.map { it[SOCIAL_SECURITY_AMOUNT_KEY] ?: 0.0 }
     }
 
     suspend fun editSocialSecurityAmount(newSocialSecurityAmount: Double) {
@@ -50,8 +50,8 @@ class HomeDataStore @Inject constructor(
         }
     }
 
-    suspend fun getCompanyExpensesAmount(): Double {
-        return dataStore.data.map { it[COMPANY_EXPENSES_AMOUNT_KEY] }.firstOrNull() ?: 0.0
+    fun getCompanyExpensesAmount(): Flow<Double> {
+        return dataStore.data.map { it[COMPANY_EXPENSES_AMOUNT_KEY] ?: 0.0 }
     }
 
     suspend fun editCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
@@ -60,8 +60,8 @@ class HomeDataStore @Inject constructor(
         }
     }
 
-    suspend fun getMonthlyGrossSalary(): String {
-        return dataStore.data.map { it[MONTHLY_GROSS_SALARY_KEY] }.firstOrNull() ?: ""
+    fun getMonthlyGrossSalary(): Flow<String> {
+        return dataStore.data.map { it[MONTHLY_GROSS_SALARY_KEY] ?: "" }
     }
 
     suspend fun editMonthlyGrossSalary(newMonthlyGrossSalary: String) {
@@ -70,8 +70,8 @@ class HomeDataStore @Inject constructor(
         }
     }
 
-    suspend fun getMonthlyNetSalary(): Double {
-        return dataStore.data.map { it[MONTHLY_NET_SALARY_KEY] }.firstOrNull() ?: 0.0
+    fun getMonthlyNetSalary(): Flow<Double> {
+        return dataStore.data.map { it[MONTHLY_NET_SALARY_KEY] ?: 0.0 }
     }
 
     suspend fun editMonthlyNetSalary(newMonthlyNetSalary: Double) {

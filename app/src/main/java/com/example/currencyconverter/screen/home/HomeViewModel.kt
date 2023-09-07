@@ -1,6 +1,9 @@
 package com.example.currencyconverter.screen.home
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,16 +28,26 @@ class HomeViewModel @Inject constructor(
     private val socialSecurityAmount = mutableStateOf<Double?>(null)
     private val companyExpensesAmount = mutableStateOf<Double?>(null)
 
-    fun onStart() {
+    private fun fetchExchangeRates() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
-            hourlyRateInUsd.value = homeDataStore.getHourlyRate()
-            taxPercentage.value = homeDataStore.getTaxPercentage()
-            socialSecurityAmount.value = homeDataStore.getSocialSecurityAmount()
-            companyExpensesAmount.value = homeDataStore.getCompanyExpensesAmount()
-            monthlyGrossSalaryInBgn.value = homeDataStore.getMonthlyGrossSalary()
-            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
         }
+    }
+
+    @Composable
+    fun OnStart() {
+        fetchExchangeRates()
+
+        hourlyRateInUsd.value = remember { homeDataStore.getHourlyRate() }
+            .collectAsState(initial = "").value
+
+        taxPercentage.value = remember { homeDataStore.getTaxPercentage() }
+            .collectAsState()
+
+        socialSecurityAmount.value = homeDataStore.getSocialSecurityAmount()
+        companyExpensesAmount.value = homeDataStore.getCompanyExpensesAmount()
+        monthlyGrossSalaryInBgn.value = homeDataStore.getMonthlyGrossSalary()
+        monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary()
     }
 
     fun getDate(): String? {
