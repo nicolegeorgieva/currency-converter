@@ -48,7 +48,7 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         LaunchedEffect(Unit) {
-            viewModel.onStart()
+            viewModel.OnStart()
         }
 
         if (viewModel.getDate() != null) {
@@ -93,7 +93,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getSocialSecurity() ?: "",
+                value = viewModel.getSocialSecurityAmount() ?: "",
                 onValueChange = {
                     viewModel.onChangeSocialSecurityAmount(
                         it.toDoubleOrNull

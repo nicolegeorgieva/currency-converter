@@ -29,40 +29,20 @@ class HomeViewModel @Inject constructor(
     private val socialSecurityAmount = mutableStateOf<Double?>(null)
     private val companyExpensesAmount = mutableStateOf<Double?>(null)
 
-    private fun fetchExchangeRates() {
+    fun onStart() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
         }
-    }
-
-    @Composable
-    fun OnStart() {
-        fetchExchangeRates()
-
-        hourlyRateInUsd.value = remember { homeDataStore.getHourlyRate() }
-            .collectAsState(initial = "").value
-
-        taxPercentage.value = remember { homeDataStore.getTaxPercentage() }
-            .collectAsState(initial = 0.0).value
-
-        socialSecurityAmount.value = remember { homeDataStore.getSocialSecurityAmount() }
-            .collectAsState(initial = 0.0).value
-
-        companyExpensesAmount.value = remember { homeDataStore.getCompanyExpensesAmount() }
-            .collectAsState(initial = 0.0).value
-
-        monthlyGrossSalaryInBgn.value = remember { homeDataStore.getMonthlyGrossSalary() }
-            .collectAsState(initial = "").value
-
-        monthlyNetSalaryInBgn.value = remember { homeDataStore.getMonthlyNetSalary() }
-            .collectAsState(initial = 0.0).value
     }
 
     fun getDate(): String? {
         return exchangeRatesResponse.value?.date
     }
 
+    @Composable
     fun getHourlyRateInUsd(): String {
+        hourlyRateInUsd.value = remember { homeDataStore.getHourlyRate() }
+            .collectAsState(initial = "").value
         return hourlyRateInUsd.value
     }
 
@@ -105,15 +85,25 @@ class HomeViewModel @Inject constructor(
             ).toString()
     }
 
+    @Composable
     fun getTaxPercentage(): Double? {
+        taxPercentage.value = remember { homeDataStore.getTaxPercentage() }
+            .collectAsState(initial = 0.0).value
+
         return taxPercentage.value
     }
 
-    fun getSocialSecurity(): Double? {
+    @Composable
+    fun getSocialSecurityAmount(): Double? {
+        socialSecurityAmount.value = remember { homeDataStore.getSocialSecurityAmount() }
+            .collectAsState(initial = 0.0).value
         return socialSecurityAmount.value
     }
 
+    @Composable
     fun getCompanyExpensesAmount(): Double? {
+        companyExpensesAmount.value = remember { homeDataStore.getCompanyExpensesAmount() }
+            .collectAsState(initial = 0.0).value
         return companyExpensesAmount.value
     }
 
@@ -168,11 +158,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    @Composable
     fun getMontlyBgnGrossSalary(): Double {
+        monthlyGrossSalaryInBgn.value = remember { homeDataStore.getMonthlyGrossSalary() }
+            .collectAsState(initial = "").value
         return monthlyGrossSalaryInBgn.value.toDoubleOrNull() ?: 1.0
     }
 
+    @Composable
     fun getMonthlyBgnNetSalary(): Double {
+        monthlyNetSalaryInBgn.value = remember { homeDataStore.getMonthlyNetSalary() }
+            .collectAsState(initial = 0.0).value
         return monthlyNetSalaryInBgn.value ?: 1.0
     }
 }
