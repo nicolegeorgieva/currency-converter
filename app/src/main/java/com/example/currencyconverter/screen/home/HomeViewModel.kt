@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor(
             homeDataStore.editMonthlyGrossSalary(
                 monthlyGrossSalary.toString()
             )
-            homeDataStore.editMonthlyNetSalary()
+            homeDataStore.editMonthlyNetSalary(monthlyNetSalary)
         }
 
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
@@ -82,6 +82,18 @@ class HomeViewModel @Inject constructor(
                 usdToBgn ?: 1.0,
                 monthlyGrossSalaryCalculator.monthlyHours
             ).toString()
+    }
+
+    fun getTaxPercentage(): Double? {
+        return taxPercentage.value
+    }
+
+    fun getSocialSecurity(): Double? {
+        return socialSecurityAmount.value
+    }
+
+    fun getCompanyExpensesAmount(): Double? {
+        return companyExpensesAmount.value
     }
 
     fun onChangeTaxPercentage(newTaxPercentage: Double) {

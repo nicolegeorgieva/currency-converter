@@ -75,9 +75,11 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = // TODO,
+                value = viewModel.getTaxPercentage(),
                 onValueChange = {
-                    // TODO
+                    viewModel.onChangeTaxPercentage(
+                        it.toDoubleOrNull()
+                    )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -91,9 +93,9 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = // TODO,
+                value = viewModel.getSocialSecurity(),
                 onValueChange = {
-                    // TODO
+                    viewModel.onChangeSocialSecurityAmount(it)
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -107,9 +109,9 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = // TODO,
+                value = viewModel.getCompanyExpensesAmount(),
                 onValueChange = {
-                    // TODO
+                    viewModel.onChangeCompanyExpensesAmount(it)
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
