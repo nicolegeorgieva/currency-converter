@@ -12,7 +12,8 @@ class HomeViewModel @Inject constructor(
     private val monthlyGrossSalaryCalculator: MonthlyGrossSalaryCalculator,
     private val monthlyNetSalaryCalculator: MonthlyNetSalaryCalculator,
     private val exchangeRatesDataSource: ExchangeRatesDataSource,
-    private val currencyConverter: CurrencyConverter
+    private val currencyConverter: CurrencyConverter,
+    private val homeDataStore: HomeDataStore
 ) : ViewModel() {
     private val monthlyGrossSalaryInBgn = mutableStateOf("")
     val hourlyRateInUsd = mutableStateOf("")
