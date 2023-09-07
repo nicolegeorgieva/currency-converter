@@ -4,14 +4,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.domain.monthlysalary.calculateMonthlySalary
-import com.example.currencyconverter.domain.monthlysalary.monthlyHours
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val exchangeRates: ExchangeRates
+    private val exchangeRates: ExchangeRates,
+    private val monthlyHoursProvider: MonthlyHoursProvider
 ) : ViewModel() {
     private val hourlyRateInUsd = mutableStateOf("")
     private val monthlySalaryInBgn = mutableStateOf("")
@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
         hourlyRateInUsd.value = newRate
 
         monthlySalaryInBgn.value =
-            calculateMonthlySalary(eurToBgnHourlyRate, monthlyHours).toString()
+            calculateMonthlySalary(eurToBgnHourlyRate, monthlyHoursProvider.monthlyHours).toString()
     }
 
     fun getMontlySalary(): Double {
