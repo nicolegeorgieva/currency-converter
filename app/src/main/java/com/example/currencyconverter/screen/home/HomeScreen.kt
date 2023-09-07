@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -53,12 +54,8 @@ fun HomeScreen() {
         if (viewModel.getDate() != null) {
             Text(text = "Conversions are up to this date: ${viewModel.getDate()}")
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(24.dp))
         }
-
-        Text(text = "Hourly rate:")
-
-        Spacer(modifier = Modifier.height(24.dp))
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
@@ -71,14 +68,62 @@ fun HomeScreen() {
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Text(text = "$", fontWeight = FontWeight.Bold)
+            Text(text = "$ (hourly rate)", fontWeight = FontWeight.Bold)
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(verticalAlignment = Alignment.Bottom) {
+            TextField(
+                value = // TODO,
+                onValueChange = {
+                    // TODO
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(text = "% (tax)", fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(verticalAlignment = Alignment.Bottom) {
+            TextField(
+                value = // TODO,
+                onValueChange = {
+                    // TODO
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(text = "BGN (social security)", fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(verticalAlignment = Alignment.Bottom) {
+            TextField(
+                value = // TODO,
+                onValueChange = {
+                    // TODO
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(text = "BGN (company expenses)", fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(text = "=", fontWeight = FontWeight.Bold)
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         if (viewModel.getHourlyRateInUsd().isNotBlank()) {
             Row(verticalAlignment = Alignment.Bottom) {
@@ -95,6 +140,29 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        Text(text = "monthly salary", fontStyle = FontStyle.Italic)
+        Text(text = "monthly gross salary", fontStyle = FontStyle.Italic)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(text = "=", fontWeight = FontWeight.Bold)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (viewModel.getHourlyRateInUsd().isNotBlank()) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                val formatter = DecimalFormat("###,###.00")
+                val formattedSalary = formatter.format(viewModel.getMontlySalary())
+
+                Text(text = formattedSalary, color = Color.Green)
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(text = "BGN", fontWeight = FontWeight.Bold, color = Color.Green)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(text = "monthly net salary", fontStyle = FontStyle.Italic, color = Color.Green)
     }
 }
