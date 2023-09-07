@@ -12,7 +12,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val monthlyHoursProvider: MonthlyHoursProvider,
     private val exchangeRatesDataSource: ExchangeRatesDataSource,
-    private val exchangeLogic: ExchangeLogic
+    private val currencyConverter: CurrencyConverter
 ) : ViewModel() {
     private val monthlySalaryInBgn = mutableStateOf("")
     val hourlyRateInUsd = mutableStateOf("")
@@ -36,12 +36,15 @@ class HomeViewModel @Inject constructor(
     fun onChangeHourlyRateInUsd(newRate: String) {
         hourlyRateInUsd.value = newRate
 
+        val usdToBgn = currencyConverter.exchangeUsdToBgn(
+            exchangeRatesResponse.value,
+            hourlyRateInUsd.value.toDoubleOrNull()
+        )
+
         monthlySalaryInBgn.value =
             calculateMonthlySalary(
-                exchangeLogic.exchangeUsdToBgn(
-                    exchangeRatesResponse.value,
-                    hourlyRateInUsd.value
-                ), monthlyHoursProvider.monthlyHours
+                usdToBgn ?: 1.0,
+                monthlyHoursProvider.monthlyHours
             ).toString()
     }
 
