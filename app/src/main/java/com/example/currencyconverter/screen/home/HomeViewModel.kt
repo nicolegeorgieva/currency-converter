@@ -32,14 +32,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onChangeHourlyRateInUsd(newRate: String) {
-        // TODO Fix calculations
+        hourlyRateInUsd.value = newRate
 
         val eurToUsd = exchangeRatesResponse.value?.eur?.usd ?: 1.0
         val eurToBgn = exchangeRatesResponse.value?.eur?.bgn ?: 1.0
         val usdHourlyRateToEur = (hourlyRateInUsd.value.toDoubleOrNull() ?: 1.0) / eurToUsd
         val eurToBgnHourlyRate = usdHourlyRateToEur * eurToBgn
-
-        hourlyRateInUsd.value = newRate
 
         monthlySalaryInBgn.value =
             calculateMonthlySalary(eurToBgnHourlyRate, monthlyHoursProvider.monthlyHours).toString()
