@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val monthlyGrossSalaryInBgn = mutableStateOf("")
     private val monthlyNetSalaryInBgn = mutableStateOf<Double?>(null)
-    val hourlyRateInUsd = mutableStateOf("")
+    private val hourlyRateInUsd = mutableStateOf("")
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
     private val taxPercentage = mutableStateOf<Double?>(null)
@@ -41,8 +41,10 @@ class HomeViewModel @Inject constructor(
 
     @Composable
     fun getHourlyRateInUsd(): String {
-        hourlyRateInUsd.value = remember { homeDataStore.getHourlyRate() }
+        val storedHourlyRateInUsd = remember { homeDataStore.getHourlyRate() }
             .collectAsState(initial = "").value
+        hourlyRateInUsd.value = storedHourlyRateInUsd
+
         return hourlyRateInUsd.value
     }
 
