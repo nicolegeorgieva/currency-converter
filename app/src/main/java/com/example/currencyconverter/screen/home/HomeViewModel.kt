@@ -3,14 +3,13 @@ package com.example.currencyconverter.screen.home
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.currencyconverter.domain.monthlysalary.calculateMonthlySalary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val monthlyHoursProvider: MonthlyHoursProvider,
+    private val monthlySalaryCalculator: MonthlySalaryCalculator,
     private val exchangeRatesDataSource: ExchangeRatesDataSource,
     private val currencyConverter: CurrencyConverter
 ) : ViewModel() {
@@ -42,9 +41,9 @@ class HomeViewModel @Inject constructor(
         )
 
         monthlySalaryInBgn.value =
-            calculateMonthlySalary(
+            monthlySalaryCalculator.calculateMonthlySalary(
                 usdToBgn ?: 1.0,
-                monthlyHoursProvider.monthlyHours
+                monthlySalaryCalculator.monthlyHours
             ).toString()
     }
 
