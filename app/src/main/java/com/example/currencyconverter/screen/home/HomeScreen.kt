@@ -48,7 +48,7 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         LaunchedEffect(Unit) {
-            viewModel.OnStart()
+            viewModel.onStart()
         }
 
         if (viewModel.getDate() != null) {
@@ -75,10 +75,10 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getTaxPercentage() ?: "",
+                value = viewModel.getTaxPercentage().toString(),
                 onValueChange = {
                     viewModel.onChangeTaxPercentage(
-                        it.toDoubleOrNull()
+                        it.toDoubleOrNull() ?: 0.0
                     )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -93,10 +93,10 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getSocialSecurityAmount() ?: "",
+                value = viewModel.getSocialSecurityAmount().toString(),
                 onValueChange = {
                     viewModel.onChangeSocialSecurityAmount(
-                        it.toDoubleOrNull
+                        it.toDoubleOrNull() ?: 0.0
                     )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -111,10 +111,10 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getCompanyExpensesAmount() ?: "",
+                value = viewModel.getCompanyExpensesAmount().toString(),
                 onValueChange = {
                     viewModel.onChangeCompanyExpensesAmount(
-                        it.toDoubleOrNull()
+                        it.toDoubleOrNull() ?: 0.0
                     )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
