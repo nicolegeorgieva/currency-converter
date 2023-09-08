@@ -4,9 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.currencyconverter.domain.studytime.convertTotalTimeToMins
-import com.example.currencyconverter.domain.studytime.currentStudyMins
-import com.example.currencyconverter.domain.studytime.totalStudyTimeRes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -14,7 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CountStudyTimeViewModel @Inject constructor(
-    private val studyTimeDataStore: CountStudyTimeDataStore
+    private val studyTimeDataStore: CountStudyTimeDataStore,
+    private val studyTimeCalculator: StudyTimeCalculator
 ) : ViewModel() {
     private val startHourInputState = mutableStateOf("")
     private val startMinsInputState = mutableStateOf("")
@@ -100,7 +98,7 @@ class CountStudyTimeViewModel @Inject constructor(
     }
 
     fun addCurrentStudyToTotal() {
-        val currentStudyMins = currentStudyMins(
+        val currentStudyMins = studyTimeCalculator.currentStudyMins(
             startHourInputState.value,
             startMinsInputState.value,
             endHourInputState.value,
@@ -145,13 +143,13 @@ class CountStudyTimeViewModel @Inject constructor(
         cutMinsState: String,
         totalStudyTimeState: String?
     ): String {
-        return totalStudyTimeRes(
+        return studyTimeCalculator.totalStudyTimeRes(
             startHourInputState,
             startMinsInputState,
             endHourInputState,
             endMinsInputState,
             cutMinsState,
-            convertTotalTimeToMins(totalStudyTimeState)
+            studyTimeCalculator.convertTotalTimeToMins(totalStudyTimeState)
         )
     }
 
