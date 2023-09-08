@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,33 +38,57 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun Double?.formatAmount(): String {
+        val formatter = DecimalFormat("###,###.00")
+
+        return if (this == null || this == 0.0) "" else formatter.format(this)
+    }
+
+    private fun Double?.toCustomString(): String {
+        return if (this == null || this == 0.0) "" else this.toString()
+    }
+
     @Composable
-    fun getDate(): String? {
+    fun getUiState(): HomeUiState {
+        return HomeUiState(
+            date = getDate(),
+            hourlyRateUsd = getHourlyRateInUsd() ?: "", //TODO: Make it Double
+            taxPercentage = getTaxPercentage().toCustomString(),
+            socialSecurityAmount = getSocialSecurityAmount().toCustomString(),
+            companyExpensesAmount = getCompanyExpensesAmount().toCustomString(),
+            monthlyGrossSalary = getMonthlyBgnGrossSalary().formatAmount(),
+            monthlyNetSalary = getMonthlyBgnNetSalary().formatAmount(),
+            yearlyNetSalary = getYearlyNetSalary().formatAmount()
+        )
+    }
+
+    @Composable
+    private fun getDate(): String? {
         return exchangeRatesResponse.value?.date
     }
 
     @Composable
-    fun getHourlyRateInUsd(): String? {
+    private fun getHourlyRateInUsd(): String? {
         return hourlyRateInUsd.value
     }
 
     @Composable
-    fun getTaxPercentage(): Double? {
+    private fun getTaxPercentage(): Double? {
         return taxPercentage.value
     }
 
     @Composable
-    fun getSocialSecurityAmount(): Double? {
+    private fun getSocialSecurityAmount(): Double? {
         return socialSecurityAmount.value
     }
 
     @Composable
-    fun getCompanyExpensesAmount(): Double? {
+    private fun getCompanyExpensesAmount(): Double? {
         return companyExpensesAmount.value
     }
 
     @Composable
-    fun getMonthlyBgnGrossSalary(): Double? {
+    private fun getMonthlyBgnGrossSalary(): Double? {
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
             exchangeRatesResponse.value,
             (hourlyRateInUsd.value ?: "").toDoubleOrNull()
@@ -78,7 +103,7 @@ class HomeViewModel @Inject constructor(
     }
 
     @Composable
-    fun getMonthlyBgnNetSalary(): Double {
+    private fun getMonthlyBgnNetSalary(): Double {
         val income = getMonthlyBgnGrossSalary()
 
         return monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
@@ -95,7 +120,7 @@ class HomeViewModel @Inject constructor(
     }
 
     @Composable
-    fun getYearlyNetSalary(): Double {
+    private fun getYearlyNetSalary(): Double {
         return getMonthlyBgnNetSalary() * 12
     }
 

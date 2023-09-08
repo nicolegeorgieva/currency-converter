@@ -25,12 +25,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
-import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val viewModel: HomeViewModel = viewModel()
+    val uiState = viewModel.getUiState()
 
     Column(
         modifier = Modifier
@@ -51,15 +51,15 @@ fun HomeScreen() {
             viewModel.onStart()
         }
 
-        if (viewModel.getDate() != null) {
-            Text(text = "Conversions are up to this date: ${viewModel.getDate()}")
+        if (uiState.date != null) {
+            Text(text = "Conversions are up to this date: ${uiState.date}")
 
             Spacer(modifier = Modifier.height(24.dp))
         }
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getHourlyRateInUsd() ?: "",
+                value = uiState.hourlyRateUsd,
                 onValueChange = {
                     viewModel.onChangeHourlyRateInUsd(it)
                 },
@@ -75,7 +75,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getTaxPercentage()?.takeIf { it != 0.0 }?.toString() ?: "",
+                value = uiState.taxPercentage,
                 onValueChange = {
                     viewModel.onChangeTaxPercentage(
                         it.toDoubleOrNull() ?: 0.0
@@ -93,7 +93,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getSocialSecurityAmount()?.takeIf { it != 0.0 }?.toString() ?: "",
+                value = uiState.socialSecurityAmount,
                 onValueChange = {
                     viewModel.onChangeSocialSecurityAmount(
                         it.toDoubleOrNull() ?: 0.0
@@ -111,8 +111,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getCompanyExpensesAmount()?.takeIf { it != 0.0 }?.toString()
-                    ?: "",
+                value = uiState.companyExpensesAmount,
                 onValueChange = {
                     viewModel.onChangeCompanyExpensesAmount(
                         it.toDoubleOrNull() ?: 0.0
@@ -132,16 +131,9 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
+        if (uiState.hourlyRateUsd.isNotBlank()) {
             Row(verticalAlignment = Alignment.Bottom) {
-                val formatter = DecimalFormat("###,###.00")
-
-                val monthlyGrossSalary = viewModel.getMonthlyBgnGrossSalary()
-
-                val salary =
-                    if (monthlyGrossSalary != null) formatter.format(monthlyGrossSalary) else ""
-
-                Text(text = salary)
+                Text(text = uiState.monthlyGrossSalary)
 
                 Spacer(modifier = Modifier.width(8.dp))
 
@@ -159,15 +151,9 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
+        if (uiState.hourlyRateUsd.isNotBlank()) {
             Row(verticalAlignment = Alignment.Bottom) {
-                val formatter = DecimalFormat("###,###.00")
-
-                val monthlyNetSalary = viewModel.getMonthlyBgnNetSalary()
-
-                val salary = formatter.format(monthlyNetSalary)
-
-                Text(text = salary, color = Color(0xFF3B6909))
+                Text(text = uiState.monthlyNetSalary, color = Color(0xFF3B6909))
 
                 Spacer(modifier = Modifier.width(8.dp))
 
@@ -189,12 +175,10 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
+        if (uiState.hourlyRateUsd.isNotBlank()) {
             Row(verticalAlignment = Alignment.Bottom) {
-                val formatter = DecimalFormat("###,###.00")
-
                 Text(
-                    text = formatter.format(viewModel.getYearlyNetSalary()),
+                    text = uiState.yearlyNetSalary,
                     color = Color(0xFFF4511E)
                 )
 
