@@ -9,7 +9,11 @@ class TaxCalculator @Inject constructor() {
         companyExpenses: Double?,
         taxPercentage: Double?
     ): Double {
-        return (income - (socialSecurityAmount ?: 0.0) - (companyExpenses ?: 0.0) * (taxPercentage
-            ?: 0.0))
+        val percentageParser = if (taxPercentage != null) {
+            1 - (taxPercentage / 100)
+        } else 1.0
+
+        return (income - (socialSecurityAmount ?: 0.0) - (companyExpenses
+            ?: 0.0) * percentageParser)
     }
 }
