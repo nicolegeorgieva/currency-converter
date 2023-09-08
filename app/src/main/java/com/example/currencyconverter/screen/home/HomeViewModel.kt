@@ -159,17 +159,25 @@ class HomeViewModel @Inject constructor(
     fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
         companyExpensesAmount.value = newCompanyExpensesAmount
 
+        val income = monthlyGrossSalaryInBgn.value.toString().toDoubleOrNull()
+
+        monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+            income = income ?: 0.0,
+            taxAmount = taxCalculator.calculateTaxAmount(
+                income = income ?: 0.0,
+                socialSecurityAmount = socialSecurityAmount.value,
+                companyExpenses = companyExpensesAmount.value,
+                taxPercentage = taxPercentage.value
+            ),
+            companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
+            socialSecurityAmount = socialSecurityAmount.value ?: 0.0
+        )
+
         viewModelScope.launch {
             homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount)
             homeDataStore.editMonthlyNetSalary(
-                monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
-                    monthlyGrossSalaryInBgn.value?.toDoubleOrNull() ?: 0.0,
-                    taxPercentage.value ?: 0.0,
-                    companyExpensesAmount.value ?: 0.0,
-                    socialSecurityAmount.value ?: 0.0
-                )
+                monthlyNetSalaryInBgn.value.toString().toDoubleOrNull() ?: 0.0
             )
-            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
     }
 }
