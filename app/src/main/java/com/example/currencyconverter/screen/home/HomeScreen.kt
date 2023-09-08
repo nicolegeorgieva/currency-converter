@@ -75,7 +75,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getTaxPercentage()?.toString() ?: "",
+                value = viewModel.getTaxPercentage()?.takeIf { it != 0.0 }?.toString() ?: "",
                 onValueChange = {
                     viewModel.onChangeTaxPercentage(
                         it.toDoubleOrNull() ?: 0.0
@@ -93,7 +93,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getSocialSecurityAmount()?.toString() ?: "",
+                value = viewModel.getSocialSecurityAmount()?.takeIf { it != 0.0 }?.toString() ?: "",
                 onValueChange = {
                     viewModel.onChangeSocialSecurityAmount(
                         it.toDoubleOrNull() ?: 0.0
@@ -111,7 +111,8 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getCompanyExpensesAmount()?.toString() ?: "",
+                value = viewModel.getCompanyExpensesAmount()?.takeIf { it != 0.0 }?.toString()
+                    ?: "",
                 onValueChange = {
                     viewModel.onChangeCompanyExpensesAmount(
                         it.toDoubleOrNull() ?: 0.0
@@ -135,7 +136,9 @@ fun HomeScreen() {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
 
-                val monthlyGrossSalary = viewModel.getMonthlyBgnGrossSalary() ?: 0.0
+                val monthlyGrossSalary = viewModel.getMonthlyBgnGrossSalary()?.takeIf {
+                    it != 0.0
+                }?.toString() ?: ""
 
                 val formattedSalary = formatter.format(monthlyGrossSalary)
 
@@ -161,7 +164,9 @@ fun HomeScreen() {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
 
-                val monthlyNetSalary = viewModel.getMonthlyBgnNetSalary() ?: 0.0
+                val monthlyNetSalary = viewModel.getMonthlyBgnNetSalary()?.takeIf {
+                    it != 0.0
+                }?.toString() ?: ""
 
                 val formattedSalary = formatter.format(monthlyNetSalary)
 
