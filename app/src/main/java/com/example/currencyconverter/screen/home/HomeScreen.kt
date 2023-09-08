@@ -75,7 +75,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getTaxPercentage().toString(),
+                value = viewModel.getTaxPercentage()?.toString() ?: "",
                 onValueChange = {
                     viewModel.onChangeTaxPercentage(
                         it.toDoubleOrNull() ?: 0.0
@@ -93,7 +93,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getSocialSecurityAmount().toString(),
+                value = viewModel.getSocialSecurityAmount()?.toString() ?: "",
                 onValueChange = {
                     viewModel.onChangeSocialSecurityAmount(
                         it.toDoubleOrNull() ?: 0.0
@@ -111,7 +111,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getCompanyExpensesAmount().toString(),
+                value = viewModel.getCompanyExpensesAmount()?.toString() ?: "",
                 onValueChange = {
                     viewModel.onChangeCompanyExpensesAmount(
                         it.toDoubleOrNull() ?: 0.0
@@ -135,11 +135,7 @@ fun HomeScreen() {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
 
-                val monthlyGrossSalary = if (viewModel.getMonthlyBgnGrossSalary() != null) {
-                    viewModel.getMonthlyBgnGrossSalary()
-                } else {
-                    0.0
-                }
+                val monthlyGrossSalary = viewModel?.getMonthlyBgnGrossSalary() ?: 0.0
 
                 val formattedSalary = formatter.format(monthlyGrossSalary)
 
@@ -165,17 +161,9 @@ fun HomeScreen() {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
 
-                val monthlyNetSalary = if (
-                    viewModel.getMonthlyBgnNetSalary() != null
-                ) {
-                    viewModel.getMonthlyBgnNetSalary()
-                } else {
-                    0.0
-                }
+                val monthlyNetSalary = viewModel?.getMonthlyBgnNetSalary() ?: 0.0
 
-                val formattedSalary = formatter.format(
-                    monthlyNetSalary
-                )
+                val formattedSalary = formatter.format(monthlyNetSalary)
 
                 Text(text = formattedSalary, color = Color(0xFF3B6909))
 

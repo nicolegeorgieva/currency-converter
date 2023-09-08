@@ -29,15 +29,15 @@ class HomeViewModel @Inject constructor(
     fun onStart() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
-            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull() ?: ""
-            taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull() ?: 0.0
+            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull()
+            taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull()
             socialSecurityAmount.value =
-                homeDataStore.getSocialSecurityAmount().firstOrNull() ?: 0.0
+                homeDataStore.getSocialSecurityAmount().firstOrNull()
             companyExpensesAmount.value =
-                homeDataStore.getCompanyExpensesAmount().firstOrNull() ?: 0.0
+                homeDataStore.getCompanyExpensesAmount().firstOrNull()
             monthlyGrossSalaryInBgn.value =
-                homeDataStore.getMonthlyGrossSalary().firstOrNull() ?: ""
-            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull() ?: 0.0
+                homeDataStore.getMonthlyGrossSalary().firstOrNull()
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
     }
 
