@@ -134,9 +134,12 @@ fun HomeScreen() {
         if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
-                val formattedSalary = formatter.format(
+
+                val monthlyGrossSalary = if (viewModel.getMonthlyBgnGrossSalary() != null) {
                     viewModel.getMonthlyBgnGrossSalary().toString()
-                )
+                } else ""
+
+                val formattedSalary = formatter.format(monthlyGrossSalary)
 
                 Text(text = formattedSalary)
 
@@ -159,8 +162,17 @@ fun HomeScreen() {
         if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
-                val formattedSalary = formatter.format(
+
+                val monthlyNetSalary = if (
+                    viewModel.getMonthlyBgnNetSalary() != null
+                ) {
                     viewModel.getMonthlyBgnNetSalary().toString()
+                } else {
+                    ""
+                }
+
+                val formattedSalary = formatter.format(
+                    monthlyNetSalary
                 )
 
                 Text(text = formattedSalary, color = Color(0xFF3B6909))
