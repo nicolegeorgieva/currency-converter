@@ -74,20 +74,22 @@ class HomeViewModel @Inject constructor(
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
             exchangeRatesResponse.value,
             (hourlyRateInUsd.value ?: "").toDoubleOrNull()
-        )
+        ) ?: 0.0
 
         monthlyGrossSalaryInBgn.value = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
-            usdToBgn,
-            monthlyGrossSalaryCalculator.monthlyHours
+            hourlyRate = usdToBgn,
+            monthlyHours = monthlyGrossSalaryCalculator.monthlyHours
         ).toString()
 
-        val monthlyNetSalary = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
-            income = (monthlyGrossSalaryInBgn.value ?: "").toDoubleOrNull() ?: 0.0,
+        val income = monthlyGrossSalaryInBgn.value.toString().toDoubleOrNull()
+
+        monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+            income = income ?: 0.0,
             taxAmount = taxCalculator.calculateTaxAmount(
-                income = (monthlyGrossSalaryInBgn.value ?: "").toDoubleOrNull() ?: 0.0,
-                socialSecurityAmount = socialSecurityAmount.value ?: 0.0,
-                companyExpenses = companyExpensesAmount.value ?: 0.0,
-                taxPercentage = taxPercentage.value ?: 0.0
+                income = income ?: 0.0,
+                socialSecurityAmount = socialSecurityAmount.value,
+                companyExpenses = companyExpensesAmount.value,
+                taxPercentage = taxPercentage.value
             ),
             companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
             socialSecurityAmount = socialSecurityAmount.value ?: 0.0
@@ -96,16 +98,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeDataStore.editHourlyRate(newRate)
             homeDataStore.editMonthlyGrossSalary(
-                monthlyGrossSalaryInBgn.toString()
+                monthlyGrossSalaryInBgn.value.toString()
             )
-            homeDataStore.editMonthlyNetSalary(monthlyNetSalary)
+            homeDataStore.editMonthlyNetSalary(
+                monthlyNetSalaryInBgn.value.toString().toDoubleOrNull() ?: 0.0
+            )
         }
-
-        monthlyGrossSalaryInBgn.value =
-            monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
-                usdToBgn ?: 1.0,
-                monthlyGrossSalaryCalculator.monthlyHours
-            ).toString()
     }
 
     fun onChangeTaxPercentage(newTaxPercentage: Double) {
