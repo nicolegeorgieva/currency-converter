@@ -182,5 +182,34 @@ fun HomeScreen() {
             fontStyle = FontStyle.Italic,
             color = Color(0xFF3B6909)
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(text = "=", fontWeight = FontWeight.Bold)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                val formatter = DecimalFormat("###,###.00")
+
+                Text(
+                    text = formatter.format(viewModel.getYearlyNetSalary()),
+                    color = Color(0xFFF4511E)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(text = "BGN", fontWeight = FontWeight.Bold, color = Color(0xFFF4511E))
+            }
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = "yearly net salary",
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFFF4511E)
+        )
     }
 }

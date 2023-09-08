@@ -81,7 +81,7 @@ class HomeViewModel @Inject constructor(
     fun getMonthlyBgnNetSalary(): Double {
         val income = getMonthlyBgnGrossSalary()
 
-        val monthlyNetSalaryInBgn = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
+        return monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
             income = income ?: 0.0,
             taxAmount = taxCalculator.calculateTaxAmount(
                 income = income ?: 0.0,
@@ -92,8 +92,11 @@ class HomeViewModel @Inject constructor(
             companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
             socialSecurityAmount = socialSecurityAmount.value ?: 0.0
         )
+    }
 
-        return monthlyNetSalaryInBgn
+    @Composable
+    fun getYearlyNetSalary(): Double {
+        return getMonthlyBgnNetSalary() * 12
     }
 
     fun onChangeHourlyRateInUsd(newRate: String) {
