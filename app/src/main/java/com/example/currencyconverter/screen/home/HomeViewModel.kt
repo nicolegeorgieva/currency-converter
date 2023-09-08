@@ -81,7 +81,7 @@ class HomeViewModel @Inject constructor(
             monthlyHours = monthlyGrossSalaryCalculator.monthlyHours
         ).toString()
 
-        val income = monthlyGrossSalaryInBgn.value.toString().toDoubleOrNull()
+        val income = monthlyGrossSalaryInBgn.value?.toDoubleOrNull()
 
         monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
             income = income ?: 0.0,
@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
                 monthlyGrossSalaryInBgn.value.toString()
             )
             homeDataStore.editMonthlyNetSalary(
-                monthlyNetSalaryInBgn.value.toString().toDoubleOrNull() ?: 0.0
+                monthlyNetSalaryInBgn.value ?: 0.0
             )
         }
     }
@@ -109,7 +109,7 @@ class HomeViewModel @Inject constructor(
     fun onChangeTaxPercentage(newTaxPercentage: Double) {
         taxPercentage.value = newTaxPercentage
 
-        val income = monthlyGrossSalaryInBgn.value.toString().toDoubleOrNull()
+        val income = monthlyGrossSalaryInBgn.value?.toDoubleOrNull()
 
         monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
             income = income ?: 0.0,
@@ -126,7 +126,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeDataStore.editTaxPercentage(newTaxPercentage)
             homeDataStore.editMonthlyNetSalary(
-                monthlyNetSalaryInBgn.value.toString().toDoubleOrNull() ?: 0.0
+                monthlyNetSalaryInBgn.value ?: 0.0
             )
         }
     }
@@ -134,7 +134,7 @@ class HomeViewModel @Inject constructor(
     fun onChangeSocialSecurityAmount(newSocialSecurityAmount: Double) {
         socialSecurityAmount.value = newSocialSecurityAmount
 
-        val income = monthlyGrossSalaryInBgn.value.toString().toDoubleOrNull()
+        val income = monthlyGrossSalaryInBgn.value?.toDoubleOrNull()
 
         monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
             income = income ?: 0.0,
@@ -151,7 +151,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
             homeDataStore.editMonthlyNetSalary(
-                monthlyNetSalaryInBgn.value.toString().toDoubleOrNull() ?: 0.0
+                monthlyNetSalaryInBgn.value ?: 0.0
             )
         }
     }
@@ -159,7 +159,7 @@ class HomeViewModel @Inject constructor(
     fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
         companyExpensesAmount.value = newCompanyExpensesAmount
 
-        val income = monthlyGrossSalaryInBgn.value.toString().toDoubleOrNull()
+        val income = monthlyGrossSalaryInBgn.value?.toDoubleOrNull()
 
         monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
             income = income ?: 0.0,
@@ -176,7 +176,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount)
             homeDataStore.editMonthlyNetSalary(
-                monthlyNetSalaryInBgn.value.toString().toDoubleOrNull() ?: 0.0
+                monthlyNetSalaryInBgn.value ?: 0.0
             )
         }
     }

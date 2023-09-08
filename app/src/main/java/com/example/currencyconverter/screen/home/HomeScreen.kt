@@ -135,7 +135,7 @@ fun HomeScreen() {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
 
-                val monthlyGrossSalary = viewModel?.getMonthlyBgnGrossSalary() ?: 0.0
+                val monthlyGrossSalary = viewModel.getMonthlyBgnGrossSalary() ?: 0.0
 
                 val formattedSalary = formatter.format(monthlyGrossSalary)
 
@@ -161,7 +161,7 @@ fun HomeScreen() {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
 
-                val monthlyNetSalary = viewModel?.getMonthlyBgnNetSalary() ?: 0.0
+                val monthlyNetSalary = viewModel.getMonthlyBgnNetSalary() ?: 0.0
 
                 val formattedSalary = formatter.format(monthlyNetSalary)
 
