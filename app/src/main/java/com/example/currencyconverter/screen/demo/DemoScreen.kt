@@ -16,14 +16,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.screen.age.AgeViewModel
 import com.example.currencyconverter.screenState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DemoScreen() {
     val viewModel: DemoViewModel = viewModel()
-    val viewModel2: AgeViewModel = viewModel()
 
     Column {
         Row {
