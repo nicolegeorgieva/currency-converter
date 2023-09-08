@@ -10,22 +10,20 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.screen.age.AgeViewModel
 import com.example.currencyconverter.screenState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DemoScreen() {
     val viewModel: DemoViewModel = viewModel()
+    val viewModel2: AgeViewModel = viewModel()
 
     Column {
         Row {
@@ -50,17 +48,7 @@ fun DemoScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        var nameState by remember { mutableStateOf("") }
-
-        TextField(value = nameState, onValueChange = { nameState = it })
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = {
-            viewModel.setName(nameState)
-        }) {
-            Text(text = "Set name")
-        }
+        TextField(value = viewModel.getName(), onValueChange = { viewModel.setName(it) })
 
         Spacer(modifier = Modifier.height(8.dp))
 
