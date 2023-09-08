@@ -136,9 +136,9 @@ fun HomeScreen() {
                 val formatter = DecimalFormat("###,###.00")
 
                 val monthlyGrossSalary = if (viewModel.getMonthlyBgnGrossSalary() != null) {
-                    viewModel.getMonthlyBgnGrossSalary().toString()
+                    viewModel.getMonthlyBgnGrossSalary()
                 } else {
-                    ""
+                    0.0
                 }
 
                 val formattedSalary = formatter.format(monthlyGrossSalary)
@@ -168,9 +168,9 @@ fun HomeScreen() {
                 val monthlyNetSalary = if (
                     viewModel.getMonthlyBgnNetSalary() != null
                 ) {
-                    viewModel.getMonthlyBgnNetSalary().toString()
+                    viewModel.getMonthlyBgnNetSalary()
                 } else {
-                    ""
+                    0.0
                 }
 
                 val formattedSalary = formatter.format(
