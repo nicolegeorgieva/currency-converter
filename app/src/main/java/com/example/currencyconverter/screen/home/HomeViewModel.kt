@@ -1,9 +1,6 @@
 package com.example.currencyconverter.screen.home
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,11 +29,12 @@ class HomeViewModel @Inject constructor(
     fun onStart() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
-            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull() ?: ""
+            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull()
             taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull()
             socialSecurityAmount.value = homeDataStore.getSocialSecurityAmount().firstOrNull()
             companyExpensesAmount.value = homeDataStore.getCompanyExpensesAmount().firstOrNull()
             monthlyGrossSalaryInBgn.value = homeDataStore.getMonthlyGrossSalary().firstOrNull()
+            monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
     }
 
@@ -46,6 +44,26 @@ class HomeViewModel @Inject constructor(
 
     fun getHourlyRateInUsd(): String? {
         return hourlyRateInUsd.value
+    }
+
+    fun getTaxPercentage(): Double? {
+        return taxPercentage.value
+    }
+
+    fun getSocialSecurityAmount(): Double? {
+        return socialSecurityAmount.value
+    }
+
+    fun getCompanyExpensesAmount(): Double? {
+        return companyExpensesAmount.value
+    }
+
+    fun getMonthlyBgnGrossSalary(): Double? {
+        return monthlyGrossSalaryInBgn.value?.toDoubleOrNull()
+    }
+
+    fun getMonthlyBgnNetSalary(): Double? {
+        return monthlyNetSalaryInBgn.value
     }
 
     fun onChangeHourlyRateInUsd(newRate: String) {
@@ -85,18 +103,6 @@ class HomeViewModel @Inject constructor(
                 usdToBgn ?: 1.0,
                 monthlyGrossSalaryCalculator.monthlyHours
             ).toString()
-    }
-
-    fun getTaxPercentage(): Double? {
-        return taxPercentage.value
-    }
-
-    fun getSocialSecurityAmount(): Double? {
-        return socialSecurityAmount.value
-    }
-
-    fun getCompanyExpensesAmount(): Double? {
-        return companyExpensesAmount.value
     }
 
     fun onChangeTaxPercentage(newTaxPercentage: Double) {
@@ -148,16 +154,5 @@ class HomeViewModel @Inject constructor(
             )
             monthlyNetSalaryInBgn.value = homeDataStore.getMonthlyNetSalary().firstOrNull()
         }
-    }
-
-    fun getMontlyBgnGrossSalary(): Double {
-        return monthlyGrossSalaryInBgn.value?.toDoubleOrNull() ?: 1.0
-    }
-
-    @Composable
-    fun getMonthlyBgnNetSalary(): Double {
-        monthlyNetSalaryInBgn.value = remember { homeDataStore.getMonthlyNetSalary() }
-            .collectAsState(initial = 0.0).value
-        return monthlyNetSalaryInBgn.value ?: 1.0
     }
 }
