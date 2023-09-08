@@ -1,7 +1,6 @@
 package com.example.currencyconverter.screen.studytime
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -88,9 +87,8 @@ class CountStudyTimeViewModel @Inject constructor(
         endMinsInputState.value = newMins
     }
 
-    @Composable
     fun getCutMins(): String {
-        return studyTimeDataStore.cutMins.collectAsState(initial = "").value ?: ""
+        return cutMinsState.value
     }
 
     fun editCutMins(newCutMins: String) {
