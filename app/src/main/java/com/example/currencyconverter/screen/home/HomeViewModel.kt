@@ -1,5 +1,6 @@
 package com.example.currencyconverter.screen.home
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -135,18 +136,25 @@ class HomeViewModel @Inject constructor(
         socialSecurityAmount.value = newSocialSecurityAmount
 
         val income = monthlyGrossSalaryInBgn.value?.toDoubleOrNull()
+        val taxAmount = taxCalculator.calculateTaxAmount(
+            income = income ?: 0.0,
+            socialSecurityAmount = socialSecurityAmount.value,
+            companyExpenses = companyExpensesAmount.value,
+            taxPercentage = taxPercentage.value
+        )
 
         monthlyNetSalaryInBgn.value = monthlyNetSalaryCalculator.calculateMonthlyNetSalary(
             income = income ?: 0.0,
-            taxAmount = taxCalculator.calculateTaxAmount(
-                income = income ?: 0.0,
-                socialSecurityAmount = socialSecurityAmount.value,
-                companyExpenses = companyExpensesAmount.value,
-                taxPercentage = taxPercentage.value
-            ),
+            taxAmount = taxAmount,
             companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
             socialSecurityAmount = socialSecurityAmount.value ?: 0.0
         )
+
+        Log.i("netSalary", "Income: $income")
+        Log.i("netSalary", "Tax: $taxAmount")
+        Log.i("netSalary", "Comp.exp.amount: ${companyExpensesAmount.value}")
+        Log.i("netSalary", "SocialSecurityAmount: ${socialSecurityAmount.value}")
+        Log.i("netSalary", "M.net.s.in bgn: ${monthlyNetSalaryInBgn.value}")
 
         viewModelScope.launch {
             homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
