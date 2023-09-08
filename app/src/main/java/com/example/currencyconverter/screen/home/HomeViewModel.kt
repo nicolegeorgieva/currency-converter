@@ -1,6 +1,5 @@
 package com.example.currencyconverter.screen.home
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -149,12 +148,6 @@ class HomeViewModel @Inject constructor(
             companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
             socialSecurityAmount = socialSecurityAmount.value ?: 0.0
         )
-
-        Log.i("netSalary", "Income: $income")
-        Log.i("netSalary", "Tax: $taxAmount")
-        Log.i("netSalary", "Comp.exp.amount: ${companyExpensesAmount.value}")
-        Log.i("netSalary", "SocialSecurityAmount: ${socialSecurityAmount.value}")
-        Log.i("netSalary", "M.net.s.in bgn: ${monthlyNetSalaryInBgn.value}")
 
         viewModelScope.launch {
             homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
