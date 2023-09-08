@@ -165,8 +165,7 @@ fun HomeScreen() {
 
                 val monthlyNetSalary = viewModel.getMonthlyBgnNetSalary()
 
-                val salary = if (monthlyNetSalary != null) formatter.format(monthlyNetSalary)
-                else ""
+                val salary = formatter.format(monthlyNetSalary)
 
                 Text(text = salary, color = Color(0xFF3B6909))
 

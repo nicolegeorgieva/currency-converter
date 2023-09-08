@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.currencyconverter.data.COMPANY_EXPENSES_AMOUNT_KEY
 import com.example.currencyconverter.data.HOURLY_RATE_KEY
-import com.example.currencyconverter.data.MONTHLY_GROSS_SALARY_KEY
-import com.example.currencyconverter.data.MONTHLY_NET_SALARY_KEY
 import com.example.currencyconverter.data.SOCIAL_SECURITY_AMOUNT_KEY
 import com.example.currencyconverter.data.TAX_PERCENTAGE_KEY
 import com.example.currencyconverter.data.dataStore
@@ -57,26 +55,6 @@ class HomeDataStore @Inject constructor(
     suspend fun editCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
         dataStore.edit {
             it[COMPANY_EXPENSES_AMOUNT_KEY] = newCompanyExpensesAmount
-        }
-    }
-
-    fun getMonthlyGrossSalary(): Flow<String> {
-        return dataStore.data.map { it[MONTHLY_GROSS_SALARY_KEY] ?: "" }
-    }
-
-    suspend fun editMonthlyGrossSalary(newMonthlyGrossSalary: String) {
-        dataStore.edit {
-            it[MONTHLY_GROSS_SALARY_KEY] = newMonthlyGrossSalary
-        }
-    }
-
-    fun getMonthlyNetSalary(): Flow<Double> {
-        return dataStore.data.map { it[MONTHLY_NET_SALARY_KEY] ?: 0.0 }
-    }
-
-    suspend fun editMonthlyNetSalary(newMonthlyNetSalary: Double) {
-        dataStore.edit {
-            it[MONTHLY_NET_SALARY_KEY] = newMonthlyNetSalary
         }
     }
 }
