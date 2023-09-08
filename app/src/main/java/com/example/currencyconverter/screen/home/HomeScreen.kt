@@ -159,16 +159,20 @@ fun HomeScreen() {
                 val formatter = DecimalFormat("###,###.00")
                 val formattedSalary = formatter.format(viewModel.getMonthlyBgnNetSalary())
 
-                Text(text = formattedSalary, color = Color.Green)
+                Text(text = formattedSalary, color = Color(0xFF3B6909))
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Text(text = "BGN", fontWeight = FontWeight.Bold, color = Color.Green)
+                Text(text = "BGN", fontWeight = FontWeight.Bold, color = Color(0xFF3B6909))
             }
         }
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        Text(text = "monthly net salary", fontStyle = FontStyle.Italic, color = Color.Green)
+        Text(
+            text = "monthly net salary",
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFF3B6909)
+        )
     }
 }
