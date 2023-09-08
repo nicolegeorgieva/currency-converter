@@ -59,7 +59,7 @@ fun HomeScreen() {
 
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
-                value = viewModel.getHourlyRateInUsd(),
+                value = viewModel.getHourlyRateInUsd() ?: "",
                 onValueChange = {
                     viewModel.onChangeHourlyRateInUsd(it)
                 },
@@ -131,7 +131,7 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (viewModel.getHourlyRateInUsd().isNotBlank()) {
+        if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
                 val formattedSalary = formatter.format(viewModel.getMonthlyBgnGrossSalary())
@@ -154,7 +154,7 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (viewModel.getHourlyRateInUsd().isNotBlank()) {
+        if (viewModel.getHourlyRateInUsd()?.isNotBlank() == true) {
             Row(verticalAlignment = Alignment.Bottom) {
                 val formatter = DecimalFormat("###,###.00")
                 val formattedSalary = formatter.format(viewModel.getMonthlyBgnNetSalary())
