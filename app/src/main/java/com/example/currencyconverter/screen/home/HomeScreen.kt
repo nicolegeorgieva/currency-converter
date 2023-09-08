@@ -137,7 +137,9 @@ fun HomeScreen() {
 
                 val monthlyGrossSalary = if (viewModel.getMonthlyBgnGrossSalary() != null) {
                     viewModel.getMonthlyBgnGrossSalary().toString()
-                } else ""
+                } else {
+                    ""
+                }
 
                 val formattedSalary = formatter.format(monthlyGrossSalary)
 
