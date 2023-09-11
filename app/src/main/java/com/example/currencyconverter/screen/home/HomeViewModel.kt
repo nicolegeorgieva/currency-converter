@@ -45,7 +45,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun Double?.toCustomString(): String {
-        return if (this == null || this == 0.0) "" else this.toString()
+        return if (this == null || this == 0.0) {
+            ""
+        } else {
+            this.toString()
+        }
     }
 
     @Composable
