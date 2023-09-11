@@ -1,6 +1,7 @@
 package com.example.currencyconverter.screen.apartmentinfo
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -40,7 +41,9 @@ fun InputRow(
     onValueChange: (String) -> Unit,
     label: String
 ) {
-    TextField(value = value, onValueChange = onValueChange)
-    Spacer(modifier = Modifier.width(4.dp))
-    Text(text = label)
+    Row {
+        TextField(value = value, onValueChange = onValueChange)
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(text = label)
+    }
 }
