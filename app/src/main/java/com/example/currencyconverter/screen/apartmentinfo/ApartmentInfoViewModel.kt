@@ -7,7 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ApartmentInfoViewModel @Inject constructor() : ViewModel() {
+class ApartmentInfoViewModel @Inject constructor(
+    private val apartmentPriceCalculator: ApartmentPriceCalculator
+) : ViewModel() {
     private val m2PriceEur = mutableStateOf("")
     private val totalM2 = mutableStateOf("")
     private val realM2 = mutableStateOf("")
