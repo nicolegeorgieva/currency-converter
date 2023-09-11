@@ -13,10 +13,8 @@ class ApartmentInfoViewModel @Inject constructor(
     private val m2PriceEur = mutableStateOf("")
     private val totalM2 = mutableStateOf("")
     private val realM2 = mutableStateOf("")
-    private val totalM2Price = mutableStateOf("")
-    private val totalM2PriceCurrency = mutableStateOf("")
-    private val realM2Price = mutableStateOf("")
     private val totalRealM2PriceCurrency = mutableStateOf("")
+    private val totalM2PriceCurrency = mutableStateOf("")
 
     @Composable
     fun uiState(): ApartmentInfoUi {
@@ -48,16 +46,10 @@ class ApartmentInfoViewModel @Inject constructor(
 
     @Composable
     private fun getRealM2Price(): String {
-        realM2Price.value = try {
-            apartmentPriceCalculator.calculateRealM2Price(
-                totalM2Price = totalM2Price.value,
-                realM2 = realM2.value
-            ).toString()
-        } catch (e: Exception) {
-            ""
-        }
-
-        return realM2Price.value
+        return apartmentPriceCalculator.calculateRealM2Price(
+            totalM2Price = getTotalM2Price(),
+            realM2 = realM2.value
+        ).toString()
     }
 
     @Composable
@@ -67,16 +59,10 @@ class ApartmentInfoViewModel @Inject constructor(
 
     @Composable
     private fun getTotalM2Price(): String {
-        totalM2Price.value = try {
-            apartmentPriceCalculator.calculateTotalM2Price(
-                eurPerM2 = m2PriceEur.value,
-                totalM2 = totalM2.value
-            ).toString()
-        } catch (e: Exception) {
-            ""
-        }
-
-        return totalM2Price.value
+        return apartmentPriceCalculator.calculateTotalM2Price(
+            eurPerM2 = m2PriceEur.value,
+            totalM2 = totalM2.value
+        ).toString()
     }
 
     @Composable

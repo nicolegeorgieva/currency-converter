@@ -58,17 +58,17 @@ fun ApartmentInfoScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         TotalM2PriceRow(
-            label = "Total m2 price: ",
-            price = uiState.totalM2Price,
-            currency = uiState.totalM2PriceCurrency
+            label = "Real m2 price: ",
+            price = uiState.realM2Price,
+            currency = uiState.realM2PriceCurrency
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         TotalM2PriceRow(
-            label = "Real m2 price: ",
-            price = uiState.realM2Price,
-            currency = uiState.realM2PriceCurrency
+            label = "Total m2 price: ",
+            price = uiState.totalM2Price,
+            currency = uiState.totalM2PriceCurrency
         )
     }
 }
