@@ -44,14 +44,6 @@ class HomeViewModel @Inject constructor(
         return if (this == null || this == 0.0) "" else formatter.format(this)
     }
 
-    private fun Double?.toCustomString(): String {
-        return if (this == null || this == 0.0) {
-            ""
-        } else {
-            this.toString()
-        }
-    }
-
     @Composable
     fun getUiState(): HomeUiState {
         return HomeUiState(
@@ -114,13 +106,17 @@ class HomeViewModel @Inject constructor(
             income = income ?: 0.0,
             taxAmount = taxCalculator.calculateTaxAmount(
                 income = income ?: 0.0,
-                socialSecurityAmount = socialSecurityAmount.value?.toDoubleOrNull() ?: 0.0,
-                companyExpenses = companyExpensesAmount.value?.toDoubleOrNull() ?: 0.0,
-                taxPercentage = taxPercentage.value?.toDoubleOrNull() ?: 0.0
+                socialSecurityAmount = socialSecurityAmount.value.toDoubleOrZero(),
+                companyExpenses = companyExpensesAmount.value.toDoubleOrZero(),
+                taxPercentage = taxPercentage.value.toDoubleOrZero()
             ),
-            companyExpensesAmount = companyExpensesAmount.value?.toDoubleOrNull() ?: 0.0,
-            socialSecurityAmount = socialSecurityAmount.value?.toDoubleOrNull() ?: 0.0
+            companyExpensesAmount = companyExpensesAmount.value.toDoubleOrZero(),
+            socialSecurityAmount = socialSecurityAmount.value.toDoubleOrZero()
         )
+    }
+
+    private fun String?.toDoubleOrZero(): Double {
+        return this?.toDoubleOrNull() ?: 0.0
     }
 
     @Composable
@@ -129,12 +125,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onChangeHourlyRateInUsd(newRate: String) {
-        val newHourlyRate = newRate.toDoubleOrNull() ?: 0.0
-
-        hourlyRateInUsd.value = newHourlyRate.toString()
+        hourlyRateInUsd.value = newRate
 
         viewModelScope.launch {
-            homeDataStore.editHourlyRate(newHourlyRate)
+            homeDataStore.editHourlyRate(newRate.toDoubleOrNull() ?: 0.0)
         }
     }
 
