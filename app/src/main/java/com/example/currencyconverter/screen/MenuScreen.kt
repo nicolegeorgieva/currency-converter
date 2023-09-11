@@ -29,6 +29,14 @@ fun MenuScreen() {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(onClick = {
+            screenState.value = Screen.ApartmentInfoScreen
+        }) {
+            Text(text = "Apartment Info")
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(onClick = {
             screenState.value = Screen.CountStudyTime
         }) {
             Text(text = "Count Study Time")
