@@ -24,22 +24,22 @@ class DemoViewModel @Inject constructor(
         viewModelScope.launch {
             name.value = nameDataStore.name().firstOrNull() ?: ""
             age.value = ageDataStore.getAge().firstOrNull() ?: 0
+            greeting.value = greeter.randomGreeting()
         }
     }
 
     @Composable
     fun uiState(): DemoUiState {
         return DemoUiState(
-            greeting = greeting(),
+            greeting = getGreeting(),
             name = getName(),
             age = getAge()
         )
     }
 
-    private fun greeting(): String {
-        greeting.value = greeter.randomGreeting()
-
-        return if (name.value?.isNotBlank() == true) "$greeting $name!" else ""
+    @Composable
+    private fun getGreeting(): String {
+        return if (name.value?.isNotBlank() == true) "${greeting.value} ${name.value}!" else ""
     }
 
     @Composable
