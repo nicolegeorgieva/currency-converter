@@ -17,12 +17,12 @@ class DemoViewModel @Inject constructor(
 ) : ViewModel() {
     private val name = mutableStateOf<String?>(null)
     private val greeting = mutableStateOf<String?>(null)
-    private val age = mutableStateOf<Double?>(null)
+    private val age = mutableStateOf<Int?>(null)
 
     fun onStart() {
         viewModelScope.launch {
             name.value = nameDataStore.name().firstOrNull() ?: ""
-            age.value = ageDataStore.getAge().firstOrNull() ?: 0.0
+            age.value = ageDataStore.getAge().firstOrNull() ?: 0
         }
     }
 
@@ -61,6 +61,6 @@ class DemoViewModel @Inject constructor(
     }
 
     private fun getAge(): String {
-        return age.value?.takeIf { it != 0.0 }?.toString() ?: ""
+        return age.value?.takeIf { it != 0 }?.toString() ?: ""
     }
 }
