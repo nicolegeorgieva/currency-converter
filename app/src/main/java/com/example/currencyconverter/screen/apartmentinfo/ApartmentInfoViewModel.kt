@@ -75,10 +75,10 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     fun onTotalM2Change(newTotalM2: String) {
-        m2PriceEur.value = newTotalM2
+        totalM2.value = newTotalM2
     }
 
     fun onRealM2Change(newRealM2: String) {
-        m2PriceEur.value = newRealM2
+        realM2.value = newRealM2
     }
 }
