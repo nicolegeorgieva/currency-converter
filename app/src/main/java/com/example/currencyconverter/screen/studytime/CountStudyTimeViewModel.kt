@@ -50,32 +50,32 @@ class CountStudyTimeViewModel @Inject constructor(
     }
 
     @Composable
-    fun getStartHour(): String {
+    private fun getStartHour(): String {
         return startHourInputState.value
     }
 
     @Composable
-    fun getStartMins(): String {
+    private fun getStartMins(): String {
         return startMinsInputState.value
     }
 
     @Composable
-    fun getEndHour(): String {
+    private fun getEndHour(): String {
         return endHourInputState.value
     }
 
     @Composable
-    fun getEndMins(): String {
+    private fun getEndMins(): String {
         return endMinsInputState.value
     }
 
     @Composable
-    fun getErrorOccuredState(): Boolean {
+    private fun getErrorOccuredState(): Boolean {
         return errorOccurredState.value
     }
 
     @Composable
-    fun getTotalStudyTimeState(): String {
+    private fun getTotalStudyTimeState(): String {
         return totalStudyTimeState.value ?: "0h 00m"
     }
 

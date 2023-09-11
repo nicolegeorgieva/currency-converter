@@ -1,5 +1,6 @@
 package com.example.currencyconverter.screen.requestplayground
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,6 +25,7 @@ class RequestPlaygroundViewModel @Inject constructor(
         }
     }
 
+    @Composable
     fun uiState(): RequestUi {
         return RequestUi(
             tasks = getToDosState(),
@@ -31,10 +33,12 @@ class RequestPlaygroundViewModel @Inject constructor(
         )
     }
 
+    @Composable
     private fun getToDosState(): RequestPlayground.Request {
         return toDosState.value
     }
 
+    @Composable
     private fun getToDo(): String {
         return newToDo.value
     }
