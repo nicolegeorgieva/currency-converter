@@ -39,6 +39,7 @@ fun CountStudyTimeScreen() {
             .padding(12.dp)
     ) {
         val viewModel: CountStudyTimeViewModel = viewModel()
+        val uiState = viewModel.studyTimeUi()
 
         LaunchedEffect(Unit) {
             viewModel.onStart()
@@ -51,11 +52,11 @@ fun CountStudyTimeScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         TimeInputRow(
-            hours = viewModel.getStartHour(),
+            hours = uiState.startHour,
             onHoursChange = { newHour ->
                 viewModel.editStartHour(newHour)
             },
-            mins = viewModel.getStartMins(),
+            mins = uiState.startMins,
             onMinsChange = { newMins ->
                 viewModel.editStartMins(newMins)
             }
@@ -64,11 +65,11 @@ fun CountStudyTimeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         TimeInputRow(
-            hours = viewModel.getEndHour(),
+            hours = uiState.endHour,
             onHoursChange = {
                 viewModel.editEndHour(it)
             },
-            mins = viewModel.getEndMins(),
+            mins = uiState.endMins,
             onMinsChange = {
                 viewModel.editEndMins(it)
             }
@@ -78,7 +79,7 @@ fun CountStudyTimeScreen() {
 
         TextField(
             modifier = Modifier.width(124.dp),
-            value = viewModel.getCutMins(),
+            value = uiState.cutMins,
             onValueChange = { newCutMinsInput ->
                 viewModel.editCutMins(newCutMinsInput)
             },
@@ -94,7 +95,7 @@ fun CountStudyTimeScreen() {
             Text(text = "Add")
         }
 
-        if (viewModel.getErrorOccuredState()) {
+        if (uiState.errorOccured) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(text = "Invalid input!", color = Color.Red)
@@ -111,7 +112,7 @@ fun CountStudyTimeScreen() {
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = viewModel.getTotalStudyTimeState(),
+                text = uiState.totalTimeOfStudying,
                 fontWeight = FontWeight.Bold
             )
 

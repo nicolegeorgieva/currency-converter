@@ -32,6 +32,19 @@ class CountStudyTimeViewModel @Inject constructor(
     }
 
     @Composable
+    fun studyTimeUi(): StudyTimeUi {
+        return StudyTimeUi(
+            startHour = getStartHour(),
+            startMins = getStartMins(),
+            endHour = getEndHour(),
+            endMins = getEndMins(),
+            cutMins = getCutMins(),
+            totalTimeOfStudying = getTotalStudyTimeState(),
+            errorOccured = getErrorOccuredState()
+        )
+    }
+
+    @Composable
     fun getStartHour(): String {
         return startHourInputState.value
     }
