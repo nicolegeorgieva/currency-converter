@@ -19,22 +19,22 @@ class HomeViewModel @Inject constructor(
     private val homeDataStore: HomeDataStore,
     private val taxCalculator: TaxCalculator
 ) : ViewModel() {
-    private val hourlyRateInUsd = mutableStateOf<Double?>(0.0)
+    private val hourlyRateInUsd = mutableStateOf<String?>(null)
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
-    private val taxPercentage = mutableStateOf<Double?>(null)
-    private val socialSecurityAmount = mutableStateOf<Double?>(null)
-    private val companyExpensesAmount = mutableStateOf<Double?>(null)
+    private val taxPercentage = mutableStateOf<String?>(null)
+    private val socialSecurityAmount = mutableStateOf<String?>(null)
+    private val companyExpensesAmount = mutableStateOf<String?>(null)
 
     fun onStart() {
         viewModelScope.launch {
             exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
-            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull()
-            taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull()
+            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull()?.toString()
+            taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull()?.toString()
             socialSecurityAmount.value =
-                homeDataStore.getSocialSecurityAmount().firstOrNull()
+                homeDataStore.getSocialSecurityAmount().firstOrNull()?.toString()
             companyExpensesAmount.value =
-                homeDataStore.getCompanyExpensesAmount().firstOrNull()
+                homeDataStore.getCompanyExpensesAmount().firstOrNull()?.toString()
         }
     }
 
@@ -56,10 +56,10 @@ class HomeViewModel @Inject constructor(
     fun getUiState(): HomeUiState {
         return HomeUiState(
             date = getDate(),
-            hourlyRateUsd = getHourlyRateInUsd().toCustomString(),
-            taxPercentage = getTaxPercentage().toCustomString(),
-            socialSecurityAmount = getSocialSecurityAmount().toCustomString(),
-            companyExpensesAmount = getCompanyExpensesAmount().toCustomString(),
+            hourlyRateUsd = getHourlyRateInUsd() ?: "",
+            taxPercentage = getTaxPercentage() ?: "",
+            socialSecurityAmount = getSocialSecurityAmount() ?: "",
+            companyExpensesAmount = getCompanyExpensesAmount() ?: "",
             monthlyGrossSalary = getMonthlyBgnGrossSalary().formatAmount(),
             monthlyNetSalary = getMonthlyBgnNetSalary().formatAmount(),
             yearlyNetSalary = getYearlyNetSalary().formatAmount()
@@ -72,22 +72,22 @@ class HomeViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getHourlyRateInUsd(): Double? {
+    private fun getHourlyRateInUsd(): String? {
         return hourlyRateInUsd.value
     }
 
     @Composable
-    private fun getTaxPercentage(): Double? {
+    private fun getTaxPercentage(): String? {
         return taxPercentage.value
     }
 
     @Composable
-    private fun getSocialSecurityAmount(): Double? {
+    private fun getSocialSecurityAmount(): String? {
         return socialSecurityAmount.value
     }
 
     @Composable
-    private fun getCompanyExpensesAmount(): Double? {
+    private fun getCompanyExpensesAmount(): String? {
         return companyExpensesAmount.value
     }
 
@@ -95,7 +95,7 @@ class HomeViewModel @Inject constructor(
     private fun getMonthlyBgnGrossSalary(): Double? {
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
             exchangeRatesResponse.value,
-            hourlyRateInUsd.value ?: 0.0
+            hourlyRateInUsd.value?.toDoubleOrNull() ?: 0.0
         ) ?: 0.0
 
         val monthlyGrossSalaryInBgn = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
@@ -114,12 +114,12 @@ class HomeViewModel @Inject constructor(
             income = income ?: 0.0,
             taxAmount = taxCalculator.calculateTaxAmount(
                 income = income ?: 0.0,
-                socialSecurityAmount = socialSecurityAmount.value,
-                companyExpenses = companyExpensesAmount.value,
-                taxPercentage = taxPercentage.value
+                socialSecurityAmount = socialSecurityAmount.value?.toDoubleOrNull() ?: 0.0,
+                companyExpenses = companyExpensesAmount.value?.toDoubleOrNull() ?: 0.0,
+                taxPercentage = taxPercentage.value?.toDoubleOrNull() ?: 0.0
             ),
-            companyExpensesAmount = companyExpensesAmount.value ?: 0.0,
-            socialSecurityAmount = socialSecurityAmount.value ?: 0.0
+            companyExpensesAmount = companyExpensesAmount.value?.toDoubleOrNull() ?: 0.0,
+            socialSecurityAmount = socialSecurityAmount.value?.toDoubleOrNull() ?: 0.0
         )
     }
 
@@ -131,7 +131,7 @@ class HomeViewModel @Inject constructor(
     fun onChangeHourlyRateInUsd(newRate: String) {
         val newHourlyRate = newRate.toDoubleOrNull() ?: 0.0
 
-        hourlyRateInUsd.value = newHourlyRate
+        hourlyRateInUsd.value = newHourlyRate.toString()
 
         viewModelScope.launch {
             homeDataStore.editHourlyRate(newHourlyRate)
@@ -139,7 +139,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onChangeTaxPercentage(newTaxPercentage: Double) {
-        taxPercentage.value = newTaxPercentage
+        taxPercentage.value = newTaxPercentage.toString()
 
         viewModelScope.launch {
             homeDataStore.editTaxPercentage(newTaxPercentage)
@@ -147,7 +147,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onChangeSocialSecurityAmount(newSocialSecurityAmount: Double) {
-        socialSecurityAmount.value = newSocialSecurityAmount
+        socialSecurityAmount.value = newSocialSecurityAmount.toString()
 
         viewModelScope.launch {
             homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
@@ -155,7 +155,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
-        companyExpensesAmount.value = newCompanyExpensesAmount
+        companyExpensesAmount.value = newCompanyExpensesAmount.toString()
 
         viewModelScope.launch {
             homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount)
