@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.doublePreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
@@ -16,7 +17,7 @@ val CUT_MINS_KEY = stringPreferencesKey("cut-mins")
 val TOTAL_STUDY_TIME_KEY = stringPreferencesKey("total-study-time")
 
 val FIRST_NAME_KEY = stringPreferencesKey("first-name")
-val SAVED_AGE_KEY = doublePreferencesKey("age")
+val GIVEN_AGE_KEY = intPreferencesKey("age")
 
 val HOURLY_RATE_KEY = stringPreferencesKey("hourly-rate")
 val TAX_PERCENTAGE_KEY = doublePreferencesKey("tax-percentage")

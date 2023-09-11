@@ -13,16 +13,16 @@ import javax.inject.Inject
 class AgeViewModel @Inject constructor(
     private val ageDataStore: AgeDataStore
 ) : ViewModel() {
-    private val ageState = mutableStateOf<Double?>(0.0)
+    private val ageState = mutableStateOf<Int?>(null)
 
     fun onStart() {
         viewModelScope.launch {
-            ageState.value = ageDataStore.getAge().firstOrNull() ?: 0.0
+            ageState.value = ageDataStore.getAge().firstOrNull() ?: 0
         }
     }
 
-    private fun Double?.toCustomString(): String {
-        return if (this == null || this == 0.0) "" else this.toString()
+    private fun Int?.toCustomString(): String {
+        return if (this == null || this == 0) "" else this.toString()
     }
 
     @Composable
@@ -30,15 +30,15 @@ class AgeViewModel @Inject constructor(
         return AgeUiState(getAge().toCustomString())
     }
 
-    private fun getAge(): Double {
-        return ageState.value ?: 0.0
+    private fun getAge(): Int {
+        return ageState.value ?: 0
     }
 
     fun onChangeAge(age: String) {
-        ageState.value = age.toDoubleOrNull() ?: 0.0
+        ageState.value = age.toIntOrNull() ?: 0
 
         viewModelScope.launch {
-            ageDataStore.setAge(age.toDoubleOrNull() ?: 0.0)
+            ageDataStore.setAge(age.toIntOrNull() ?: 0)
         }
     }
 }

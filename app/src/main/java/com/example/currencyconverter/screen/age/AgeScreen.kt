@@ -21,6 +21,7 @@ import com.example.currencyconverter.screenState
 fun AgeScreen() {
     Column {
         val viewModel: AgeViewModel = viewModel()
+        val uiState = viewModel.getAgeUi()
 
         BackButton {
             screenState.value = Screen.DemoScreen
@@ -33,7 +34,7 @@ fun AgeScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         TextField(
-            value = viewModel.getAgeUi().age,
+            value = uiState.age,
             onValueChange = { viewModel.onChangeAge(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
