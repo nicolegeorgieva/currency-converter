@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 class ApartmentPriceCalculator @Inject constructor() {
     fun calculateRealM2Price(totalM2Price: String, realM2: String): Double {
+        if (realM2.toDoubleOrZero() == 0.0) return 0.0
         return (totalM2Price.toDoubleOrZero()) / (realM2.toDoubleOrZero())
     }
 
