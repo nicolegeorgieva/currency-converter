@@ -48,7 +48,7 @@ class ApartmentInfoViewModel @Inject constructor(
     private fun getRealM2Price(): String {
         return apartmentPriceCalculator.calculateRealM2Price(
             totalM2Price = getTotalM2Price(),
-            realM2 = realM2.value
+            realM2 = getRealM2()
         ).toString()
     }
 
@@ -60,8 +60,8 @@ class ApartmentInfoViewModel @Inject constructor(
     @Composable
     private fun getTotalM2Price(): String {
         return apartmentPriceCalculator.calculateTotalM2Price(
-            eurPerM2 = m2PriceEur.value,
-            totalM2 = totalM2.value
+            eurPerM2 = getM2PriceEur(),
+            totalM2 = getTotalM2()
         ).toString()
     }
 
