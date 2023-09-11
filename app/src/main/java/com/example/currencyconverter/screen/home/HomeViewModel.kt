@@ -87,7 +87,7 @@ class HomeViewModel @Inject constructor(
     private fun getMonthlyBgnGrossSalary(): Double? {
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
             exchangeRatesResponse.value,
-            hourlyRateInUsd.value?.toDoubleOrNull() ?: 0.0
+            hourlyRateInUsd.value.toDoubleOrZero()
         ) ?: 0.0
 
         val monthlyGrossSalaryInBgn = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
@@ -128,31 +128,31 @@ class HomeViewModel @Inject constructor(
         hourlyRateInUsd.value = newRate
 
         viewModelScope.launch {
-            homeDataStore.editHourlyRate(newRate.toDoubleOrNull() ?: 0.0)
+            homeDataStore.editHourlyRate(newRate.toDoubleOrZero())
         }
     }
 
-    fun onChangeTaxPercentage(newTaxPercentage: Double) {
-        taxPercentage.value = newTaxPercentage.toString()
+    fun onChangeTaxPercentage(newTaxPercentage: String) {
+        taxPercentage.value = newTaxPercentage
 
         viewModelScope.launch {
-            homeDataStore.editTaxPercentage(newTaxPercentage)
+            homeDataStore.editTaxPercentage(newTaxPercentage.toDoubleOrZero())
         }
     }
 
-    fun onChangeSocialSecurityAmount(newSocialSecurityAmount: Double) {
-        socialSecurityAmount.value = newSocialSecurityAmount.toString()
+    fun onChangeSocialSecurityAmount(newSocialSecurityAmount: String) {
+        socialSecurityAmount.value = newSocialSecurityAmount
 
         viewModelScope.launch {
-            homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount)
+            homeDataStore.editSocialSecurityAmount(newSocialSecurityAmount.toDoubleOrZero())
         }
     }
 
-    fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: Double) {
-        companyExpensesAmount.value = newCompanyExpensesAmount.toString()
+    fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: String) {
+        companyExpensesAmount.value = newCompanyExpensesAmount
 
         viewModelScope.launch {
-            homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount)
+            homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount.toDoubleOrZero())
         }
     }
 }

@@ -60,9 +60,7 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.hourlyRateUsd,
-                onValueChange = {
-                    viewModel.onChangeHourlyRateInUsd(it)
-                },
+                onValueChange = viewModel::onChangeHourlyRateInUsd,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -76,11 +74,7 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.taxPercentage,
-                onValueChange = {
-                    viewModel.onChangeTaxPercentage(
-                        it.toDoubleOrNull() ?: 0.0
-                    )
-                },
+                onValueChange = viewModel::onChangeTaxPercentage,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -94,11 +88,7 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.socialSecurityAmount,
-                onValueChange = {
-                    viewModel.onChangeSocialSecurityAmount(
-                        it.toDoubleOrNull() ?: 0.0
-                    )
-                },
+                onValueChange = viewModel::onChangeSocialSecurityAmount,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -112,11 +102,7 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.companyExpensesAmount,
-                onValueChange = {
-                    viewModel.onChangeCompanyExpensesAmount(
-                        it.toDoubleOrNull() ?: 0.0
-                    )
-                },
+                onValueChange = viewModel::onChangeCompanyExpensesAmount,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
