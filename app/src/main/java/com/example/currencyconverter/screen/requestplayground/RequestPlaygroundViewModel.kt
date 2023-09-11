@@ -24,11 +24,18 @@ class RequestPlaygroundViewModel @Inject constructor(
         }
     }
 
-    fun getToDosState(): RequestPlayground.Request {
+    fun uiState(): RequestUi {
+        return RequestUi(
+            tasks = getToDosState(),
+            currentTask = getToDo()
+        )
+    }
+
+    private fun getToDosState(): RequestPlayground.Request {
         return toDosState.value
     }
 
-    fun getToDo(): String {
+    private fun getToDo(): String {
         return newToDo.value
     }
 

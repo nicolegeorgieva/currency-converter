@@ -30,6 +30,7 @@ import com.example.currencyconverter.screenState
 @Composable
 fun RequestPlaygroundScreen() {
     val viewModel: RequestPlaygroundViewModel = viewModel()
+    val uiState = viewModel.uiState()
 
     Column(
         modifier = Modifier
@@ -64,7 +65,7 @@ fun RequestPlaygroundScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Crossfade(
-            targetState = viewModel.getToDosState(),
+            targetState = uiState.tasks,
             label = "crossfade content"
         ) { state ->
             Column {
@@ -88,7 +89,7 @@ fun RequestPlaygroundScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         TextField(
-            value = viewModel.getToDo(),
+            value = uiState.currentTask,
             onValueChange = {
                 viewModel.onToDoWriting(it)
             }
