@@ -7,5 +7,5 @@ data class ApartmentInfoUi(
     val totalM2Price: String,
     val totalM2PriceCurrency: String,
     val realM2Price: String,
-    val totalRealM2PriceCurrency: String
+    val realM2PriceCurrency: String
 )

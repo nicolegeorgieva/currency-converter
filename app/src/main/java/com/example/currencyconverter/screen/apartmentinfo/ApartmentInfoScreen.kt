@@ -68,7 +68,7 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Real m2 price: ",
             price = uiState.realM2Price,
-            currency = uiState.totalRealM2PriceCurrency
+            currency = uiState.realM2PriceCurrency
         )
     }
 }

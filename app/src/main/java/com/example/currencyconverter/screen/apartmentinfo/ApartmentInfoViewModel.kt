@@ -27,7 +27,7 @@ class ApartmentInfoViewModel @Inject constructor(
             totalM2Price = getTotalM2Price(),
             totalM2PriceCurrency = getTotalM2PriceCurrency(),
             realM2Price = getRealM2Price(),
-            totalRealM2PriceCurrency = getTotalRealM2PriceCurrency()
+            realM2PriceCurrency = getRealM2PriceCurrency()
         )
     }
 
@@ -62,7 +62,7 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getTotalRealM2PriceCurrency(): String {
+    private fun getRealM2PriceCurrency(): String {
         return totalRealM2PriceCurrency.value
     }
 
