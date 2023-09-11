@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,11 +25,15 @@ class CountStudyTimeViewModel @Inject constructor(
 
     fun onStart() {
         viewModelScope.launch {
-            startHourInputState.value = studyTimeDataStore.startHourInput.firstOrNull() ?: ""
-            startMinsInputState.value = studyTimeDataStore.startMinsInput.firstOrNull() ?: ""
-            cutMinsState.value = studyTimeDataStore.cutMins.firstOrNull() ?: ""
+            startHourInputState.value = studyTimeDataStore.startHourInput.firstOrEmptyString()
+            startMinsInputState.value = studyTimeDataStore.startMinsInput.firstOrEmptyString()
+            cutMinsState.value = studyTimeDataStore.cutMins.firstOrEmptyString()
             totalStudyTimeState.value = studyTimeDataStore.totalStudyTime.firstOrNull() ?: "0h 00m"
         }
+    }
+
+    private suspend fun Flow<String?>.firstOrEmptyString(): String {
+        return this.firstOrNull() ?: ""
     }
 
     @Composable
