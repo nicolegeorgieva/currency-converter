@@ -3,7 +3,7 @@ package com.example.currencyconverter.screen.home
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.currencyconverter.data.COMPANY_EXPENSES_AMOUNT_KEY
-import com.example.currencyconverter.data.HOURLY_RATE_KEY
+import com.example.currencyconverter.data.RATE_PER_HOUR_KEY
 import com.example.currencyconverter.data.SOCIAL_SECURITY_AMOUNT_KEY
 import com.example.currencyconverter.data.TAX_PERCENTAGE_KEY
 import com.example.currencyconverter.data.dataStore
@@ -18,13 +18,13 @@ class HomeDataStore @Inject constructor(
 ) {
     val dataStore = context.dataStore
 
-    fun getHourlyRate(): Flow<String> {
-        return dataStore.data.map { it[HOURLY_RATE_KEY] ?: "" }
+    fun getHourlyRate(): Flow<Double> {
+        return dataStore.data.map { it[RATE_PER_HOUR_KEY] ?: 0.0 }
     }
 
-    suspend fun editHourlyRate(newHourlyRate: String) {
+    suspend fun editHourlyRate(newHourlyRate: Double) {
         dataStore.edit {
-            it[HOURLY_RATE_KEY] = newHourlyRate
+            it[RATE_PER_HOUR_KEY] = newHourlyRate
         }
     }
 

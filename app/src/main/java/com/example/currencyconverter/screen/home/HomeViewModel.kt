@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(
     private val homeDataStore: HomeDataStore,
     private val taxCalculator: TaxCalculator
 ) : ViewModel() {
-    private val hourlyRateInUsd = mutableStateOf<String?>("")
+    private val hourlyRateInUsd = mutableStateOf<Double?>(0.0)
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
     private val taxPercentage = mutableStateOf<Double?>(null)
@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
     fun getUiState(): HomeUiState {
         return HomeUiState(
             date = getDate(),
-            hourlyRateUsd = getHourlyRateInUsd() ?: "", //TODO: Make it Double
+            hourlyRateUsd = getHourlyRateInUsd().toCustomString(),
             taxPercentage = getTaxPercentage().toCustomString(),
             socialSecurityAmount = getSocialSecurityAmount().toCustomString(),
             companyExpensesAmount = getCompanyExpensesAmount().toCustomString(),
@@ -68,7 +68,7 @@ class HomeViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getHourlyRateInUsd(): String? {
+    private fun getHourlyRateInUsd(): Double? {
         return hourlyRateInUsd.value
     }
 
@@ -91,7 +91,7 @@ class HomeViewModel @Inject constructor(
     private fun getMonthlyBgnGrossSalary(): Double? {
         val usdToBgn = currencyConverter.exchangeUsdToBgn(
             exchangeRatesResponse.value,
-            (hourlyRateInUsd.value ?: "").toDoubleOrNull()
+            hourlyRateInUsd.value ?: 0.0
         ) ?: 0.0
 
         val monthlyGrossSalaryInBgn = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(
@@ -125,10 +125,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onChangeHourlyRateInUsd(newRate: String) {
-        hourlyRateInUsd.value = newRate
+        val newHourlyRate = newRate.toDoubleOrNull() ?: 0.0
+
+        hourlyRateInUsd.value = newHourlyRate
 
         viewModelScope.launch {
-            homeDataStore.editHourlyRate(newRate)
+            homeDataStore.editHourlyRate(newHourlyRate)
         }
     }
 

@@ -17,9 +17,9 @@ val CUT_MINS_KEY = stringPreferencesKey("cut-mins")
 val TOTAL_STUDY_TIME_KEY = stringPreferencesKey("total-study-time")
 
 val FIRST_NAME_KEY = stringPreferencesKey("first-name")
-val GIVEN_AGE_KEY = intPreferencesKey("age")
+val AGE_KEY = intPreferencesKey("age")
 
-val HOURLY_RATE_KEY = stringPreferencesKey("hourly-rate")
+val RATE_PER_HOUR_KEY = doublePreferencesKey("rate-per-hour")
 val TAX_PERCENTAGE_KEY = doublePreferencesKey("tax-percentage")
 val SOCIAL_SECURITY_AMOUNT_KEY = doublePreferencesKey("social-security-amount")
 val COMPANY_EXPENSES_AMOUNT_KEY = doublePreferencesKey("company-expenses-amount")
