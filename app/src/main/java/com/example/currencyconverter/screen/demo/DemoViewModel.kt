@@ -1,5 +1,6 @@
 package com.example.currencyconverter.screen.demo
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,6 +27,7 @@ class DemoViewModel @Inject constructor(
         }
     }
 
+    @Composable
     fun uiState(): DemoUiState {
         return DemoUiState(
             greeting = greeting(),
@@ -40,6 +42,7 @@ class DemoViewModel @Inject constructor(
         return if (name.value?.isNotBlank() == true) "$greeting $name!" else ""
     }
 
+    @Composable
     private fun getName(): String {
         return name.value ?: ""
     }
@@ -60,6 +63,7 @@ class DemoViewModel @Inject constructor(
         }
     }
 
+    @Composable
     private fun getAge(): String {
         return age.value?.takeIf { it != 0 }?.toString() ?: ""
     }

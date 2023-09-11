@@ -23,12 +23,12 @@ fun AgeScreen() {
         val viewModel: AgeViewModel = viewModel()
         val uiState = viewModel.getAgeUi()
 
-        BackButton {
-            screenState.value = Screen.DemoScreen
-        }
-
         LaunchedEffect(Unit) {
             viewModel.onStart()
+        }
+
+        BackButton {
+            screenState.value = Screen.DemoScreen
         }
 
         Spacer(modifier = Modifier.height(12.dp))

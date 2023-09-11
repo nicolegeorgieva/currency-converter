@@ -21,15 +21,16 @@ class AgeViewModel @Inject constructor(
         }
     }
 
-    private fun Int?.toCustomString(): String {
-        return if (this == null || this == 0) "" else this.toString()
-    }
-
     @Composable
     fun getAgeUi(): AgeUiState {
         return AgeUiState(getAge().toCustomString())
     }
 
+    private fun Int?.toCustomString(): String {
+        return if (this == null || this == 0) "" else this.toString()
+    }
+
+    @Composable
     private fun getAge(): Int {
         return ageState.value ?: 0
     }
