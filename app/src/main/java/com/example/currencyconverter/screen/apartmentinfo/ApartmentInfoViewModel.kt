@@ -47,23 +47,41 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getTotalM2Price(): String {
-        return totalM2Price.value
-    }
-
-    @Composable
-    private fun getTotalM2PriceCurrency(): String {
-        return totalM2PriceCurrency.value
-    }
-
-    @Composable
     private fun getRealM2Price(): String {
+        realM2Price.value = try {
+            apartmentPriceCalculator.calculateRealM2Price(
+                totalM2Price = totalM2Price.value,
+                realM2 = realM2.value
+            ).toString()
+        } catch (e: Exception) {
+            ""
+        }
+
         return realM2Price.value
     }
 
     @Composable
     private fun getRealM2PriceCurrency(): String {
         return totalRealM2PriceCurrency.value
+    }
+
+    @Composable
+    private fun getTotalM2Price(): String {
+        totalM2Price.value = try {
+            apartmentPriceCalculator.calculateTotalM2Price(
+                eurPerM2 = m2PriceEur.value,
+                totalM2 = totalM2.value
+            ).toString()
+        } catch (e: Exception) {
+            ""
+        }
+
+        return totalM2Price.value
+    }
+
+    @Composable
+    private fun getTotalM2PriceCurrency(): String {
+        return totalM2PriceCurrency.value
     }
 
     fun onM2PriceEurChange(newM2PriceEur: String) {
