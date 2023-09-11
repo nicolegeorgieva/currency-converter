@@ -22,6 +22,7 @@ import com.example.currencyconverter.screenState
 @Composable
 fun DemoScreen() {
     val viewModel: DemoViewModel = viewModel()
+    val uiState = viewModel.uiState()
 
     Column {
         Row {
@@ -38,15 +39,11 @@ fun DemoScreen() {
             }
         }
 
-        Text(text = "Demo")
+        Text(text = uiState.greeting, fontSize = 48.sp)
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = viewModel.greeting(), fontSize = 48.sp)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(value = viewModel.getName(), onValueChange = { viewModel.setName(it) })
+        TextField(value = uiState.name, onValueChange = { viewModel.setName(it) })
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -58,6 +55,6 @@ fun DemoScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = "Age: ${viewModel.getAge()}", fontSize = 48.sp)
+        Text(text = "Age: ${uiState.age}", fontSize = 48.sp)
     }
 }

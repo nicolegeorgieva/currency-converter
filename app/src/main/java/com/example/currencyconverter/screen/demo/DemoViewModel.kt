@@ -26,13 +26,21 @@ class DemoViewModel @Inject constructor(
         }
     }
 
-    fun greeting(): String {
+    fun uiState(): DemoUiState {
+        return DemoUiState(
+            greeting = greeting(),
+            name = getName(),
+            age = getAge()
+        )
+    }
+
+    private fun greeting(): String {
         greeting.value = greeter.randomGreeting()
 
         return if (name.value?.isNotBlank() == true) "$greeting $name!" else ""
     }
 
-    fun getName(): String {
+    private fun getName(): String {
         return name.value ?: ""
     }
 
@@ -45,12 +53,14 @@ class DemoViewModel @Inject constructor(
     }
 
     fun clearName() {
+        name.value = ""
+
         viewModelScope.launch {
             nameDataStore.clearName()
         }
     }
 
-    fun getAge(): String {
+    private fun getAge(): String {
         return age.value?.takeIf { it != 0.0 }?.toString() ?: ""
     }
 }
