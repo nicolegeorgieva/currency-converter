@@ -21,10 +21,11 @@ class DemoViewModel @Inject constructor(
     private val age = mutableStateOf<Int?>(null)
 
     fun onStart() {
+        greeting.value = greeter.randomGreeting()
+
         viewModelScope.launch {
             name.value = nameDataStore.name().firstOrNull() ?: ""
             age.value = ageDataStore.getAge().firstOrNull() ?: 0
-            greeting.value = greeter.randomGreeting()
         }
     }
 
