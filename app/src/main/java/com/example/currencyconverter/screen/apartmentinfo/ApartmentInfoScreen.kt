@@ -75,7 +75,7 @@ fun ApartmentInfoScreen() {
             label = "Real m2 price: ",
             price = uiState.realM2Price,
             currencyValue = uiState.realM2PriceCurrency.name,
-            onCurrencyValueSelected = viewModel.onEurRealPriceCurrencySet(),
+            onCurrencyValueSelected = viewModel.onRealPriceCurrencySet(),
             isExpanded = uiState.isRealM2PriceCurrencyExpanded
         )
 
@@ -85,7 +85,7 @@ fun ApartmentInfoScreen() {
             label = "Total m2 price: ",
             price = uiState.totalM2Price,
             currencyValue = uiState.totalM2PriceCurrency.name,
-            onCurrencyValueSelected = viewModel.onEurTotalPriceCurrencySet(),
+            onCurrencyValueSelected = viewModel.onTotalPriceCurrencySet(),
             isExpanded = uiState.isTotalM2PriceCurrencyExpanded
         )
     }
@@ -117,7 +117,7 @@ fun TotalM2PriceRow(
     label: String,
     price: String,
     currencyValue: String,
-    onCurrencyValueSelected: Unit,
+    onCurrencyValueSelected: (ApartmentInfoCurrency) -> Unit,
     isExpanded: Boolean
 ) {
     Row(
@@ -152,12 +152,12 @@ fun TotalM2PriceRow(
                 ) {
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.EUR}") },
-                        onClick = { onCurrencyValueSelected }
+                        onClick = { onCurrencyValueSelected(ApartmentInfoCurrency.EUR) }
                     )
 
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.BGN}") },
-                        onClick = { onCurrencyValueSelected }
+                        onClick = { onCurrencyValueSelected(ApartmentInfoCurrency.BGN) }
                     )
                 }
             }

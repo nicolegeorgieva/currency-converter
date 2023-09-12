@@ -106,19 +106,17 @@ class ApartmentInfoViewModel @Inject constructor(
         totalM2PriceCurrencyExpanded.value = true
     }
 
-    fun onEurRealPriceCurrencySet() {
-        realM2PriceCurrency.value = ApartmentInfoCurrency.EUR
+    fun onRealPriceCurrencySet(currency: ApartmentInfoCurrency) {
+        realM2PriceCurrency.value = when (currency) {
+            ApartmentInfoCurrency.EUR -> ApartmentInfoCurrency.EUR
+            ApartmentInfoCurrency.BGN -> ApartmentInfoCurrency.BGN
+        }
     }
 
-    fun onBgnRealPriceCurrencySet() {
-        realM2PriceCurrency.value = ApartmentInfoCurrency.BGN
-    }
-
-    fun onEurTotalPriceCurrencySet() {
-        totalM2PriceCurrency.value = ApartmentInfoCurrency.EUR
-    }
-
-    fun onBgnTotalPriceCurrencySet() {
-        totalM2PriceCurrency.value = ApartmentInfoCurrency.BGN
+    fun onTotalPriceCurrencySet(currency: ApartmentInfoCurrency) {
+        totalM2PriceCurrency.value = when (currency) {
+            ApartmentInfoCurrency.EUR -> ApartmentInfoCurrency.EUR
+            ApartmentInfoCurrency.BGN -> ApartmentInfoCurrency.BGN
+        }
     }
 }
