@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Divider
@@ -126,9 +127,12 @@ fun TotalM2PriceRow(
         Spacer(modifier = Modifier.width(4.dp))
 
         Text(text = price)
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
-        Box {
+        Box(
+            modifier = Modifier.size(128.dp),
+            contentAlignment = Alignment.CenterEnd
+        ) {
             ExposedDropdownMenuBox(
                 expanded = isExpanded,
                 onExpandedChange = {}) {
