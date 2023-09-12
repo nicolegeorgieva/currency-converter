@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -18,6 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.Screen
+import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.screenState
 
 @Composable
 fun ApartmentInfoScreen() {
@@ -29,6 +33,12 @@ fun ApartmentInfoScreen() {
             .fillMaxSize()
             .padding(12.dp)
     ) {
+        BackButton {
+            screenState.value = Screen.MenuScreen
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         InputRow(
             value = uiState.m2PriceEur,
             onValueChange = viewModel::onM2PriceEurChange,
@@ -59,16 +69,14 @@ fun ApartmentInfoScreen() {
 
         TotalM2PriceRow(
             label = "Real m2 price: ",
-            price = uiState.realM2Price,
-            currency = uiState.realM2PriceCurrency
+            price = uiState.realM2Price
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         TotalM2PriceRow(
             label = "Total m2 price: ",
-            price = uiState.totalM2Price,
-            currency = uiState.totalM2PriceCurrency
+            price = uiState.totalM2Price
         )
     }
 }
@@ -96,8 +104,7 @@ fun InputRow(
 @Composable
 fun TotalM2PriceRow(
     label: String,
-    price: String,
-    currency: String
+    price: String
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -106,6 +113,17 @@ fun TotalM2PriceRow(
         Spacer(modifier = Modifier.width(4.dp))
         Text(text = price)
         Spacer(modifier = Modifier.width(4.dp))
-        Text(text = currency)
+        DropDownCurrencyMenu()
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownCurrencyMenu() {
+    ExposedDropdownMenuBox(expanded = false, onExpandedChange = {}) {
+        Text(text = "EUR")
+        Text(text = "BGN")
+    }
+
+    // TODO
 }
