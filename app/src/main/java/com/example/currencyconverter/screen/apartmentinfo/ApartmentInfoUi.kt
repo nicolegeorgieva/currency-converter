@@ -5,9 +5,14 @@ data class ApartmentInfoUi(
     val totalM2: String,
     val realM2: String,
     val realM2Price: String,
-    val realM2PriceCurrency: String,
+    val realM2PriceCurrency: ApartmentInfoCurrency,
     val isRealM2PriceCurrencyExpanded: Boolean,
     val totalM2Price: String,
-    val totalM2PriceCurrency: String,
+    val totalM2PriceCurrency: ApartmentInfoCurrency,
     val isTotalM2PriceCurrencyExpanded: Boolean
 )
+
+enum class ApartmentInfoCurrency {
+    EUR,
+    BGN
+}

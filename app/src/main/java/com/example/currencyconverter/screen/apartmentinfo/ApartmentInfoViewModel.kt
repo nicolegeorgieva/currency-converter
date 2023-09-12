@@ -13,8 +13,10 @@ class ApartmentInfoViewModel @Inject constructor(
     private val m2PriceEur = mutableStateOf("")
     private val totalM2 = mutableStateOf("")
     private val realM2 = mutableStateOf("")
-    private val realM2PriceCurrency = mutableStateOf("EUR")
-    private val totalM2PriceCurrency = mutableStateOf("EUR")
+    private val realM2PriceCurrency =
+        mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
+    private val totalM2PriceCurrency =
+        mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
     private val realM2PriceCurrencyExpanded = mutableStateOf(false)
     private val totalM2PriceCurrencyExpanded = mutableStateOf(false)
 
@@ -57,7 +59,7 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getRealM2PriceCurrency(): String {
+    private fun getRealM2PriceCurrency(): ApartmentInfoCurrency {
         return realM2PriceCurrency.value
     }
 
@@ -75,7 +77,7 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getTotalM2PriceCurrency(): String {
+    private fun getTotalM2PriceCurrency(): ApartmentInfoCurrency {
         return totalM2PriceCurrency.value
     }
 
@@ -105,18 +107,18 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     fun onEurRealPriceCurrencySet() {
-        realM2PriceCurrency.value = "EUR"
+        realM2PriceCurrency.value = ApartmentInfoCurrency.EUR
     }
 
     fun onBgnRealPriceCurrencySet() {
-        realM2PriceCurrency.value = "BGN"
+        realM2PriceCurrency.value = ApartmentInfoCurrency.BGN
     }
 
     fun onEurTotalPriceCurrencySet() {
-        totalM2PriceCurrency.value = "EUR"
+        totalM2PriceCurrency.value = ApartmentInfoCurrency.EUR
     }
 
     fun onBgnTotalPriceCurrencySet() {
-        totalM2PriceCurrency.value = "BGN"
+        totalM2PriceCurrency.value = ApartmentInfoCurrency.BGN
     }
 }

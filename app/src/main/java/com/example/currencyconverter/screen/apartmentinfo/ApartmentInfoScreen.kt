@@ -1,5 +1,6 @@
 package com.example.currencyconverter.screen.apartmentinfo
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,9 +13,11 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -71,10 +74,9 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Real m2 price: ",
             price = uiState.realM2Price,
-            isExpanded = uiState.isRealM2PriceCurrencyExpanded,
-            onExpandedChange = viewModel.onRealM2PriceCurrencyExpandedStateChange(),
-            dropDownOption2 = uiState.realM2PriceCurrency,
-            dropDownOption3 = uiState.realM2PriceCurrency
+            currencyValue = uiState.realM2PriceCurrency.name,
+            onCurrencyValueSelected =,
+            isExpanded = uiState.isRealM2PriceCurrencyExpanded
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -82,10 +84,7 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Total m2 price: ",
             price = uiState.totalM2Price,
-            isExpanded = uiState.isTotalM2PriceCurrencyExpanded,
-            onExpandedChange = viewModel.onTotalM2PriceCurrencyExpandedStateChange(),
-            dropDownOption2 = uiState.totalM2PriceCurrency,
-            dropDownOption3 = uiState.totalM2PriceCurrency
+            isExpanded = uiState.isTotalM2PriceCurrencyExpanded
         )
     }
 }
@@ -110,62 +109,53 @@ fun InputRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TotalM2PriceRow(
     label: String,
     price: String,
-    isExpanded: Boolean,
-    onExpandedChange: Unit,
-    dropDownOption2: String,
-    dropDownOption3: String
+    currencyValue: String,
+    onCurrencyValueSelected: () -> Unit,
+    isExpanded: MutableState<Boolean>
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = label)
         Spacer(modifier = Modifier.width(4.dp))
+
         Text(text = price)
         Spacer(modifier = Modifier.width(4.dp))
-        DropDownCurrencyMenu(
-            isExpanded = isExpanded,
-            onExpandedChange = onExpandedChange,
-            dropDownOption2 = dropDownOption2,
-            dropDownOption3 = dropDownOption3
-        )
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropDownCurrencyMenu(
-    isExpanded: Boolean,
-    onExpandedChange: Unit,
-    dropDownOption2: String,
-    dropDownOption3: String
-) {
-    ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { onExpandedChange }
-    ) {
-        ExposedDropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { onExpandedChange }) {
-            CustomDropDownCurrencyItem(
-                text = dropDownOption2,
-                onClick = onExpandedChange
-            )
-            CustomDropDownCurrencyItem(
-                text = dropDownOption3,
-                onClick = onExpandedChange
-            )
+        Box {
+            ExposedDropdownMenuBox(
+                expanded = isExpanded.value,
+                onExpandedChange = { isExpanded.value = it }) {
+                TextField(
+                    value = currencyValue,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded.value)
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = isExpanded.value,
+                    onDismissRequest = { isExpanded.value = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("${ApartmentInfoCurrency.EUR}") },
+                        onClick = { onCurrencyValueSelected() }
+                    )
+
+                    DropdownMenuItem(
+                        text = { Text("${ApartmentInfoCurrency.BGN}") },
+                        onClick = { onCurrencyValueSelected() }
+                    )
+                }
+            }
         }
     }
-}
-
-@Composable
-fun CustomDropDownCurrencyItem(
-    text: String,
-    onClick: Unit
-) {
-    DropdownMenuItem(text = { text }, onClick = { onClick })
 }
