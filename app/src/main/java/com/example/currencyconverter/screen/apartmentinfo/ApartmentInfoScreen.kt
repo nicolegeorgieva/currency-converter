@@ -17,7 +17,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -75,7 +74,7 @@ fun ApartmentInfoScreen() {
             label = "Real m2 price: ",
             price = uiState.realM2Price,
             currencyValue = uiState.realM2PriceCurrency.name,
-            onCurrencyValueSelected =,
+            onCurrencyValueSelected = viewModel.onEurRealPriceCurrencySet(),
             isExpanded = uiState.isRealM2PriceCurrencyExpanded
         )
 
@@ -84,6 +83,8 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Total m2 price: ",
             price = uiState.totalM2Price,
+            currencyValue = uiState.totalM2PriceCurrency.name,
+            onCurrencyValueSelected = viewModel.onEurTotalPriceCurrencySet(),
             isExpanded = uiState.isTotalM2PriceCurrencyExpanded
         )
     }
@@ -115,8 +116,8 @@ fun TotalM2PriceRow(
     label: String,
     price: String,
     currencyValue: String,
-    onCurrencyValueSelected: () -> Unit,
-    isExpanded: MutableState<Boolean>
+    onCurrencyValueSelected: Unit,
+    isExpanded: Boolean
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -129,30 +130,30 @@ fun TotalM2PriceRow(
 
         Box {
             ExposedDropdownMenuBox(
-                expanded = isExpanded.value,
-                onExpandedChange = { isExpanded.value = it }) {
+                expanded = isExpanded,
+                onExpandedChange = {}) {
                 TextField(
                     value = currencyValue,
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded.value)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors()
                 )
 
                 ExposedDropdownMenu(
-                    expanded = isExpanded.value,
-                    onDismissRequest = { isExpanded.value = false }
+                    expanded = isExpanded,
+                    onDismissRequest = {}
                 ) {
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.EUR}") },
-                        onClick = { onCurrencyValueSelected() }
+                        onClick = { onCurrencyValueSelected }
                     )
 
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.BGN}") },
-                        onClick = { onCurrencyValueSelected() }
+                        onClick = { onCurrencyValueSelected }
                     )
                 }
             }
