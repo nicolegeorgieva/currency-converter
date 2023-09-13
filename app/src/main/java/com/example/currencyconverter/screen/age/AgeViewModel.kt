@@ -2,8 +2,8 @@ package com.example.currencyconverter.screen.age
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.currencyconverter.ComposeViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -12,17 +12,11 @@ import javax.inject.Inject
 @HiltViewModel
 class AgeViewModel @Inject constructor(
     private val ageDataStore: AgeDataStore
-) : ViewModel() {
+) : ComposeViewModel<AgeUiState, AgeEvent>() {
     private val ageState = mutableStateOf<Int?>(null)
 
-    fun onStart() {
-        viewModelScope.launch {
-            ageState.value = ageDataStore.getAge().firstOrNull() ?: 0
-        }
-    }
-
     @Composable
-    fun getAgeUi(): AgeUiState {
+    override fun uiState(): AgeUiState {
         return AgeUiState(getAge().toCustomString())
     }
 
@@ -35,7 +29,20 @@ class AgeViewModel @Inject constructor(
         return ageState.value ?: 0
     }
 
-    fun onChangeAge(age: String) {
+    override fun onEvent(event: AgeEvent) {
+        when (event) {
+            is AgeEvent.OnChangeAge -> onChangeAge(event.newAge)
+            AgeEvent.OnStart -> onStart()
+        }
+    }
+
+    private fun onStart() {
+        viewModelScope.launch {
+            ageState.value = ageDataStore.getAge().firstOrNull() ?: 0
+        }
+    }
+
+    private fun onChangeAge(age: String) {
         ageState.value = age.toIntOrNull() ?: 0
 
         viewModelScope.launch {
