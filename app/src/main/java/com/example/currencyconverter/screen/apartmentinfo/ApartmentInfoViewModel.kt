@@ -65,8 +65,10 @@ class ApartmentInfoViewModel @Inject constructor(
 
     @Composable
     private fun getRealM2Price(): String {
+        val totalM2Price = getTotalM2Price().replace(",", "")
+
         val price = apartmentPriceCalculator.calculateRealM2Price(
-            totalM2Price = getTotalM2Price(),
+            totalM2Price = totalM2Price,
             realM2 = getRealM2()
         )
 
