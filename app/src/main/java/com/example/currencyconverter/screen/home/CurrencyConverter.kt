@@ -6,14 +6,24 @@ class CurrencyConverter @Inject constructor(
 ) {
     fun exchangeUsdToBgn(
         exchangeRatesResponse: ExchangeRatesDataSource.ExchangeRatesResponse?,
-        hourlyRateInUsd: Double?
+        amount: Double?
     ): Double? {
-        if (hourlyRateInUsd == null) return null
+        if (amount == null) return null
         val eurToUsd = exchangeRatesResponse?.eur?.usd ?: return null
 
         val eurToBgn = exchangeRatesResponse.eur.bgn
-        val usdHourlyRateToEur = hourlyRateInUsd / eurToUsd
+        val usdHourlyRateToEur = amount / eurToUsd
 
         return usdHourlyRateToEur * eurToBgn
+    }
+
+    fun exchangeEurToBgn(
+        exchangeRatesResponse: ExchangeRatesDataSource.ExchangeRatesResponse?,
+        amount: Double?
+    ): Double? {
+        if (amount == null || exchangeRatesResponse == null) return null
+        val eurToBgn = exchangeRatesResponse.eur.bgn
+
+        return amount * eurToBgn
     }
 }
