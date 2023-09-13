@@ -38,7 +38,7 @@ fun RequestPlaygroundScreen() {
             .padding(12.dp)
     ) {
         LaunchedEffect(Unit) {
-            viewModel.fetchToDos()
+            viewModel.onEvent(RequestPlaygroundEvent.OnStart)
         }
 
         BackButton {
@@ -51,7 +51,7 @@ fun RequestPlaygroundScreen() {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 onClick = {
-                    viewModel.fetchToDos()
+                    viewModel.onEvent(RequestPlaygroundEvent.OnStart)
                 }
             )
             {
@@ -73,7 +73,7 @@ fun RequestPlaygroundScreen() {
                     is RequestPlayground.Request.Success ->
                         for (i in state.data.indices) {
                             TaskCard(task = state.data[i]) {
-                                viewModel.onDelete(i)
+                                viewModel.onEvent(RequestPlaygroundEvent.OnDelete(i))
                             }
                         }
 
@@ -91,14 +91,14 @@ fun RequestPlaygroundScreen() {
         TextField(
             value = uiState.currentTask,
             onValueChange = {
-                viewModel.onToDoWriting(it)
+                viewModel.onEvent(RequestPlaygroundEvent.OnToDoWriting(it))
             }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(onClick = {
-            viewModel.onAddToDo()
+            viewModel.onEvent(RequestPlaygroundEvent.OnAddToDo)
         }) {
             Text(text = "Add")
         }
