@@ -35,7 +35,7 @@ fun ApartmentInfoScreen() {
     val uiState = viewModel.uiState()
 
     LaunchedEffect(Unit) {
-        viewModel.onStart()
+        viewModel.onEvent(ApartmentInfoEvent.OnStart)
     }
 
     Column(
@@ -51,7 +51,9 @@ fun ApartmentInfoScreen() {
 
         InputRow(
             value = uiState.m2PriceEur,
-            onValueChange = viewModel::onM2PriceEurChange,
+            onValueChange = {
+                viewModel.onEvent(ApartmentInfoEvent.OnM2PriceEurChange(it))
+            },
             label = "EUR/m2"
         )
 
@@ -59,7 +61,9 @@ fun ApartmentInfoScreen() {
 
         InputRow(
             value = uiState.totalM2,
-            onValueChange = viewModel::onTotalM2Change,
+            onValueChange = {
+                viewModel.onEvent(ApartmentInfoEvent.OnTotalM2Change(it))
+            },
             label = "total m2"
         )
 
@@ -67,7 +71,9 @@ fun ApartmentInfoScreen() {
 
         InputRow(
             value = uiState.realM2,
-            onValueChange = viewModel::onRealM2Change,
+            onValueChange = {
+                viewModel.onEvent(ApartmentInfoEvent.OnRealM2Change(it))
+            },
             label = "real m2"
         )
 
@@ -82,7 +88,7 @@ fun ApartmentInfoScreen() {
             price = uiState.realM2Price,
             currencyValue = viewModel.realM2PriceCurrency,
             onCurrencyValueSelected = {
-                viewModel.onRealPriceCurrencySet(viewModel.realM2PriceCurrency.value)
+                viewModel.onEvent(ApartmentInfoEvent.OnRealPriceCurrencySet(it))
             },
             isExpanded = viewModel.realM2PriceCurrencyExpanded
         )
@@ -94,7 +100,7 @@ fun ApartmentInfoScreen() {
             price = uiState.totalM2Price,
             currencyValue = viewModel.totalM2PriceCurrency,
             onCurrencyValueSelected = {
-                viewModel.onTotalPriceCurrencySet(viewModel.totalM2PriceCurrency.value)
+                viewModel.onEvent(ApartmentInfoEvent.OnTotalPriceCurrencySet(it))
             },
             isExpanded = viewModel.totalM2PriceCurrencyExpanded
         )

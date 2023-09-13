@@ -2,8 +2,8 @@ package com.example.currencyconverter.screen.apartmentinfo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.currencyconverter.CustomViewModel
 import com.example.currencyconverter.screen.home.CurrencyConverter
 import com.example.currencyconverter.screen.home.ExchangeRatesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ class ApartmentInfoViewModel @Inject constructor(
     private val currencyRequest: ExchangeRatesDataSource,
     private val currencyConverter: CurrencyConverter,
     private val apartmentPriceCalculator: ApartmentPriceCalculator
-) : ViewModel() {
+) : CustomViewModel<ApartmentInfoUi, ApartmentInfoEvent>() {
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
     private val m2PriceEur = mutableStateOf("")
@@ -29,14 +29,8 @@ class ApartmentInfoViewModel @Inject constructor(
     val realM2PriceCurrencyExpanded = mutableStateOf(false)
     val totalM2PriceCurrencyExpanded = mutableStateOf(false)
 
-    fun onStart() {
-        viewModelScope.launch {
-            exchangeRatesResponse.value = currencyRequest.fetchExchangeRates()
-        }
-    }
-
     @Composable
-    fun uiState(): ApartmentInfoUi {
+    override fun uiState(): ApartmentInfoUi {
         return ApartmentInfoUi(
             m2PriceEur = getM2PriceEur(),
             totalM2 = getTotalM2(),
@@ -128,26 +122,43 @@ class ApartmentInfoViewModel @Inject constructor(
         return totalM2PriceCurrency.value
     }
 
-    fun onM2PriceEurChange(newM2PriceEur: String) {
+    override fun onEvent(event: ApartmentInfoEvent) {
+        when (event) {
+            is ApartmentInfoEvent.OnM2PriceEurChange -> onM2PriceEurChange(event.newM2PriceEur)
+            is ApartmentInfoEvent.OnRealM2Change -> onRealM2Change(event.newRealM2)
+            is ApartmentInfoEvent.OnRealPriceCurrencySet -> onRealPriceCurrencySet(event.currency)
+            ApartmentInfoEvent.OnStart -> onStart()
+            is ApartmentInfoEvent.OnTotalM2Change -> onTotalM2Change(event.newTotalM2)
+            is ApartmentInfoEvent.OnTotalPriceCurrencySet -> onTotalPriceCurrencySet(event.currency)
+        }
+    }
+
+    private fun onStart() {
+        viewModelScope.launch {
+            exchangeRatesResponse.value = currencyRequest.fetchExchangeRates()
+        }
+    }
+
+    private fun onM2PriceEurChange(newM2PriceEur: String) {
         m2PriceEur.value = newM2PriceEur
     }
 
-    fun onTotalM2Change(newTotalM2: String) {
+    private fun onTotalM2Change(newTotalM2: String) {
         totalM2.value = newTotalM2
     }
 
-    fun onRealM2Change(newRealM2: String) {
+    private fun onRealM2Change(newRealM2: String) {
         realM2.value = newRealM2
     }
 
-    fun onRealPriceCurrencySet(currency: ApartmentInfoCurrency) {
+    private fun onRealPriceCurrencySet(currency: ApartmentInfoCurrency) {
         realM2PriceCurrency.value = when (currency) {
             ApartmentInfoCurrency.EUR -> ApartmentInfoCurrency.EUR
             ApartmentInfoCurrency.BGN -> ApartmentInfoCurrency.BGN
         }
     }
 
-    fun onTotalPriceCurrencySet(currency: ApartmentInfoCurrency) {
+    private fun onTotalPriceCurrencySet(currency: ApartmentInfoCurrency) {
         totalM2PriceCurrency.value = when (currency) {
             ApartmentInfoCurrency.EUR -> ApartmentInfoCurrency.EUR
             ApartmentInfoCurrency.BGN -> ApartmentInfoCurrency.BGN
