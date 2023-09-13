@@ -18,6 +18,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -74,8 +75,8 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Real m2 price: ",
             price = uiState.realM2Price,
-            currencyValue = uiState.realM2PriceCurrency.name,
-            onCurrencyValueSelected = viewModel.onRealPriceCurrencySet(),
+            currencyValue = viewModel.realM2PriceCurrency,
+            onCurrencyValueSelected = { viewModel.onRealPriceCurrencySet(viewModel.realM2PriceCurrency.value) },
             isExpanded = uiState.isRealM2PriceCurrencyExpanded
         )
 
@@ -84,8 +85,8 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Total m2 price: ",
             price = uiState.totalM2Price,
-            currencyValue = uiState.totalM2PriceCurrency.name,
-            onCurrencyValueSelected = viewModel.onTotalPriceCurrencySet(),
+            currencyValue = viewModel.totalM2PriceCurrency,
+            onCurrencyValueSelected = { viewModel.onTotalPriceCurrencySet(viewModel.totalM2PriceCurrency.value) },
             isExpanded = uiState.isTotalM2PriceCurrencyExpanded
         )
     }
@@ -116,9 +117,9 @@ fun InputRow(
 fun TotalM2PriceRow(
     label: String,
     price: String,
-    currencyValue: String,
-    onCurrencyValueSelected: (ApartmentInfoCurrency) -> Unit,
-    isExpanded: Boolean
+    isExpanded: Boolean,
+    currencyValue: MutableState<ApartmentInfoCurrency>,
+    onCurrencyValueSelected: (ApartmentInfoCurrency) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -137,7 +138,7 @@ fun TotalM2PriceRow(
                 expanded = isExpanded,
                 onExpandedChange = {}) {
                 TextField(
-                    value = currencyValue,
+                    value = "",
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
@@ -152,12 +153,18 @@ fun TotalM2PriceRow(
                 ) {
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.EUR}") },
-                        onClick = { onCurrencyValueSelected(ApartmentInfoCurrency.EUR) }
+                        onClick = {
+                            currencyValue.value = ApartmentInfoCurrency.EUR
+                            onCurrencyValueSelected(currencyValue.value)
+                        }
                     )
 
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.BGN}") },
-                        onClick = { onCurrencyValueSelected(ApartmentInfoCurrency.BGN) }
+                        onClick = {
+                            currencyValue.value = ApartmentInfoCurrency.BGN
+                            onCurrencyValueSelected(currencyValue.value)
+                        }
                     )
                 }
             }

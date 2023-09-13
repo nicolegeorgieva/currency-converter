@@ -13,9 +13,9 @@ class ApartmentInfoViewModel @Inject constructor(
     private val m2PriceEur = mutableStateOf("")
     private val totalM2 = mutableStateOf("")
     private val realM2 = mutableStateOf("")
-    private val realM2PriceCurrency =
+    val realM2PriceCurrency =
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
-    private val totalM2PriceCurrency =
+    val totalM2PriceCurrency =
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
     private val realM2PriceCurrencyExpanded = mutableStateOf(false)
     private val totalM2PriceCurrencyExpanded = mutableStateOf(false)
@@ -59,7 +59,7 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getRealM2PriceCurrency(): ApartmentInfoCurrency {
+    fun getRealM2PriceCurrency(): ApartmentInfoCurrency {
         return realM2PriceCurrency.value
     }
 
@@ -69,7 +69,7 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getTotalM2Price(): String {
+    fun getTotalM2Price(): String {
         return apartmentPriceCalculator.calculateTotalM2Price(
             eurPerM2 = getM2PriceEur(),
             totalM2 = getTotalM2()
