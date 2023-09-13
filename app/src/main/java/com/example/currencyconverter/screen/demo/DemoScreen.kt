@@ -27,7 +27,7 @@ fun DemoScreen() {
 
     Column {
         LaunchedEffect(Unit) {
-            viewModel.onStart()
+            viewModel.onEvent(DemoEvent.OnStart)
         }
 
         Row {
@@ -48,12 +48,16 @@ fun DemoScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(value = uiState.name, onValueChange = { viewModel.setName(it) })
+        TextField(
+            value = uiState.name,
+            onValueChange = {
+                viewModel.onEvent(DemoEvent.SetName(it))
+            })
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(onClick = {
-            viewModel.clearName()
+            viewModel.onEvent(DemoEvent.ClearName)
         }) {
             Text(text = "Clear name")
         }
