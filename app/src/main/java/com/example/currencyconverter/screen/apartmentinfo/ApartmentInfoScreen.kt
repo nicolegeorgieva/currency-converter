@@ -77,7 +77,7 @@ fun ApartmentInfoScreen() {
             price = uiState.realM2Price,
             currencyValue = viewModel.realM2PriceCurrency,
             onCurrencyValueSelected = { viewModel.onRealPriceCurrencySet(viewModel.realM2PriceCurrency.value) },
-            isExpanded = uiState.isRealM2PriceCurrencyExpanded
+            isExpanded = viewModel.realM2PriceCurrencyExpanded
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -87,7 +87,7 @@ fun ApartmentInfoScreen() {
             price = uiState.totalM2Price,
             currencyValue = viewModel.totalM2PriceCurrency,
             onCurrencyValueSelected = { viewModel.onTotalPriceCurrencySet(viewModel.totalM2PriceCurrency.value) },
-            isExpanded = uiState.isTotalM2PriceCurrencyExpanded
+            isExpanded = viewModel.totalM2PriceCurrencyExpanded
         )
     }
 }
@@ -117,7 +117,7 @@ fun InputRow(
 fun TotalM2PriceRow(
     label: String,
     price: String,
-    isExpanded: Boolean,
+    isExpanded: MutableState<Boolean>,
     currencyValue: MutableState<ApartmentInfoCurrency>,
     onCurrencyValueSelected: (ApartmentInfoCurrency) -> Unit
 ) {
@@ -135,20 +135,21 @@ fun TotalM2PriceRow(
             contentAlignment = Alignment.CenterEnd
         ) {
             ExposedDropdownMenuBox(
-                expanded = isExpanded,
-                onExpandedChange = {}) {
+                expanded = isExpanded.value,
+                onExpandedChange = { isExpanded.value = it }
+            ) {
                 TextField(
                     value = "",
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded.value)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors()
                 )
 
                 ExposedDropdownMenu(
-                    expanded = isExpanded,
+                    expanded = isExpanded.value,
                     onDismissRequest = {}
                 ) {
                     DropdownMenuItem(

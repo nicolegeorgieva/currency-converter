@@ -17,8 +17,8 @@ class ApartmentInfoViewModel @Inject constructor(
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
     val totalM2PriceCurrency =
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
-    private val realM2PriceCurrencyExpanded = mutableStateOf(false)
-    private val totalM2PriceCurrencyExpanded = mutableStateOf(false)
+    val realM2PriceCurrencyExpanded = mutableStateOf(false)
+    val totalM2PriceCurrencyExpanded = mutableStateOf(false)
 
     @Composable
     fun uiState(): ApartmentInfoUi {
