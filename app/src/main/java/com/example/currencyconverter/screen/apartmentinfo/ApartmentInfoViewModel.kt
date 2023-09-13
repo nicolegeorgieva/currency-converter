@@ -64,11 +64,6 @@ class ApartmentInfoViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getRealM2PriceCurrencyExpandedState(): Boolean {
-        return realM2PriceCurrencyExpanded.value
-    }
-
-    @Composable
     fun getTotalM2Price(): String {
         return apartmentPriceCalculator.calculateTotalM2Price(
             eurPerM2 = getM2PriceEur(),
@@ -81,11 +76,6 @@ class ApartmentInfoViewModel @Inject constructor(
         return totalM2PriceCurrency.value
     }
 
-    @Composable
-    private fun getTotalM2PriceCurrencyExpandedState(): Boolean {
-        return totalM2PriceCurrencyExpanded.value
-    }
-
     fun onM2PriceEurChange(newM2PriceEur: String) {
         m2PriceEur.value = newM2PriceEur
     }
@@ -96,14 +86,6 @@ class ApartmentInfoViewModel @Inject constructor(
 
     fun onRealM2Change(newRealM2: String) {
         realM2.value = newRealM2
-    }
-
-    fun onRealM2PriceCurrencyExpandedStateChange() {
-        realM2PriceCurrencyExpanded.value = true
-    }
-
-    fun onTotalM2PriceCurrencyExpandedStateChange() {
-        totalM2PriceCurrencyExpanded.value = true
     }
 
     fun onRealPriceCurrencySet(currency: ApartmentInfoCurrency) {
