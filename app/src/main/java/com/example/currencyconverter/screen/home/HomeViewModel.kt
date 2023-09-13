@@ -2,8 +2,8 @@ package com.example.currencyconverter.screen.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.currencyconverter.ComposeViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(
     private val currencyConverter: CurrencyConverter,
     private val homeDataStore: HomeDataStore,
     private val taxCalculator: TaxCalculator
-) : ViewModel() {
+) : ComposeViewModel<HomeUiState, HomeEvent>() {
     private val hourlyRateInUsd = mutableStateOf<String?>(null)
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
@@ -26,26 +26,8 @@ class HomeViewModel @Inject constructor(
     private val socialSecurityAmount = mutableStateOf<String?>(null)
     private val companyExpensesAmount = mutableStateOf<String?>(null)
 
-    fun onStart() {
-        viewModelScope.launch {
-            exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
-            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull()?.toString()
-            taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull()?.toString()
-            socialSecurityAmount.value =
-                homeDataStore.getSocialSecurityAmount().firstOrNull()?.toString()
-            companyExpensesAmount.value =
-                homeDataStore.getCompanyExpensesAmount().firstOrNull()?.toString()
-        }
-    }
-
-    private fun Double?.formatAmount(): String {
-        val formatter = DecimalFormat("###,###.00")
-
-        return if (this == null || this == 0.0) "" else formatter.format(this)
-    }
-
     @Composable
-    fun getUiState(): HomeUiState {
+    override fun uiState(): HomeUiState {
         return HomeUiState(
             date = getDate(),
             hourlyRateUsd = getHourlyRateInUsd() ?: "",
@@ -115,16 +97,38 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun String?.toDoubleOrZero(): Double {
-        return this?.toDoubleOrNull() ?: 0.0
-    }
-
     @Composable
     private fun getYearlyNetSalary(): Double {
         return getMonthlyBgnNetSalary() * 12
     }
 
-    fun onChangeHourlyRateInUsd(newRate: String) {
+    override fun onEvent(event: HomeEvent) {
+        when (event) {
+            is HomeEvent.OnChangeCompanyExpensesAmount ->
+                onChangeCompanyExpensesAmount(event.newCompanyExpensesAmount)
+
+            is HomeEvent.OnChangeHourlyRateInUsd -> onChangeHourlyRateInUsd(event.newRate)
+            is HomeEvent.OnChangeSocialSecurityAmount ->
+                onChangeSocialSecurityAmount(event.newSocialSecurityAmount)
+
+            is HomeEvent.OnChangeTaxPercentage -> onChangeTaxPercentage(event.newTaxPercentage)
+            HomeEvent.OnStart -> onStart()
+        }
+    }
+
+    private fun onStart() {
+        viewModelScope.launch {
+            exchangeRatesResponse.value = exchangeRatesDataSource.fetchExchangeRates()
+            hourlyRateInUsd.value = homeDataStore.getHourlyRate().firstOrNull()?.toString()
+            taxPercentage.value = homeDataStore.getTaxPercentage().firstOrNull()?.toString()
+            socialSecurityAmount.value =
+                homeDataStore.getSocialSecurityAmount().firstOrNull()?.toString()
+            companyExpensesAmount.value =
+                homeDataStore.getCompanyExpensesAmount().firstOrNull()?.toString()
+        }
+    }
+
+    private fun onChangeHourlyRateInUsd(newRate: String) {
         hourlyRateInUsd.value = newRate
 
         viewModelScope.launch {
@@ -132,7 +136,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onChangeTaxPercentage(newTaxPercentage: String) {
+    private fun onChangeTaxPercentage(newTaxPercentage: String) {
         taxPercentage.value = newTaxPercentage
 
         viewModelScope.launch {
@@ -140,7 +144,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onChangeSocialSecurityAmount(newSocialSecurityAmount: String) {
+    private fun onChangeSocialSecurityAmount(newSocialSecurityAmount: String) {
         socialSecurityAmount.value = newSocialSecurityAmount
 
         viewModelScope.launch {
@@ -148,11 +152,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: String) {
+    private fun onChangeCompanyExpensesAmount(newCompanyExpensesAmount: String) {
         companyExpensesAmount.value = newCompanyExpensesAmount
 
         viewModelScope.launch {
             homeDataStore.editCompanyExpensesAmount(newCompanyExpensesAmount.toDoubleOrZero())
         }
+    }
+
+    private fun Double?.formatAmount(): String {
+        val formatter = DecimalFormat("###,###.00")
+
+        return if (this == null || this == 0.0) "" else formatter.format(this)
+    }
+
+    private fun String?.toDoubleOrZero(): Double {
+        return this?.toDoubleOrNull() ?: 0.0
     }
 }

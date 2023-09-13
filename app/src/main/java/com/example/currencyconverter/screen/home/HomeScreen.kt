@@ -30,7 +30,7 @@ import com.example.currencyconverter.screenState
 @Composable
 fun HomeScreen() {
     val viewModel: HomeViewModel = viewModel()
-    val uiState = viewModel.getUiState()
+    val uiState = viewModel.uiState()
 
     Column(
         modifier = Modifier
@@ -48,7 +48,7 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         LaunchedEffect(Unit) {
-            viewModel.onStart()
+            viewModel.onEvent(HomeEvent.OnStart)
         }
 
         if (uiState.date != null) {
@@ -60,7 +60,9 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.hourlyRateUsd,
-                onValueChange = viewModel::onChangeHourlyRateInUsd,
+                onValueChange = {
+                    viewModel.onEvent(HomeEvent.OnChangeHourlyRateInUsd(it))
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -74,7 +76,9 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.taxPercentage,
-                onValueChange = viewModel::onChangeTaxPercentage,
+                onValueChange = {
+                    viewModel.onEvent(HomeEvent.OnChangeTaxPercentage(it))
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -88,7 +92,9 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.socialSecurityAmount,
-                onValueChange = viewModel::onChangeSocialSecurityAmount,
+                onValueChange = {
+                    viewModel.onEvent(HomeEvent.OnChangeSocialSecurityAmount(it))
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -102,7 +108,9 @@ fun HomeScreen() {
         Row(verticalAlignment = Alignment.Bottom) {
             TextField(
                 value = uiState.companyExpensesAmount,
-                onValueChange = viewModel::onChangeCompanyExpensesAmount,
+                onValueChange = {
+                    viewModel.onEvent(HomeEvent.OnChangeCompanyExpensesAmount(it))
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
