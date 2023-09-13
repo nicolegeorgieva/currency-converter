@@ -4,12 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.currencyconverter.Screen
+import com.example.currencyconverter.component.MenuItem
 import com.example.currencyconverter.screenState
 
 @Composable
@@ -19,43 +18,32 @@ fun MenuScreen() {
             .fillMaxSize()
             .padding(12.dp)
     ) {
-
-        Button(onClick = {
+        MenuItem(name = "Home") {
             screenState.value = Screen.HomeScreen
-        }) {
-            Text(text = "Home")
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = {
+        MenuItem(name = "Apartment Info") {
             screenState.value = Screen.ApartmentInfoScreen
-        }) {
-            Text(text = "Apartment Info")
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = {
+        MenuItem(name = "Count Study Time") {
             screenState.value = Screen.CountStudyTime
-        }) {
-            Text(text = "Count Study Time")
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = {
+        MenuItem(name = "Tasks") {
             screenState.value = Screen.RequestPlaygroundScreen
-        }) {
-            Text(text = "Tasks")
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = {
+        MenuItem(name = "Demo") {
             screenState.value = Screen.DemoScreen
-        }) {
-            Text(text = "Demo")
         }
 
         Spacer(modifier = Modifier.weight(1f))
