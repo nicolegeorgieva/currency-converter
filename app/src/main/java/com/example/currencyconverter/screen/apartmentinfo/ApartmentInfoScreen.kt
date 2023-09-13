@@ -158,6 +158,8 @@ fun TotalM2PriceRow(
                         onClick = {
                             currencyValue.value = ApartmentInfoCurrency.EUR
                             onCurrencyValueSelected(currencyValue.value)
+                            isExpanded.value = false
+
                         }
                     )
 
@@ -166,6 +168,7 @@ fun TotalM2PriceRow(
                         onClick = {
                             currencyValue.value = ApartmentInfoCurrency.BGN
                             onCurrencyValueSelected(currencyValue.value)
+                            isExpanded.value = false
                         }
                     )
                 }
