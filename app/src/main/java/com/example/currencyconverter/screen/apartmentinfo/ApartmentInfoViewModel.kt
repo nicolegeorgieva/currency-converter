@@ -3,11 +3,15 @@ package com.example.currencyconverter.screen.apartmentinfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.currencyconverter.screen.home.ExchangeRatesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ApartmentInfoViewModel @Inject constructor(
+    private val currencyRequest: ExchangeRatesDataSource,
     private val apartmentPriceCalculator: ApartmentPriceCalculator
 ) : ViewModel() {
     private val m2PriceEur = mutableStateOf("")
@@ -19,6 +23,12 @@ class ApartmentInfoViewModel @Inject constructor(
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
     val realM2PriceCurrencyExpanded = mutableStateOf(false)
     val totalM2PriceCurrencyExpanded = mutableStateOf(false)
+
+    fun onStart() {
+        viewModelScope.launch {
+            currencyRequest.fetchExchangeRates()
+        }
+    }
 
     @Composable
     fun uiState(): ApartmentInfoUi {

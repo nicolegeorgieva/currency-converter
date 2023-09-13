@@ -18,6 +18,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +33,10 @@ import com.example.currencyconverter.screenState
 fun ApartmentInfoScreen() {
     val viewModel: ApartmentInfoViewModel = viewModel()
     val uiState = viewModel.uiState()
+
+    LaunchedEffect(Unit) {
+        viewModel.onStart()
+    }
 
     Column(
         modifier = Modifier
