@@ -139,7 +139,8 @@ fun TotalM2PriceRow(
                 onExpandedChange = { isExpanded.value = it }
             ) {
                 TextField(
-                    value = "",
+                    modifier = Modifier.menuAnchor(),
+                    value = "${currencyValue.value}",
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
