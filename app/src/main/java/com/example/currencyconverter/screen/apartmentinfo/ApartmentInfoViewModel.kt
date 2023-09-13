@@ -8,6 +8,7 @@ import com.example.currencyconverter.screen.home.CurrencyConverter
 import com.example.currencyconverter.screen.home.ExchangeRatesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,26 +68,30 @@ class ApartmentInfoViewModel @Inject constructor(
         val price = apartmentPriceCalculator.calculateRealM2Price(
             totalM2Price = getTotalM2Price(),
             realM2 = getRealM2()
-        ).toString()
+        )
 
-        return when (realM2PriceCurrency.value) {
+        val formatter = DecimalFormat("###,###.##")
+
+        val res = when (realM2PriceCurrency.value) {
             ApartmentInfoCurrency.EUR -> when (totalM2PriceCurrency.value) {
                 ApartmentInfoCurrency.EUR -> price
                 ApartmentInfoCurrency.BGN -> currencyConverter.exchangeBgnToEur(
                     exchangeRatesResponse = exchangeRatesResponse.value,
-                    amount = price.toDoubleOrNull() ?: 0.0
-                ).toString()
+                    amount = price
+                )
             }
 
             ApartmentInfoCurrency.BGN -> when (totalM2PriceCurrency.value) {
                 ApartmentInfoCurrency.EUR -> currencyConverter.exchangeEurToBgn(
                     exchangeRatesResponse = exchangeRatesResponse.value,
-                    amount = price.toDoubleOrNull() ?: 0.0
-                ).toString()
+                    amount = price
+                )
 
                 ApartmentInfoCurrency.BGN -> price
             }
-        }
+        } ?: 0.0
+
+        return formatter.format(res)
     }
 
     @Composable
@@ -99,15 +104,19 @@ class ApartmentInfoViewModel @Inject constructor(
         val price = apartmentPriceCalculator.calculateTotalM2Price(
             eurPerM2 = getM2PriceEur(),
             totalM2 = getTotalM2()
-        ).toString()
+        )
 
-        return when (totalM2PriceCurrency.value) {
+        val formatter = DecimalFormat("###,###.##")
+
+        val res = when (totalM2PriceCurrency.value) {
             ApartmentInfoCurrency.EUR -> price
             ApartmentInfoCurrency.BGN -> currencyConverter.exchangeEurToBgn(
                 exchangeRatesResponse = exchangeRatesResponse.value,
-                amount = price.toDoubleOrNull() ?: 0.0
-            ).toString()
-        }
+                amount = price
+            )
+        } ?: 0.0
+
+        return formatter.format(res)
     }
 
     @Composable

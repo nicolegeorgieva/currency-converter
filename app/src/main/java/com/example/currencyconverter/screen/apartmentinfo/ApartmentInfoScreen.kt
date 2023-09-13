@@ -81,7 +81,9 @@ fun ApartmentInfoScreen() {
             label = "Real m2 price: ",
             price = uiState.realM2Price,
             currencyValue = viewModel.realM2PriceCurrency,
-            onCurrencyValueSelected = { viewModel.onRealPriceCurrencySet(viewModel.realM2PriceCurrency.value) },
+            onCurrencyValueSelected = {
+                viewModel.onRealPriceCurrencySet(viewModel.realM2PriceCurrency.value)
+            },
             isExpanded = viewModel.realM2PriceCurrencyExpanded
         )
 
@@ -91,7 +93,9 @@ fun ApartmentInfoScreen() {
             label = "Total m2 price: ",
             price = uiState.totalM2Price,
             currencyValue = viewModel.totalM2PriceCurrency,
-            onCurrencyValueSelected = { viewModel.onTotalPriceCurrencySet(viewModel.totalM2PriceCurrency.value) },
+            onCurrencyValueSelected = {
+                viewModel.onTotalPriceCurrencySet(viewModel.totalM2PriceCurrency.value)
+            },
             isExpanded = viewModel.totalM2PriceCurrencyExpanded
         )
     }
