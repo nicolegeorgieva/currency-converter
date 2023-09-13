@@ -42,10 +42,8 @@ class ApartmentInfoViewModel @Inject constructor(
             realM2 = getRealM2(),
             realM2Price = getRealM2Price(),
             realM2PriceCurrency = getRealM2PriceCurrency(),
-            isRealM2PriceCurrencyExpanded = false,
             totalM2Price = getTotalM2Price(),
-            totalM2PriceCurrency = getTotalM2PriceCurrency(),
-            isTotalM2PriceCurrencyExpanded = false
+            totalM2PriceCurrency = getTotalM2PriceCurrency()
         )
     }
 
@@ -66,17 +64,28 @@ class ApartmentInfoViewModel @Inject constructor(
 
     @Composable
     private fun getRealM2Price(): String {
-        val priceInEur = apartmentPriceCalculator.calculateRealM2Price(
+        val price = apartmentPriceCalculator.calculateRealM2Price(
             totalM2Price = getTotalM2Price(),
             realM2 = getRealM2()
         ).toString()
 
         return when (realM2PriceCurrency.value) {
-            ApartmentInfoCurrency.EUR -> priceInEur
-            ApartmentInfoCurrency.BGN -> currencyConverter.exchangeEurToBgn(
-                exchangeRatesResponse = exchangeRatesResponse.value,
-                amount = priceInEur.toDoubleOrNull() ?: 0.0
-            ).toString()
+            ApartmentInfoCurrency.EUR -> when (totalM2PriceCurrency.value) {
+                ApartmentInfoCurrency.EUR -> price
+                ApartmentInfoCurrency.BGN -> currencyConverter.exchangeBgnToEur(
+                    exchangeRatesResponse = exchangeRatesResponse.value,
+                    amount = price.toDoubleOrNull() ?: 0.0
+                ).toString()
+            }
+
+            ApartmentInfoCurrency.BGN -> when (totalM2PriceCurrency.value) {
+                ApartmentInfoCurrency.EUR -> currencyConverter.exchangeEurToBgn(
+                    exchangeRatesResponse = exchangeRatesResponse.value,
+                    amount = price.toDoubleOrNull() ?: 0.0
+                ).toString()
+
+                ApartmentInfoCurrency.BGN -> price
+            }
         }
     }
 
@@ -87,16 +96,16 @@ class ApartmentInfoViewModel @Inject constructor(
 
     @Composable
     fun getTotalM2Price(): String {
-        val priceInEur = apartmentPriceCalculator.calculateTotalM2Price(
+        val price = apartmentPriceCalculator.calculateTotalM2Price(
             eurPerM2 = getM2PriceEur(),
             totalM2 = getTotalM2()
         ).toString()
 
         return when (totalM2PriceCurrency.value) {
-            ApartmentInfoCurrency.EUR -> priceInEur
+            ApartmentInfoCurrency.EUR -> price
             ApartmentInfoCurrency.BGN -> currencyConverter.exchangeEurToBgn(
                 exchangeRatesResponse = exchangeRatesResponse.value,
-                amount = priceInEur.toDoubleOrNull() ?: 0.0
+                amount = price.toDoubleOrNull() ?: 0.0
             ).toString()
         }
     }
