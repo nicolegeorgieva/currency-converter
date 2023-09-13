@@ -52,7 +52,7 @@ fun ApartmentInfoScreen() {
         InputRow(
             value = uiState.m2PriceEur,
             onValueChange = viewModel::onM2PriceEurChange,
-            label = "eur/m2"
+            label = "EUR/m2"
         )
 
         Spacer(modifier = Modifier.height(12.dp))
