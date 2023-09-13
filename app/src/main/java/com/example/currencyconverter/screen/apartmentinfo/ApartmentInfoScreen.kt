@@ -151,7 +151,7 @@ fun TotalM2PriceRow(
 
                 ExposedDropdownMenu(
                     expanded = isExpanded.value,
-                    onDismissRequest = {}
+                    onDismissRequest = { isExpanded.value = false }
                 ) {
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.EUR}") },
