@@ -93,6 +93,7 @@ class ApartmentInfoViewModel @Inject constructor(
             }
         } ?: 0.0
 
+        if (res == 0.0) return ""
         return formatter.format(res)
     }
 
@@ -118,6 +119,7 @@ class ApartmentInfoViewModel @Inject constructor(
             )
         } ?: 0.0
 
+        if (res == 0.0) return ""
         return formatter.format(res)
     }
 
