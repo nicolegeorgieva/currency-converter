@@ -2,8 +2,8 @@ package com.example.currencyconverter.screen.studytime
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.currencyconverter.ComposeViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class CountStudyTimeViewModel @Inject constructor(
     private val studyTimeDataStore: CountStudyTimeDataStore,
     private val studyTimeCalculator: StudyTimeCalculator
-) : ViewModel() {
+) : ComposeViewModel<StudyTimeUi, StudyTimeEvent>() {
     private val startHourInputState = mutableStateOf("")
     private val startMinsInputState = mutableStateOf("")
     private val endHourInputState = mutableStateOf("")
@@ -23,21 +23,8 @@ class CountStudyTimeViewModel @Inject constructor(
     private val totalStudyTimeState = mutableStateOf<String?>(null)
     private val errorOccurredState = mutableStateOf(false)
 
-    fun onStart() {
-        viewModelScope.launch {
-            startHourInputState.value = studyTimeDataStore.startHourInput.firstOrEmptyString()
-            startMinsInputState.value = studyTimeDataStore.startMinsInput.firstOrEmptyString()
-            cutMinsState.value = studyTimeDataStore.cutMins.firstOrEmptyString()
-            totalStudyTimeState.value = studyTimeDataStore.totalStudyTime.firstOrNull() ?: "0h 00m"
-        }
-    }
-
-    private suspend fun Flow<String?>.firstOrEmptyString(): String {
-        return this.firstOrNull() ?: ""
-    }
-
     @Composable
-    fun studyTimeUi(): StudyTimeUi {
+    override fun uiState(): StudyTimeUi {
         return StudyTimeUi(
             startHour = getStartHour(),
             startMins = getStartMins(),
@@ -79,7 +66,37 @@ class CountStudyTimeViewModel @Inject constructor(
         return totalStudyTimeState.value ?: "0h 00m"
     }
 
-    fun editStartHour(newHour: String) {
+    private fun getCutMins(): String {
+        return cutMinsState.value
+    }
+
+    override fun onEvent(event: StudyTimeEvent) {
+        when (event) {
+            StudyTimeEvent.AddCurrentStudyToTotal -> addCurrentStudyToTotal()
+            is StudyTimeEvent.EditCutMins -> editCutMins(event.newCutMins)
+            is StudyTimeEvent.EditEndHour -> editEndHour(event.newHour)
+            is StudyTimeEvent.EditEndMins -> editEndMins(event.newMins)
+            is StudyTimeEvent.EditStartHour -> editStartHour(event.newHour)
+            is StudyTimeEvent.EditStartMins -> editStartMins(event.newMins)
+            StudyTimeEvent.OnStart -> onStart()
+            StudyTimeEvent.TotalTimeReset -> totalTimeReset()
+        }
+    }
+
+    private suspend fun Flow<String?>.firstOrEmptyString(): String {
+        return this.firstOrNull() ?: ""
+    }
+
+    private fun onStart() {
+        viewModelScope.launch {
+            startHourInputState.value = studyTimeDataStore.startHourInput.firstOrEmptyString()
+            startMinsInputState.value = studyTimeDataStore.startMinsInput.firstOrEmptyString()
+            cutMinsState.value = studyTimeDataStore.cutMins.firstOrEmptyString()
+            totalStudyTimeState.value = studyTimeDataStore.totalStudyTime.firstOrNull() ?: "0h 00m"
+        }
+    }
+
+    private fun editStartHour(newHour: String) {
         startHourInputState.value = newHour
 
         viewModelScope.launch {
@@ -87,7 +104,7 @@ class CountStudyTimeViewModel @Inject constructor(
         }
     }
 
-    fun editStartMins(newMins: String) {
+    private fun editStartMins(newMins: String) {
         startMinsInputState.value = newMins
 
         viewModelScope.launch {
@@ -95,19 +112,15 @@ class CountStudyTimeViewModel @Inject constructor(
         }
     }
 
-    fun editEndHour(newHour: String) {
+    private fun editEndHour(newHour: String) {
         endHourInputState.value = newHour
     }
 
-    fun editEndMins(newMins: String) {
+    private fun editEndMins(newMins: String) {
         endMinsInputState.value = newMins
     }
 
-    fun getCutMins(): String {
-        return cutMinsState.value
-    }
-
-    fun editCutMins(newCutMins: String) {
+    private fun editCutMins(newCutMins: String) {
         cutMinsState.value = newCutMins
 
         viewModelScope.launch {
@@ -115,7 +128,7 @@ class CountStudyTimeViewModel @Inject constructor(
         }
     }
 
-    fun addCurrentStudyToTotal() {
+    private fun addCurrentStudyToTotal() {
         val currentStudyMins = studyTimeCalculator.currentStudyMins(
             startHourInputState.value,
             startMinsInputState.value,
@@ -153,6 +166,14 @@ class CountStudyTimeViewModel @Inject constructor(
         }
     }
 
+    private fun totalTimeReset() {
+        totalStudyTimeState.value = "0h 00m"
+
+        viewModelScope.launch {
+            studyTimeDataStore.totalTimeReset()
+        }
+    }
+
     private fun totalStudy(
         startHourInputState: String,
         startMinsInputState: String,
@@ -169,13 +190,5 @@ class CountStudyTimeViewModel @Inject constructor(
             cutMinsState,
             studyTimeCalculator.convertTotalTimeToMins(totalStudyTimeState)
         )
-    }
-
-    fun totalTimeReset() {
-        totalStudyTimeState.value = "0h 00m"
-
-        viewModelScope.launch {
-            studyTimeDataStore.totalTimeReset()
-        }
     }
 }

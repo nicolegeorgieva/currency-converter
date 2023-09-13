@@ -39,10 +39,10 @@ fun CountStudyTimeScreen() {
             .padding(12.dp)
     ) {
         val viewModel: CountStudyTimeViewModel = viewModel()
-        val uiState = viewModel.studyTimeUi()
+        val uiState = viewModel.uiState()
 
         LaunchedEffect(Unit) {
-            viewModel.onStart()
+            viewModel.onEvent(StudyTimeEvent.OnStart)
         }
 
         BackButton {
@@ -53,12 +53,12 @@ fun CountStudyTimeScreen() {
 
         TimeInputRow(
             hours = uiState.startHour,
-            onHoursChange = { newHour ->
-                viewModel.editStartHour(newHour)
+            onHoursChange = {
+                viewModel.onEvent(StudyTimeEvent.EditStartHour(it))
             },
             mins = uiState.startMins,
-            onMinsChange = { newMins ->
-                viewModel.editStartMins(newMins)
+            onMinsChange = {
+                viewModel.onEvent(StudyTimeEvent.EditStartMins(it))
             }
         )
 
@@ -67,11 +67,11 @@ fun CountStudyTimeScreen() {
         TimeInputRow(
             hours = uiState.endHour,
             onHoursChange = {
-                viewModel.editEndHour(it)
+                viewModel.onEvent(StudyTimeEvent.EditEndHour(it))
             },
             mins = uiState.endMins,
             onMinsChange = {
-                viewModel.editEndMins(it)
+                viewModel.onEvent(StudyTimeEvent.EditEndMins(it))
             }
         )
 
@@ -80,8 +80,8 @@ fun CountStudyTimeScreen() {
         TextField(
             modifier = Modifier.width(124.dp),
             value = uiState.cutMins,
-            onValueChange = { newCutMinsInput ->
-                viewModel.editCutMins(newCutMinsInput)
+            onValueChange = {
+                viewModel.onEvent(StudyTimeEvent.EditCutMins(it))
             },
             label = { Text("Cut mins") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -90,7 +90,7 @@ fun CountStudyTimeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            viewModel.addCurrentStudyToTotal()
+            viewModel.onEvent(StudyTimeEvent.AddCurrentStudyToTotal)
         }) {
             Text(text = "Add")
         }
@@ -120,7 +120,7 @@ fun CountStudyTimeScreen() {
 
             IconButton(
                 onClick = {
-                    viewModel.totalTimeReset()
+                    viewModel.onEvent(StudyTimeEvent.TotalTimeReset)
                 }
             ) {
                 Icon(
