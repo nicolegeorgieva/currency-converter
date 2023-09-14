@@ -30,6 +30,7 @@ fun MenuScreen() {
         menuItem("Study Time", Screen.CountStudyTime)
         menuItem("Tasks", Screen.RequestPlaygroundScreen)
         menuItem("Demo", Screen.DemoScreen)
+        menuItem("Contact", Screen.ContactScreen)
     }
 }
 
