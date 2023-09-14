@@ -78,19 +78,31 @@ private fun ContactUi(
         }
 
         FloatingActionButton(onClick = {
-            AddContactDialog(
-                showContactDialog = uiState.showContactDialog,
-                onDismissContactDialog = onEvent(),
-                firstName = uiState.firstName,
-                onFirstNameChange = onEvent(),
-                lastName = uiState.lastName,
-                onLastNameChange = onEvent(),
-                phoneNumber = uiState.phoneNumber,
-                onPhoneNumberChange = onEvent()
-            )
+            onEvent(ContactEvent.OnDismissContactDialog(false))
         }) {
             Icon(
                 imageVector = Icons.Default.Create, contentDescription = "Add contact"
+            )
+        }
+
+        if (uiState.showContactDialog) {
+            AddContactDialog(
+                showContactDialog = uiState.showContactDialog,
+                onDismissContactDialog = {
+                    onEvent(ContactEvent.OnDismissContactDialog(it))
+                },
+                firstName = uiState.firstName,
+                onFirstNameChange = {
+                    onEvent(ContactEvent.OnFirstNameChange(it))
+                },
+                lastName = uiState.lastName,
+                onLastNameChange = {
+                    onEvent(ContactEvent.OnLastNameChange(it))
+                },
+                phoneNumber = uiState.phoneNumber,
+                onPhoneNumberChange = {
+                    onEvent(ContactEvent.OnPhoneNumberChange(it))
+                }
             )
         }
     }
@@ -111,7 +123,7 @@ fun AddContactDialog(
     if (showContactDialog) {
         AlertDialog(
             onDismissRequest = {
-                onDismissContactDialog(false)
+                onDismissContactDialog(true)
             },
             icon = {
                 Icon(
@@ -150,14 +162,14 @@ fun AddContactDialog(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    onDismissContactDialog(false)
+                    onDismissContactDialog(true)
                 }) {
                     Text("Add")
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
-                    onDismissContactDialog(false)
+                    onDismissContactDialog(true)
                 }) {
                     Text("Dismiss")
                 }
