@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.MenuItem
@@ -38,3 +39,8 @@ private fun LazyListScope.menuItem(name: String, screen: Screen) {
     }
 }
 
+@Preview
+@Composable
+private fun MenuScreenPreview() {
+    MenuScreen()
+}
