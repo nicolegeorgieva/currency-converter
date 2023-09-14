@@ -70,6 +70,22 @@ fun AgeUiPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             UI(
+                state = AgeUiState(""),
+                onEvent = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun AgeUiPreview2() {
+    CurrencyConverterTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            UI(
                 state = AgeUiState("24"),
                 onEvent = {}
             )
