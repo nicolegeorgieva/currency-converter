@@ -15,27 +15,43 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
+import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 
 @Composable
 fun ApartmentInfoScreen() {
     val viewModel: ApartmentInfoViewModel = viewModel()
     val uiState = viewModel.uiState()
 
+    ApartmentInfoUi(
+        uiState = uiState,
+        onEvent = {
+            viewModel.onEvent(it)
+        }
+    )
+}
+
+@Composable
+private fun ApartmentInfoUi(
+    uiState: ApartmentInfoState,
+    onEvent: (ApartmentInfoEvent) -> Unit
+) {
     LaunchedEffect(Unit) {
-        viewModel.onEvent(ApartmentInfoEvent.OnStart)
+        onEvent(ApartmentInfoEvent.OnStart)
     }
 
     Column(
@@ -52,7 +68,7 @@ fun ApartmentInfoScreen() {
         InputRow(
             value = uiState.m2PriceEur,
             onValueChange = {
-                viewModel.onEvent(ApartmentInfoEvent.OnM2PriceEurChange(it))
+                onEvent(ApartmentInfoEvent.OnM2PriceEurChange(it))
             },
             label = "EUR/m2"
         )
@@ -62,7 +78,7 @@ fun ApartmentInfoScreen() {
         InputRow(
             value = uiState.totalM2,
             onValueChange = {
-                viewModel.onEvent(ApartmentInfoEvent.OnTotalM2Change(it))
+                onEvent(ApartmentInfoEvent.OnTotalM2Change(it))
             },
             label = "total m2"
         )
@@ -72,7 +88,7 @@ fun ApartmentInfoScreen() {
         InputRow(
             value = uiState.realM2,
             onValueChange = {
-                viewModel.onEvent(ApartmentInfoEvent.OnRealM2Change(it))
+                onEvent(ApartmentInfoEvent.OnRealM2Change(it))
             },
             label = "real m2"
         )
@@ -86,11 +102,14 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Real m2 price: ",
             price = uiState.realM2Price,
-            currencyValue = viewModel.realM2PriceCurrency,
+            currencyValue = uiState.realM2PriceCurrency,
             onCurrencyValueSelected = {
-                viewModel.onEvent(ApartmentInfoEvent.OnRealPriceCurrencySet(it))
+                onEvent(ApartmentInfoEvent.OnRealPriceCurrencySet(it))
             },
-            isExpanded = viewModel.realM2PriceCurrencyExpanded
+            isExpanded = uiState.isRealM2PriceCurrencyExpanded,
+            onExpandedChange = {
+                onEvent(ApartmentInfoEvent.OnRealM2ExpandedChange(it))
+            }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -98,18 +117,21 @@ fun ApartmentInfoScreen() {
         TotalM2PriceRow(
             label = "Total m2 price: ",
             price = uiState.totalM2Price,
-            currencyValue = viewModel.totalM2PriceCurrency,
+            currencyValue = uiState.totalM2PriceCurrency,
             onCurrencyValueSelected = {
-                viewModel.onEvent(ApartmentInfoEvent.OnTotalPriceCurrencySet(it))
+                onEvent(ApartmentInfoEvent.OnTotalPriceCurrencySet(it))
             },
-            isExpanded = viewModel.totalM2PriceCurrencyExpanded
+            isExpanded = uiState.isTotalM2PriceCurrencyExpanded,
+            onExpandedChange = {
+                onEvent(ApartmentInfoEvent.OnTotalM2ExpandedChange(it))
+            }
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputRow(
+private fun InputRow(
     value: String,
     onValueChange: (String) -> Unit,
     label: String
@@ -129,11 +151,12 @@ fun InputRow(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TotalM2PriceRow(
+private fun TotalM2PriceRow(
     label: String,
     price: String,
-    isExpanded: MutableState<Boolean>,
-    currencyValue: MutableState<ApartmentInfoCurrency>,
+    isExpanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    currencyValue: ApartmentInfoCurrency,
     onCurrencyValueSelected: (ApartmentInfoCurrency) -> Unit
 ) {
     Row(
@@ -150,44 +173,71 @@ fun TotalM2PriceRow(
             contentAlignment = Alignment.CenterEnd
         ) {
             ExposedDropdownMenuBox(
-                expanded = isExpanded.value,
-                onExpandedChange = { isExpanded.value = it }
+                expanded = isExpanded,
+                onExpandedChange = {
+                    onExpandedChange(it)
+                }
             ) {
                 TextField(
                     modifier = Modifier.menuAnchor(),
-                    value = "${currencyValue.value}",
+                    value = "$currencyValue",
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded.value)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors()
                 )
 
                 ExposedDropdownMenu(
-                    expanded = isExpanded.value,
-                    onDismissRequest = { isExpanded.value = false }
+                    expanded = isExpanded,
+                    onDismissRequest = {
+                        onExpandedChange(false)
+                    }
                 ) {
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.EUR}") },
                         onClick = {
-                            currencyValue.value = ApartmentInfoCurrency.EUR
-                            onCurrencyValueSelected(currencyValue.value)
-                            isExpanded.value = false
-
+                            onCurrencyValueSelected(ApartmentInfoCurrency.EUR)
+                            onExpandedChange(false)
                         }
                     )
 
                     DropdownMenuItem(
                         text = { Text("${ApartmentInfoCurrency.BGN}") },
                         onClick = {
-                            currencyValue.value = ApartmentInfoCurrency.BGN
-                            onCurrencyValueSelected(currencyValue.value)
-                            isExpanded.value = false
+                            onCurrencyValueSelected(ApartmentInfoCurrency.BGN)
+                            onExpandedChange(false)
                         }
                     )
                 }
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ApartmentInfoPreview() {
+    CurrencyConverterTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            ApartmentInfoUi(
+                uiState = ApartmentInfoState(
+                    m2PriceEur = "2000",
+                    totalM2 = "70",
+                    realM2 = "50",
+                    realM2Price = "2800.0",
+                    realM2PriceCurrency = ApartmentInfoCurrency.EUR,
+                    isRealM2PriceCurrencyExpanded = false,
+                    totalM2Price = "140,000.0",
+                    totalM2PriceCurrency = ApartmentInfoCurrency.EUR,
+                    isTotalM2PriceCurrencyExpanded = false
+                ),
+                onEvent = {}
+            )
         }
     }
 }

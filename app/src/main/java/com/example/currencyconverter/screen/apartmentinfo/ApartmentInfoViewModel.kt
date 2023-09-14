@@ -16,29 +16,31 @@ class ApartmentInfoViewModel @Inject constructor(
     private val currencyRequest: ExchangeRatesDataSource,
     private val currencyConverter: CurrencyConverter,
     private val apartmentPriceCalculator: ApartmentPriceCalculator
-) : ComposeViewModel<ApartmentInfoUi, ApartmentInfoEvent>() {
+) : ComposeViewModel<ApartmentInfoState, ApartmentInfoEvent>() {
     private val exchangeRatesResponse =
         mutableStateOf<ExchangeRatesDataSource.ExchangeRatesResponse?>(null)
     private val m2PriceEur = mutableStateOf("")
     private val totalM2 = mutableStateOf("")
     private val realM2 = mutableStateOf("")
-    val realM2PriceCurrency =
+    private val realM2PriceCurrency =
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
-    val totalM2PriceCurrency =
+    private val totalM2PriceCurrency =
         mutableStateOf<ApartmentInfoCurrency>(ApartmentInfoCurrency.EUR)
-    val realM2PriceCurrencyExpanded = mutableStateOf(false)
-    val totalM2PriceCurrencyExpanded = mutableStateOf(false)
+    private val realM2PriceCurrencyExpanded = mutableStateOf(false)
+    private val totalM2PriceCurrencyExpanded = mutableStateOf(false)
 
     @Composable
-    override fun uiState(): ApartmentInfoUi {
-        return ApartmentInfoUi(
+    override fun uiState(): ApartmentInfoState {
+        return ApartmentInfoState(
             m2PriceEur = getM2PriceEur(),
             totalM2 = getTotalM2(),
             realM2 = getRealM2(),
             realM2Price = getRealM2Price(),
             realM2PriceCurrency = getRealM2PriceCurrency(),
-            totalM2Price = getTotalM2Price(),
-            totalM2PriceCurrency = getTotalM2PriceCurrency()
+            isRealM2PriceCurrencyExpanded = getRealPriceCurrencyExpanded()
+                    totalM2Price = getTotalM2Price (),
+            totalM2PriceCurrency = getTotalM2PriceCurrency(),
+            isTotalM2PriceCurrencyExpanded = getTotalPriceCurrencyExpanded()
         )
     }
 
@@ -55,6 +57,16 @@ class ApartmentInfoViewModel @Inject constructor(
     @Composable
     private fun getRealM2(): String {
         return realM2.value
+    }
+
+    @Composable
+    private fun getRealPriceCurrencyExpanded(): Boolean {
+        return realM2PriceCurrencyExpanded.value
+    }
+
+    @Composable
+    private fun getTotalPriceCurrencyExpanded(): Boolean {
+        return totalM2PriceCurrencyExpanded.value
     }
 
     @Composable
@@ -130,6 +142,10 @@ class ApartmentInfoViewModel @Inject constructor(
             ApartmentInfoEvent.OnStart -> onStart()
             is ApartmentInfoEvent.OnTotalM2Change -> onTotalM2Change(event.newTotalM2)
             is ApartmentInfoEvent.OnTotalPriceCurrencySet -> onTotalPriceCurrencySet(event.currency)
+            is ApartmentInfoEvent.OnRealM2ExpandedChange -> onRealPriceCurrencyExpandedChange(event.expanded)
+            is ApartmentInfoEvent.OnTotalM2ExpandedChange -> onTotalPriceCurrencyExpandedChange(
+                event.expanded
+            )
         }
     }
 
@@ -145,6 +161,14 @@ class ApartmentInfoViewModel @Inject constructor(
 
     private fun onTotalM2Change(newTotalM2: String) {
         totalM2.value = newTotalM2
+    }
+
+    private fun onRealPriceCurrencyExpandedChange(isExpanded: Boolean) {
+        realM2PriceCurrencyExpanded.value = isExpanded
+    }
+
+    private fun onTotalPriceCurrencyExpandedChange(isExpanded: Boolean) {
+        totalM2PriceCurrencyExpanded.value = isExpanded
     }
 
     private fun onRealM2Change(newRealM2: String) {
