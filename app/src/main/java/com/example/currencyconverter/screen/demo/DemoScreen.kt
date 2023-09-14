@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.MyPreview
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
@@ -110,19 +111,14 @@ private fun DemoScreenPreview() {
 @Preview
 @Composable
 private fun DemoScreenPreview2() {
-    CurrencyConverterTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            DemoUi(
-                state = DemoUiState(
-                    greeting = "Hi, Amy!",
-                    name = "Amy",
-                    age = ""
-                ),
-                onEvent = {}
-            )
-        }
+    MyPreview {
+        DemoUi(
+            state = DemoUiState(
+                greeting = "Hi, Amy!",
+                name = "Amy",
+                age = ""
+            ),
+            onEvent = {}
+        )
     }
 }

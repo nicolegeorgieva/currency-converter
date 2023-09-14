@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.MyPreview
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
@@ -141,13 +142,15 @@ private fun TaskCard(task: String, onDelete: () -> Unit) {
 @Preview
 @Composable
 private fun RequestPlaygroundPreview() {
-    RequestPlaygroundUi(
-        uiState = RequestUi(
-            tasks = RequestPlayground.Request.Success(
-                listOf("task1", "task2", "task3")
+    MyPreview {
+        RequestPlaygroundUi(
+            uiState = RequestUi(
+                tasks = RequestPlayground.Request.Success(
+                    listOf("task1", "task2", "task3")
+                ),
+                currentTask = "task4"
             ),
-            currentTask = "task4"
-        ),
-        onEvent = {}
-    )
+            onEvent = {}
+        )
+    }
 }

@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -25,10 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.MyPreview
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
-import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 
 @Composable
 fun HomeScreen() {
@@ -212,24 +210,19 @@ private fun HomeUi(
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    CurrencyConverterTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            HomeUi(
-                uiState = HomeUiState(
-                    date = "",
-                    hourlyRateUsd = "40",
-                    taxPercentage = "10",
-                    socialSecurityAmount = "1200",
-                    companyExpensesAmount = "",
-                    monthlyGrossSalary = "9,452.31",
-                    monthlyNetSalary = "7,427.08",
-                    yearlyNetSalary = "89,124.95"
-                ),
-                onEvent = {}
-            )
-        }
+    MyPreview {
+        HomeUi(
+            uiState = HomeUiState(
+                date = "",
+                hourlyRateUsd = "40",
+                taxPercentage = "10",
+                socialSecurityAmount = "1200",
+                companyExpensesAmount = "",
+                monthlyGrossSalary = "9,452.31",
+                monthlyNetSalary = "7,427.08",
+                yearlyNetSalary = "89,124.95"
+            ),
+            onEvent = {}
+        )
     }
 }

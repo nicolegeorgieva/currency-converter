@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.MyPreview
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
@@ -80,15 +81,10 @@ private fun AgeUiPreview() {
 @Preview
 @Composable
 private fun AgeUiPreview2() {
-    CurrencyConverterTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            UI(
-                state = AgeUiState("24"),
-                onEvent = {}
-            )
-        }
+    MyPreview {
+        UI(
+            state = AgeUiState("24"),
+            onEvent = {}
+        )
     }
 }

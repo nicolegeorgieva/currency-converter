@@ -15,8 +15,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,10 +27,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.MyPreview
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
-import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 
 @Composable
 fun CountStudyTimeScreen() {
@@ -194,23 +192,18 @@ private fun TimeInputRow(
 @Preview
 @Composable
 private fun StudyTimePreview() {
-    CurrencyConverterTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            CountStudyTimeUi(
-                uiState = StudyTimeUi(
-                    startHour = "10",
-                    startMins = "00",
-                    endHour = "14",
-                    endMins = "00",
-                    cutMins = "10",
-                    totalTimeOfStudying = "1h 00m",
-                    errorOccured = false
-                ),
-                onEvent = {}
-            )
-        }
+    MyPreview {
+        CountStudyTimeUi(
+            uiState = StudyTimeUi(
+                startHour = "10",
+                startMins = "00",
+                endHour = "14",
+                endMins = "00",
+                cutMins = "10",
+                totalTimeOfStudying = "1h 00m",
+                errorOccured = false
+            ),
+            onEvent = {}
+        )
     }
 }
