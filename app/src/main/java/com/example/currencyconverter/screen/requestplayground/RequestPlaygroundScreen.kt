@@ -20,25 +20,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestPlaygroundScreen() {
     val viewModel: RequestPlaygroundViewModel = viewModel()
     val uiState = viewModel.uiState()
 
+    RequestPlaygroundUi(
+        uiState = uiState,
+        onEvent = {
+            viewModel.onEvent(it)
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RequestPlaygroundUi(
+    uiState: RequestUi,
+    onEvent: (RequestPlaygroundEvent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
         LaunchedEffect(Unit) {
-            viewModel.onEvent(RequestPlaygroundEvent.OnStart)
+            onEvent(RequestPlaygroundEvent.OnStart)
         }
 
         BackButton {
@@ -51,7 +65,7 @@ fun RequestPlaygroundScreen() {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
                 onClick = {
-                    viewModel.onEvent(RequestPlaygroundEvent.OnStart)
+                    onEvent(RequestPlaygroundEvent.OnStart)
                 }
             )
             {
@@ -73,7 +87,7 @@ fun RequestPlaygroundScreen() {
                     is RequestPlayground.Request.Success ->
                         for (i in state.data.indices) {
                             TaskCard(task = state.data[i]) {
-                                viewModel.onEvent(RequestPlaygroundEvent.OnDelete(i))
+                                onEvent(RequestPlaygroundEvent.OnDelete(i))
                             }
                         }
 
@@ -91,14 +105,14 @@ fun RequestPlaygroundScreen() {
         TextField(
             value = uiState.currentTask,
             onValueChange = {
-                viewModel.onEvent(RequestPlaygroundEvent.OnToDoWriting(it))
+                onEvent(RequestPlaygroundEvent.OnToDoWriting(it))
             }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(onClick = {
-            viewModel.onEvent(RequestPlaygroundEvent.OnAddToDo)
+            onEvent(RequestPlaygroundEvent.OnAddToDo)
         }) {
             Text(text = "Add")
         }
@@ -106,7 +120,7 @@ fun RequestPlaygroundScreen() {
 }
 
 @Composable
-fun TaskCard(task: String, onDelete: () -> Unit) {
+private fun TaskCard(task: String, onDelete: () -> Unit) {
     Card {
         Row {
             Text(text = task)
@@ -122,4 +136,18 @@ fun TaskCard(task: String, onDelete: () -> Unit) {
     }
 
     Spacer(modifier = Modifier.height(12.dp))
+}
+
+@Preview
+@Composable
+private fun RequestPlaygroundPreview() {
+    RequestPlaygroundUi(
+        uiState = RequestUi(
+            tasks = RequestPlayground.Request.Success(
+                listOf("task1", "task2", "task3")
+            ),
+            currentTask = "task4"
+        ),
+        onEvent = {}
+    )
 }
