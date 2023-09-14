@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -19,19 +21,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
+import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val viewModel: HomeViewModel = viewModel()
     val uiState = viewModel.uiState()
 
+    HomeUi(
+        uiState = uiState,
+        onEvent = {
+            viewModel.onEvent(it)
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HomeUi(
+    uiState: HomeUiState,
+    onEvent: (HomeEvent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,10 +65,10 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         LaunchedEffect(Unit) {
-            viewModel.onEvent(HomeEvent.OnStart)
+            onEvent(HomeEvent.OnStart)
         }
 
-        if (uiState.date != null) {
+        if (!uiState.date.isNullOrBlank()) {
             Text(text = "Conversions are up to this date: ${uiState.date}")
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -61,7 +78,7 @@ fun HomeScreen() {
             TextField(
                 value = uiState.hourlyRateUsd,
                 onValueChange = {
-                    viewModel.onEvent(HomeEvent.OnChangeHourlyRateInUsd(it))
+                    onEvent(HomeEvent.OnChangeHourlyRateInUsd(it))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -77,7 +94,7 @@ fun HomeScreen() {
             TextField(
                 value = uiState.taxPercentage,
                 onValueChange = {
-                    viewModel.onEvent(HomeEvent.OnChangeTaxPercentage(it))
+                    onEvent(HomeEvent.OnChangeTaxPercentage(it))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -93,7 +110,7 @@ fun HomeScreen() {
             TextField(
                 value = uiState.socialSecurityAmount,
                 onValueChange = {
-                    viewModel.onEvent(HomeEvent.OnChangeSocialSecurityAmount(it))
+                    onEvent(HomeEvent.OnChangeSocialSecurityAmount(it))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -109,7 +126,7 @@ fun HomeScreen() {
             TextField(
                 value = uiState.companyExpensesAmount,
                 onValueChange = {
-                    viewModel.onEvent(HomeEvent.OnChangeCompanyExpensesAmount(it))
+                    onEvent(HomeEvent.OnChangeCompanyExpensesAmount(it))
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -189,5 +206,30 @@ fun HomeScreen() {
             fontStyle = FontStyle.Italic,
             color = Color(0xFFF4511E)
         )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenPreview() {
+    CurrencyConverterTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            HomeUi(
+                uiState = HomeUiState(
+                    date = "",
+                    hourlyRateUsd = "40",
+                    taxPercentage = "10",
+                    socialSecurityAmount = "1200",
+                    companyExpensesAmount = "",
+                    monthlyGrossSalary = "9,452.31",
+                    monthlyNetSalary = "7,427.08",
+                    yearlyNetSalary = "89,124.95"
+                ),
+                onEvent = {}
+            )
+        }
     }
 }
