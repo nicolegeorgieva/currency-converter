@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
-@Entity
-data class Contact(
+@Entity(tableName = "contacts")
+data class ContactEntity(
     @PrimaryKey
     val id: UUID,
     val firstName: String,
