@@ -63,7 +63,7 @@ private fun UI(
 
 @Preview
 @Composable
-fun AgeUiPreview() {
+private fun AgeUiPreview() {
     CurrencyConverterTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -79,7 +79,7 @@ fun AgeUiPreview() {
 
 @Preview
 @Composable
-fun AgeUiPreview2() {
+private fun AgeUiPreview2() {
     CurrencyConverterTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
