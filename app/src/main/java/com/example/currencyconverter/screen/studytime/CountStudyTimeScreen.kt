@@ -15,6 +15,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -24,25 +26,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
 import com.example.currencyconverter.screenState
+import com.example.currencyconverter.ui.theme.CurrencyConverterTheme
+
+@Composable
+fun CountStudyTimeScreen() {
+    val viewModel: CountStudyTimeViewModel = viewModel()
+    val uiState = viewModel.uiState()
+
+
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CountStudyTimeScreen() {
+private fun CountStudyTimeUi(
+    uiState: StudyTimeUi,
+    onEvent: (StudyTimeEvent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        val viewModel: CountStudyTimeViewModel = viewModel()
-        val uiState = viewModel.uiState()
-
         LaunchedEffect(Unit) {
-            viewModel.onEvent(StudyTimeEvent.OnStart)
+            onEvent(StudyTimeEvent.OnStart)
         }
 
         BackButton {
@@ -54,11 +66,11 @@ fun CountStudyTimeScreen() {
         TimeInputRow(
             hours = uiState.startHour,
             onHoursChange = {
-                viewModel.onEvent(StudyTimeEvent.EditStartHour(it))
+                onEvent(StudyTimeEvent.EditStartHour(it))
             },
             mins = uiState.startMins,
             onMinsChange = {
-                viewModel.onEvent(StudyTimeEvent.EditStartMins(it))
+                onEvent(StudyTimeEvent.EditStartMins(it))
             }
         )
 
@@ -67,11 +79,11 @@ fun CountStudyTimeScreen() {
         TimeInputRow(
             hours = uiState.endHour,
             onHoursChange = {
-                viewModel.onEvent(StudyTimeEvent.EditEndHour(it))
+                onEvent(StudyTimeEvent.EditEndHour(it))
             },
             mins = uiState.endMins,
             onMinsChange = {
-                viewModel.onEvent(StudyTimeEvent.EditEndMins(it))
+                onEvent(StudyTimeEvent.EditEndMins(it))
             }
         )
 
@@ -81,7 +93,7 @@ fun CountStudyTimeScreen() {
             modifier = Modifier.width(124.dp),
             value = uiState.cutMins,
             onValueChange = {
-                viewModel.onEvent(StudyTimeEvent.EditCutMins(it))
+                onEvent(StudyTimeEvent.EditCutMins(it))
             },
             label = { Text("Cut mins") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -90,7 +102,7 @@ fun CountStudyTimeScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            viewModel.onEvent(StudyTimeEvent.AddCurrentStudyToTotal)
+            onEvent(StudyTimeEvent.AddCurrentStudyToTotal)
         }) {
             Text(text = "Add")
         }
@@ -120,7 +132,7 @@ fun CountStudyTimeScreen() {
 
             IconButton(
                 onClick = {
-                    viewModel.onEvent(StudyTimeEvent.TotalTimeReset)
+                    onEvent(StudyTimeEvent.TotalTimeReset)
                 }
             ) {
                 Icon(
@@ -134,9 +146,11 @@ fun CountStudyTimeScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimeInputRow(
-    hours: String, onHoursChange: (String) -> Unit,
-    mins: String, onMinsChange: (String) -> Unit
+private fun TimeInputRow(
+    hours: String,
+    onHoursChange: (String) -> Unit,
+    mins: String,
+    onMinsChange: (String) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -169,5 +183,29 @@ fun TimeInputRow(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true
         )
+    }
+}
+
+@Preview
+@Composable
+private fun StudyTimePreview() {
+    CurrencyConverterTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            CountStudyTimeUi(
+                uiState = StudyTimeUi(
+                    startHour = "10",
+                    startMins = "00",
+                    endHour = "14",
+                    endMins = "00",
+                    cutMins = "10",
+                    totalTimeOfStudying = "1h 00m",
+                    errorOccured = false
+                ),
+                onEvent = {}
+            )
+        }
     }
 }
