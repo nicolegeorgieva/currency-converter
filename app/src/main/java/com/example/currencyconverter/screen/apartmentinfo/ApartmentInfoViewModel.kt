@@ -37,8 +37,8 @@ class ApartmentInfoViewModel @Inject constructor(
             realM2 = getRealM2(),
             realM2Price = getRealM2Price(),
             realM2PriceCurrency = getRealM2PriceCurrency(),
-            isRealM2PriceCurrencyExpanded = getRealPriceCurrencyExpanded()
-                    totalM2Price = getTotalM2Price (),
+            isRealM2PriceCurrencyExpanded = getRealPriceCurrencyExpanded(),
+            totalM2Price = getTotalM2Price(),
             totalM2PriceCurrency = getTotalM2PriceCurrency(),
             isTotalM2PriceCurrencyExpanded = getTotalPriceCurrencyExpanded()
         )
