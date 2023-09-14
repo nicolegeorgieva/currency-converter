@@ -66,6 +66,27 @@ class ContactViewModel @Inject constructor(
     }
 
     override fun onEvent(event: ContactEvent) {
-        TODO("Not yet implemented")
+        when (event) {
+            ContactEvent.OnDismissContactDialog -> onDismissContactDialog()
+            is ContactEvent.OnFirstNameChange -> onFirstNameChange(event.firstName)
+            is ContactEvent.OnLastNameChange -> onLastNameChange(event.lastName)
+            is ContactEvent.OnPhoneNumberChange -> onPhoneNumberChange(event.phoneNumber)
+        }
+    }
+
+    private fun onDismissContactDialog() {
+        showContactDialog.value = false
+    }
+
+    private fun onFirstNameChange(firstNameSet: String) {
+        firstName.value = firstNameSet
+    }
+
+    private fun onLastNameChange(lastNameSet: String) {
+        lastName.value = lastNameSet
+    }
+
+    private fun onPhoneNumberChange(phoneNumberSet: String) {
+        phoneNumber.value = phoneNumberSet
     }
 }

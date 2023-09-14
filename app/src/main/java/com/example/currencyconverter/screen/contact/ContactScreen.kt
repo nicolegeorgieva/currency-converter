@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,7 +78,16 @@ private fun ContactUi(
         }
 
         FloatingActionButton(onClick = {
-            onEvent(ContactEvent)
+            AddContactDialog(
+                showContactDialog = uiState.showContactDialog,
+                onDismissContactDialog = onEvent(),
+                firstName = uiState.firstName,
+                onFirstNameChange = onEvent(),
+                lastName = uiState.lastName,
+                onLastNameChange = onEvent(),
+                phoneNumber = uiState.phoneNumber,
+                onPhoneNumberChange = onEvent()
+            )
         }) {
             Icon(
                 imageVector = Icons.Default.Create, contentDescription = "Add contact"
@@ -100,19 +109,23 @@ fun AddContactDialog(
     onPhoneNumberChange: (String) -> Unit
 ) {
     if (showContactDialog) {
-        AlertDialog(onDismissRequest = {
-            onDismissContactDialog(false)
-        },
-            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
+        AlertDialog(
+            onDismissRequest = {
+                onDismissContactDialog(false)
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = "Add contact"
+                )
+            },
             title = {
-                Text(text = "Title")
+                Text(text = "Add contact")
             },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(text = "Add contact", fontWeight = FontWeight.Bold)
-
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -139,7 +152,7 @@ fun AddContactDialog(
                 TextButton(onClick = {
                     onDismissContactDialog(false)
                 }) {
-                    Text("Confirm")
+                    Text("Add")
                 }
             },
             dismissButton = {
