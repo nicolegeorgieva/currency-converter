@@ -1,13 +1,12 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.database.contact
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.UUID
 
 @Entity(tableName = "contacts")
 data class ContactEntity(
     @PrimaryKey
-    val id: UUID,
+    val id: String,
     val firstName: String,
     val lastName: String,
     val phoneNumber: String

@@ -1,4 +1,4 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.database.contact
 
 import androidx.room.Dao
 import androidx.room.Delete
