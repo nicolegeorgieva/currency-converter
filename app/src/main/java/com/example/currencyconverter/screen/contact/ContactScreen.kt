@@ -7,10 +7,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -62,16 +69,85 @@ private fun ContactUi(
                 FilledIconButton(
                     onClick = {
                         /* doSomething() */
-                    }
-                ) {
+                    }) {
                     Icon(
-                        imageVector = Icons.Outlined.Delete,
-                        contentDescription = "Delete"
+                        imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
                     )
                 }
             }
         }
 
+        FloatingActionButton(onClick = {
+            onEvent(ContactEvent)
+        }) {
+            Icon(
+                imageVector = Icons.Default.Create, contentDescription = "Add contact"
+            )
+        }
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddContactDialog(
+    showContactDialog: Boolean,
+    onDismissContactDialog: (Boolean) -> Unit,
+    firstName: String,
+    onFirstNameChange: (String) -> Unit,
+    lastName: String,
+    onLastNameChange: (String) -> Unit,
+    phoneNumber: String,
+    onPhoneNumberChange: (String) -> Unit
+) {
+    if (showContactDialog) {
+        AlertDialog(onDismissRequest = {
+            onDismissContactDialog(false)
+        },
+            icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info") },
+            title = {
+                Text(text = "Title")
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(text = "Add contact", fontWeight = FontWeight.Bold)
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(text = "First name")
+                        TextField(value = firstName, onValueChange = { onFirstNameChange(it) })
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(text = "Last name")
+                        TextField(value = lastName, onValueChange = { onLastNameChange(it) })
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(text = "Phone number")
+                        TextField(value = phoneNumber, onValueChange = { onPhoneNumberChange(it) })
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDismissContactDialog(false)
+                }) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    onDismissContactDialog(false)
+                }) {
+                    Text("Dismiss")
+                }
+            })
     }
 }

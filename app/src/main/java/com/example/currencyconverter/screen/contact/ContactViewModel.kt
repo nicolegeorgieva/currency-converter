@@ -15,7 +15,7 @@ class ContactViewModel @Inject constructor(
     private val database: MyDatabase
 ) : ComposeViewModel<ContactState, ContactEvent>() {
 
-    private val alertDialogDismissed = mutableStateOf(true)
+    private val showContactDialog = mutableStateOf(true)
     private val firstName = mutableStateOf("")
     private val lastName = mutableStateOf("")
     private val phoneNumber = mutableStateOf("")
@@ -25,7 +25,7 @@ class ContactViewModel @Inject constructor(
     override fun uiState(): ContactState {
         return ContactState(
             contacts = getContacts(),
-            alertDialogDismissed = getAlertDialogDismissedState(),
+            showContactDialog = getContactDialogState(),
             sortedBy = getContactsSortedBy(),
             firstName = getFirstName(),
             lastName = getLastName(),
@@ -41,8 +41,8 @@ class ContactViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getAlertDialogDismissedState(): Boolean {
-        return alertDialogDismissed.value
+    private fun getContactDialogState(): Boolean {
+        return showContactDialog.value
     }
 
     @Composable
