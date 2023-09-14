@@ -39,7 +39,12 @@ fun CountStudyTimeScreen() {
     val viewModel: CountStudyTimeViewModel = viewModel()
     val uiState = viewModel.uiState()
 
-
+    CountStudyTimeUi(
+        uiState = uiState,
+        onEvent = {
+            viewModel.onEvent(it)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
