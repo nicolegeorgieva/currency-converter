@@ -24,9 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.MyPreview
-import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.screenState
 
 @Composable
 fun HomeScreen() {
@@ -52,9 +50,7 @@ private fun HomeUi(
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        BackButton {
-            screenState.value = Screen.MenuScreen
-        }
+        BackButton()
 
         Spacer(modifier = Modifier.height(12.dp))
 

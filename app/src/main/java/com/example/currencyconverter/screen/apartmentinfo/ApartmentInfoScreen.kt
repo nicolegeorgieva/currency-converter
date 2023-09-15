@@ -26,9 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.currencyconverter.MyPreview
-import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.screenState
 
 @Composable
 fun ApartmentInfoScreen() {
@@ -57,9 +55,7 @@ private fun ApartmentInfoUi(
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        BackButton {
-            screenState.value = Screen.MenuScreen
-        }
+        BackButton()
 
         Spacer(modifier = Modifier.height(12.dp))
 

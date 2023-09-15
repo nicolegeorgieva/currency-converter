@@ -23,14 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.currencyconverter.Screen
 import com.example.currencyconverter.component.BackButton
-import com.example.currencyconverter.screenState
 
 @Composable
 fun ContactScreen() {
@@ -56,9 +55,7 @@ private fun ContactUi(
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        BackButton {
-            screenState.value = Screen.MenuScreen
-        }
+        BackButton()
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -86,7 +83,9 @@ private fun ContactUi(
         }
 
         for (contact in uiState.contacts) {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Column {
                     Text(text = contact.firstName, fontWeight = FontWeight.Bold)
                     Text(text = contact.lastName, fontWeight = FontWeight.Bold)

@@ -4,16 +4,18 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.currencyconverter.Screen
+import com.example.currencyconverter.screenState
 
 @Composable
-fun BackButton(onBack: () -> Unit) {
+fun BackButton(screen: Screen = Screen.MenuScreen) {
     Button(onClick = {
-        onBack()
+        screenState.value = screen
     }) {
         Text(text = "<")
     }
 
     BackHandler {
-        onBack()
+        screenState.value = screen
     }
 }

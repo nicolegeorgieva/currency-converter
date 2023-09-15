@@ -50,9 +50,7 @@ private fun DemoUi(
         }
 
         Row {
-            BackButton {
-                screenState.value = Screen.MenuScreen
-            }
+            BackButton()
 
             Spacer(modifier = Modifier.width(12.dp))
 
