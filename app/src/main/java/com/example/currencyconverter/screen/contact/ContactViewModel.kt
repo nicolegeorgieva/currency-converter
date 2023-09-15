@@ -124,21 +124,30 @@ class ContactViewModel @Inject constructor(
     }
 
     private fun onAddContact() {
-        viewModelScope.launch {
-            contactDao.upsertContact(
-                ContactEntity(
-                    id = UUID.randomUUID().toString(),
-                    firstName = firstName.value,
-                    lastName = lastName.value,
-                    phoneNumber = phoneNumber.value
-                )
-            )
-        }
+        if (firstName.value.isNotBlank() &&
+            lastName.value.isNotBlank() &&
+            phoneNumber.value.isNotBlank()
+        ) {
+            showWarningMessage.value = false
 
-        firstName.value = ""
-        lastName.value = ""
-        phoneNumber.value = ""
-        showContactDialog.value = false
+            viewModelScope.launch {
+                contactDao.upsertContact(
+                    ContactEntity(
+                        id = UUID.randomUUID().toString(),
+                        firstName = firstName.value,
+                        lastName = lastName.value,
+                        phoneNumber = phoneNumber.value
+                    )
+                )
+            }
+
+            firstName.value = ""
+            lastName.value = ""
+            phoneNumber.value = ""
+            showContactDialog.value = false
+        } else {
+            showWarningMessage.value = true
+        }
     }
 
     private fun onDeleteContact(contact: ContactEntity) {
