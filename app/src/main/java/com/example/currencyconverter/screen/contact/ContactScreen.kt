@@ -87,33 +87,31 @@ private fun ContactUi(
             )
         }
 
-        if (uiState.showContactDialog) {
-            AddContactDialog(
-                showContactDialog = uiState.showContactDialog,
-                onShowContactDialog = {
-                    onEvent(ContactEvent.OnShowContactDialog(it))
-                },
-                firstName = uiState.firstName,
-                onFirstNameChange = {
-                    onEvent(ContactEvent.OnFirstNameChange(it))
-                },
-                lastName = uiState.lastName,
-                onLastNameChange = {
-                    onEvent(ContactEvent.OnLastNameChange(it))
-                },
-                phoneNumber = uiState.phoneNumber,
-                onPhoneNumberChange = {
-                    onEvent(ContactEvent.OnPhoneNumberChange(it))
-                },
-                onAddContact = {
-                    onEvent(ContactEvent.OnAddContact)
-                },
-                onShowWarningMessage = {
-                    onEvent(ContactEvent.OnAddWithBlankFields)
-                },
-                warningMessage = uiState.addWithBlankFields,
-            )
-        }
+        AddContactDialog(
+            showContactDialog = uiState.showContactDialog,
+            onShowContactDialog = {
+                onEvent(ContactEvent.OnShowContactDialog(it))
+            },
+            firstName = uiState.firstName,
+            onFirstNameChange = {
+                onEvent(ContactEvent.OnFirstNameChange(it))
+            },
+            lastName = uiState.lastName,
+            onLastNameChange = {
+                onEvent(ContactEvent.OnLastNameChange(it))
+            },
+            phoneNumber = uiState.phoneNumber,
+            onPhoneNumberChange = {
+                onEvent(ContactEvent.OnPhoneNumberChange(it))
+            },
+            onAddContact = {
+                onEvent(ContactEvent.OnAddContact)
+            },
+            onShowWarningMessage = {
+                onEvent(ContactEvent.OnAddWithBlankFields)
+            },
+            warningMessage = uiState.addWithBlankFields,
+        )
     }
 }
 
