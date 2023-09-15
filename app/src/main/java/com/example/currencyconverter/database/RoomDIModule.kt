@@ -28,6 +28,6 @@ object RoomDIModule {
 
     @Provides
     fun provideContactDao(database: MyDatabase): ContactDao {
-        return database.dao
+        return database.contactDao
     }
 }

@@ -41,7 +41,7 @@ class ContactViewModel @Inject constructor(
     @Composable
     private fun getContacts(): List<ContactEntity> {
         return remember {
-            database.dao.getContactsOrderedByFirstName()
+            database.contactDao.getContactsOrderedByFirstName()
         }.collectAsState(initial = emptyList()).value
     }
 

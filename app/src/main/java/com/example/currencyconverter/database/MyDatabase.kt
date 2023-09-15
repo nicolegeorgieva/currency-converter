@@ -10,5 +10,5 @@ import com.example.currencyconverter.database.contact.ContactEntity
     version = 1
 )
 abstract class MyDatabase : RoomDatabase() {
-    abstract val dao: ContactDao
+    abstract val contactDao: ContactDao
 }
