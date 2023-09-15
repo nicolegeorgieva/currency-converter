@@ -10,7 +10,6 @@ import com.example.currencyconverter.database.MyDatabase
 import com.example.currencyconverter.database.contact.ContactDao
 import com.example.currencyconverter.database.contact.ContactEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -27,9 +26,6 @@ class ContactViewModel @Inject constructor(
     private val phoneNumber = mutableStateOf("")
     private val sortedBy = mutableStateOf(SortedBy.FIRST_NAME)
     private val addWithBlankFields = mutableStateOf(false)
-    private val selectedFirstNameSortOption = mutableStateOf(false)
-    private val selectedLastNameSortOption = mutableStateOf(false)
-    private val selectedPhoneNumberSortOption = mutableStateOf(false)
 
     @Composable
     override fun uiState(): ContactState {
@@ -46,9 +42,21 @@ class ContactViewModel @Inject constructor(
 
     @Composable
     private fun getContacts(): List<ContactEntity> {
-        return remember {
-            database.contactDao.getContactsOrderedByFirstName()
-        }.collectAsState(initial = emptyList()).value
+        val res = when (getContactsSortedBy()) {
+            SortedBy.FIRST_NAME -> remember {
+                database.contactDao.getContactsOrderedByFirstName()
+            }.collectAsState(initial = emptyList()).value
+
+            SortedBy.LAST_NAME -> remember {
+                database.contactDao.getContactsOrderedByLastName()
+            }.collectAsState(initial = emptyList()).value
+
+            SortedBy.PHONE_NUMBER -> remember {
+                database.contactDao.getContactsOrderedByPhoneNumber()
+            }.collectAsState(initial = emptyList()).value
+        }
+
+        return res
     }
 
     @Composable
@@ -102,16 +110,16 @@ class ContactViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onFirstNameSort(): List<ContactEntity> {
-        return dao.getContactsOrderedByFirstName().firstOrNull() ?: emptyList()
+    private fun onFirstNameSort() {
+        sortedBy.value = SortedBy.FIRST_NAME
     }
 
-    private suspend fun onLastNameSort(): List<ContactEntity> {
-        return dao.getContactsOrderedByLastName().firstOrNull() ?: emptyList()
+    private fun onLastNameSort() {
+        sortedBy.value = SortedBy.LAST_NAME
     }
 
-    private suspend fun onPhoneNumberSort(): List<ContactEntity> {
-        return dao.getContactsOrderedByPhoneNumber().firstOrNull() ?: emptyList()
+    private fun onPhoneNumberSort() {
+        sortedBy.value = SortedBy.PHONE_NUMBER
     }
 
     private fun onShowContactDialog(show: Boolean) {
