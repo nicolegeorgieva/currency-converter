@@ -27,6 +27,9 @@ class ContactViewModel @Inject constructor(
     private val phoneNumber = mutableStateOf("")
     private val sortedBy = mutableStateOf(SortedBy.FIRST_NAME)
     private val addWithBlankFields = mutableStateOf(false)
+    private val selectedFirstNameSortOption = mutableStateOf(false)
+    private val selectedLastNameSortOption = mutableStateOf(false)
+    private val selectedPhoneNumberSortOption = mutableStateOf(false)
 
     @Composable
     override fun uiState(): ContactState {

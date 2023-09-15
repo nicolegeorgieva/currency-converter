@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
@@ -55,15 +56,36 @@ private fun ContactUi(
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            SortOption(text = "first name") {
+            SortOption(
+                text = "first name", selected =
+                when (uiState.sortedBy) {
+                    SortedBy.FIRST_NAME -> true
+                    SortedBy.LAST_NAME -> false
+                    SortedBy.PHONE_NUMBER -> false
+                }
+            ) {
                 onEvent(ContactEvent.OnFirstNameSort)
             }
 
-            SortOption(text = "last name") {
+            SortOption(
+                text = "last name", selected =
+                when (uiState.sortedBy) {
+                    SortedBy.FIRST_NAME -> false
+                    SortedBy.LAST_NAME -> true
+                    SortedBy.PHONE_NUMBER -> false
+                }
+            ) {
                 onEvent(ContactEvent.OnLastNameSort)
             }
 
-            SortOption(text = "phone number") {
+            SortOption(
+                text = "phone number", selected =
+                when (uiState.sortedBy) {
+                    SortedBy.FIRST_NAME -> false
+                    SortedBy.LAST_NAME -> false
+                    SortedBy.PHONE_NUMBER -> true
+                }
+            ) {
                 onEvent(ContactEvent.OnPhoneNumberSort)
             }
         }
@@ -133,10 +155,16 @@ private fun ContactUi(
 }
 
 @Composable
-fun SortOption(text: String, action: () -> Unit) {
-    Button(onClick = {
-        action()
-    }) {
+fun SortOption(text: String, selected: Boolean, action: () -> Unit) {
+    Button(
+        onClick = {
+            action()
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (selected) Color.Blue else Color.DarkGray,
+            contentColor = Color.White,
+        )
+    ) {
         Text(text = text)
     }
 }
