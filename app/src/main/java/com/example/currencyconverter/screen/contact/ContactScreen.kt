@@ -1,11 +1,11 @@
 package com.example.currencyconverter.screen.contact
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,9 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.MyPreview
 import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.database.contact.ContactEntity
 
 @Composable
 fun ContactScreen() {
@@ -50,104 +53,105 @@ private fun ContactUi(
     uiState: ContactState,
     onEvent: (ContactEvent) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item(key = "Back button") {
-            BackButton()
-        }
-
-        item(key = "Sorting options") {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                SortOption(
-                    text = "first name",
-                    selected = uiState.sortedBy == SortedBy.FIRST_NAME
-                ) {
-                    onEvent(ContactEvent.OnFirstNameSort)
-                }
-
-                SortOption(
-                    text = "last name",
-                    selected = uiState.sortedBy == SortedBy.LAST_NAME
-                ) {
-                    onEvent(ContactEvent.OnLastNameSort)
-                }
-
-                SortOption(
-                    text = "phone number",
-                    selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
-                ) {
-                    onEvent(ContactEvent.OnPhoneNumberSort)
-                }
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item(key = "Back button") {
+                BackButton()
             }
-        }
 
-        item(key = "Contacts") {
-            for (contact in uiState.contacts) {
+            item(key = "Sorting options") {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Column {
-                        Text(text = contact.firstName, fontWeight = FontWeight.Bold)
-                        Text(text = contact.lastName, fontWeight = FontWeight.Bold)
-                        Text(text = contact.phoneNumber)
+                    SortOption(
+                        text = "first name",
+                        selected = uiState.sortedBy == SortedBy.FIRST_NAME
+                    ) {
+                        onEvent(ContactEvent.OnFirstNameSort)
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    SortOption(
+                        text = "last name",
+                        selected = uiState.sortedBy == SortedBy.LAST_NAME
+                    ) {
+                        onEvent(ContactEvent.OnLastNameSort)
+                    }
 
-                    FilledIconButton(
-                        onClick = {
-                            onEvent(ContactEvent.OnDeleteContact(contact))
-                        }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
-                        )
+                    SortOption(
+                        text = "phone number",
+                        selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
+                    ) {
+                        onEvent(ContactEvent.OnPhoneNumberSort)
+                    }
+                }
+            }
+
+            item(key = "Contacts") {
+                for (contact in uiState.contacts) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(text = contact.firstName, fontWeight = FontWeight.Bold)
+                            Text(text = contact.lastName, fontWeight = FontWeight.Bold)
+                            Text(text = contact.phoneNumber)
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        FilledIconButton(
+                            onClick = {
+                                onEvent(ContactEvent.OnDeleteContact(contact))
+                            }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
+                            )
+                        }
                     }
                 }
             }
         }
-    }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
-    ) {
-        FloatingActionButton(onClick = {
-            onEvent(ContactEvent.OnShowContactDialog(true))
-        }) {
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(12.dp),
+            onClick = {
+                onEvent(ContactEvent.OnShowContactDialog(true))
+            }) {
             Icon(
                 imageVector = Icons.Default.Add, contentDescription = "Add contact"
             )
         }
-    }
 
-    AddContactDialog(
-        showContactDialog = uiState.showContactDialog,
-        onShowContactDialog = {
-            onEvent(ContactEvent.OnShowContactDialog(it))
-        },
-        firstName = uiState.firstName,
-        onFirstNameChange = {
-            onEvent(ContactEvent.OnFirstNameChange(it))
-        },
-        lastName = uiState.lastName,
-        onLastNameChange = {
-            onEvent(ContactEvent.OnLastNameChange(it))
-        },
-        phoneNumber = uiState.phoneNumber,
-        onPhoneNumberChange = {
-            onEvent(ContactEvent.OnPhoneNumberChange(it))
-        },
-        onAddContact = {
-            onEvent(ContactEvent.OnAddContact)
-        },
-        warningMessage = uiState.showWarningMessage
-    )
+        AddContactDialog(
+            showContactDialog = uiState.showContactDialog,
+            onShowContactDialog = {
+                onEvent(ContactEvent.OnShowContactDialog(it))
+            },
+            firstName = uiState.firstName,
+            onFirstNameChange = {
+                onEvent(ContactEvent.OnFirstNameChange(it))
+            },
+            lastName = uiState.lastName,
+            onLastNameChange = {
+                onEvent(ContactEvent.OnLastNameChange(it))
+            },
+            phoneNumber = uiState.phoneNumber,
+            onPhoneNumberChange = {
+                onEvent(ContactEvent.OnPhoneNumberChange(it))
+            },
+            onAddContact = {
+                onEvent(ContactEvent.OnAddContact)
+            },
+            warningMessage = uiState.showWarningMessage
+        )
+    }
 }
 
 @Composable
@@ -249,5 +253,90 @@ fun AddContactDialog(
                     Text("Dismiss")
                 }
             })
+    }
+}
+
+@Preview
+@Composable
+fun ContactScreenPreview() {
+    val contacts = listOf(
+        ContactEntity(
+            id = "",
+            firstName = "Iliyan",
+            lastName = "Germanov",
+            phoneNumber = "+243827489723"
+        ),
+        ContactEntity(
+            id = "",
+            firstName = "Nicole",
+            lastName = "Georgieva",
+            phoneNumber = "+102187128937201"
+        )
+    )
+    MyPreview {
+        ContactUi(
+            uiState = ContactState(
+                contacts = contacts,
+                showContactDialog = false,
+                sortedBy = SortedBy.FIRST_NAME,
+                firstName = "",
+                lastName = "",
+                phoneNumber = "",
+                showWarningMessage = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ContactScreenPreview2() {
+    val contacts = listOf(
+        ContactEntity(
+            id = "",
+            firstName = "Iliyan",
+            lastName = "Germanov",
+            phoneNumber = "+243827489723"
+        ),
+        ContactEntity(
+            id = "",
+            firstName = "Nicole",
+            lastName = "Georgieva",
+            phoneNumber = "+102187128937201"
+        )
+    )
+    MyPreview {
+        ContactUi(
+            uiState = ContactState(
+                contacts = contacts,
+                showContactDialog = true,
+                sortedBy = SortedBy.FIRST_NAME,
+                firstName = "",
+                lastName = "",
+                phoneNumber = "",
+                showWarningMessage = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ContactScreenPreview3() {
+    MyPreview {
+        ContactUi(
+            uiState = ContactState(
+                contacts = emptyList(),
+                showContactDialog = false,
+                sortedBy = SortedBy.LAST_NAME,
+                firstName = "",
+                lastName = "",
+                phoneNumber = "",
+                showWarningMessage = false
+            ),
+            onEvent = {}
+        )
     }
 }
