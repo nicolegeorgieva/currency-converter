@@ -2,6 +2,7 @@ package com.example.currencyconverter.database
 
 import android.content.Context
 import androidx.room.Room
+import com.example.currencyconverter.database.contact.ContactDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,5 +24,10 @@ object RoomDIModule {
             context,
             MyDatabase::class.java, "my-database"
         ).build()
+    }
+
+    @Provides
+    fun provideContactDao(database: MyDatabase): ContactDao {
+        return database.dao
     }
 }
