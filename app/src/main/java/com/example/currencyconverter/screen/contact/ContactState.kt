@@ -9,5 +9,5 @@ data class ContactState(
     val firstName: String,
     val lastName: String,
     val phoneNumber: String,
-    val addWithBlankFields: Boolean
+    val showWarningMessage: Boolean
 )

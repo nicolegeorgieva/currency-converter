@@ -144,7 +144,7 @@ private fun ContactUi(
             onShowWarningMessage = {
                 onEvent(ContactEvent.OnAddWithBlankFields)
             },
-            warningMessage = uiState.addWithBlankFields,
+            warningMessage = uiState.showWarningMessage
         )
     }
 }

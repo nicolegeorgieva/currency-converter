@@ -23,7 +23,7 @@ class ContactViewModel @Inject constructor(
     private val lastName = mutableStateOf("")
     private val phoneNumber = mutableStateOf("")
     private val sortedBy = mutableStateOf(SortedBy.FIRST_NAME)
-    private val addWithBlankFields = mutableStateOf(false)
+    private val showWarningMessage = mutableStateOf(false)
 
     @Composable
     override fun uiState(): ContactState {
@@ -34,7 +34,7 @@ class ContactViewModel @Inject constructor(
             firstName = getFirstName(),
             lastName = getLastName(),
             phoneNumber = getPhoneNumber(),
-            addWithBlankFields = getBlankFieldsState()
+            showWarningMessage = showWarningMessage()
         )
     }
 
@@ -76,8 +76,8 @@ class ContactViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getBlankFieldsState(): Boolean {
-        return addWithBlankFields.value
+    private fun showWarningMessage(): Boolean {
+        return showWarningMessage.value
     }
 
     override fun onEvent(event: ContactEvent) {
@@ -150,6 +150,6 @@ class ContactViewModel @Inject constructor(
     }
 
     private fun onAddWithBlankFields() {
-        addWithBlankFields.value = true
+        showWarningMessage.value = true
     }
 }
