@@ -115,6 +115,7 @@ class ContactViewModel @Inject constructor(
         firstName.value = ""
         lastName.value = ""
         phoneNumber.value = ""
+        showContactDialog.value = false
     }
 
     private suspend fun onDeleteContact(contact: ContactEntity) {
