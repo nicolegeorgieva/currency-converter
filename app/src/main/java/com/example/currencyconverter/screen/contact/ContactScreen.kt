@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
@@ -49,100 +50,104 @@ private fun ContactUi(
     uiState: ContactState,
     onEvent: (ContactEvent) -> Unit
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        BackButton()
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            SortOption(
-                text = "first name",
-                selected = uiState.sortedBy == SortedBy.FIRST_NAME
-            ) {
-                onEvent(ContactEvent.OnFirstNameSort)
-            }
-
-            SortOption(
-                text = "last name",
-                selected = uiState.sortedBy == SortedBy.LAST_NAME
-            ) {
-                onEvent(ContactEvent.OnLastNameSort)
-            }
-
-            SortOption(
-                text = "phone number",
-                selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
-            ) {
-                onEvent(ContactEvent.OnPhoneNumberSort)
-            }
+        item(key = "Back button") {
+            BackButton()
         }
 
-        for (contact in uiState.contacts) {
+        item(key = "Sorting options") {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Column {
-                    Text(text = contact.firstName, fontWeight = FontWeight.Bold)
-                    Text(text = contact.lastName, fontWeight = FontWeight.Bold)
-                    Text(text = contact.phoneNumber)
+                SortOption(
+                    text = "first name",
+                    selected = uiState.sortedBy == SortedBy.FIRST_NAME
+                ) {
+                    onEvent(ContactEvent.OnFirstNameSort)
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
+                SortOption(
+                    text = "last name",
+                    selected = uiState.sortedBy == SortedBy.LAST_NAME
+                ) {
+                    onEvent(ContactEvent.OnLastNameSort)
+                }
 
-                FilledIconButton(
-                    onClick = {
-                        onEvent(ContactEvent.OnDeleteContact(contact))
-                    }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
-                    )
+                SortOption(
+                    text = "phone number",
+                    selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
+                ) {
+                    onEvent(ContactEvent.OnPhoneNumberSort)
                 }
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        item(key = "Contacts") {
+            for (contact in uiState.contacts) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(text = contact.firstName, fontWeight = FontWeight.Bold)
+                        Text(text = contact.lastName, fontWeight = FontWeight.Bold)
+                        Text(text = contact.phoneNumber)
+                    }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            FloatingActionButton(onClick = {
-                onEvent(ContactEvent.OnShowContactDialog(true))
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Add, contentDescription = "Add contact"
-                )
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    FilledIconButton(
+                        onClick = {
+                            onEvent(ContactEvent.OnDeleteContact(contact))
+                        }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
+                        )
+                    }
+                }
             }
         }
-
-        AddContactDialog(
-            showContactDialog = uiState.showContactDialog,
-            onShowContactDialog = {
-                onEvent(ContactEvent.OnShowContactDialog(it))
-            },
-            firstName = uiState.firstName,
-            onFirstNameChange = {
-                onEvent(ContactEvent.OnFirstNameChange(it))
-            },
-            lastName = uiState.lastName,
-            onLastNameChange = {
-                onEvent(ContactEvent.OnLastNameChange(it))
-            },
-            phoneNumber = uiState.phoneNumber,
-            onPhoneNumberChange = {
-                onEvent(ContactEvent.OnPhoneNumberChange(it))
-            },
-            onAddContact = {
-                onEvent(ContactEvent.OnAddContact)
-            },
-            warningMessage = uiState.showWarningMessage
-        )
     }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        FloatingActionButton(onClick = {
+            onEvent(ContactEvent.OnShowContactDialog(true))
+        }) {
+            Icon(
+                imageVector = Icons.Default.Add, contentDescription = "Add contact"
+            )
+        }
+    }
+
+    AddContactDialog(
+        showContactDialog = uiState.showContactDialog,
+        onShowContactDialog = {
+            onEvent(ContactEvent.OnShowContactDialog(it))
+        },
+        firstName = uiState.firstName,
+        onFirstNameChange = {
+            onEvent(ContactEvent.OnFirstNameChange(it))
+        },
+        lastName = uiState.lastName,
+        onLastNameChange = {
+            onEvent(ContactEvent.OnLastNameChange(it))
+        },
+        phoneNumber = uiState.phoneNumber,
+        onPhoneNumberChange = {
+            onEvent(ContactEvent.OnPhoneNumberChange(it))
+        },
+        onAddContact = {
+            onEvent(ContactEvent.OnAddContact)
+        },
+        warningMessage = uiState.showWarningMessage
+    )
 }
 
 @Composable
