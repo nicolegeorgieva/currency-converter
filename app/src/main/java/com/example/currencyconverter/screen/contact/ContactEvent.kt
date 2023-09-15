@@ -5,4 +5,5 @@ sealed interface ContactEvent {
     data class OnFirstNameChange(val firstName: String) : ContactEvent
     data class OnLastNameChange(val lastName: String) : ContactEvent
     data class OnPhoneNumberChange(val phoneNumber: String) : ContactEvent
+    object OnAddContact : ContactEvent
 }

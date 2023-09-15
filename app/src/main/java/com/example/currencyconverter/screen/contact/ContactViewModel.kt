@@ -4,15 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.ComposeViewModel
 import com.example.currencyconverter.database.MyDatabase
+import com.example.currencyconverter.database.contact.ContactDao
 import com.example.currencyconverter.database.contact.ContactEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class ContactViewModel @Inject constructor(
-    private val database: MyDatabase
+    private val database: MyDatabase,
+    private val dao: ContactDao
 ) : ComposeViewModel<ContactState, ContactEvent>() {
 
     private val showContactDialog = mutableStateOf(true)
@@ -71,6 +76,7 @@ class ContactViewModel @Inject constructor(
             is ContactEvent.OnLastNameChange -> onLastNameChange(event.lastName)
             is ContactEvent.OnPhoneNumberChange -> onPhoneNumberChange(event.phoneNumber)
             is ContactEvent.OnDismissContactDialog -> onDismissContactDialog(event.toDismiss)
+            ContactEvent.OnAddContact -> viewModelScope.launch { onAddContact() }
         }
     }
 
@@ -88,5 +94,20 @@ class ContactViewModel @Inject constructor(
 
     private fun onPhoneNumberChange(phoneNumberSet: String) {
         phoneNumber.value = phoneNumberSet
+    }
+
+    private suspend fun onAddContact() {
+        dao.upsertContact(
+            ContactEntity(
+                id = UUID.randomUUID().toString(),
+                firstName = firstName.value,
+                lastName = lastName.value,
+                phoneNumber = phoneNumber.value
+            )
+        )
+
+        firstName.value = ""
+        lastName.value = ""
+        phoneNumber.value = ""
     }
 }
