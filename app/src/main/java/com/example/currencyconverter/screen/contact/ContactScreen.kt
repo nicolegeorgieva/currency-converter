@@ -106,16 +106,12 @@ private fun ContactUi(
                     onEvent(ContactEvent.OnPhoneNumberChange(it))
                 },
                 onAddContact = {
-                    if (uiState.firstName.isNotBlank() &&
-                        uiState.lastName.isNotBlank() &&
-                        uiState.phoneNumber.isNotBlank()
-                    ) {
-                        onEvent(ContactEvent.OnAddContact)
-                    } else {
-                        onEvent(ContactEvent.OnAddWithBlankFields)
-                    }
+                    onEvent(ContactEvent.OnAddContact)
                 },
-                warningMessage = uiState.addWithBlankFields
+                onShowWarningMessage = {
+                    onEvent(ContactEvent.OnAddWithBlankFields)
+                },
+                warningMessage = uiState.addWithBlankFields,
             )
         }
     }
@@ -133,6 +129,7 @@ fun AddContactDialog(
     phoneNumber: String,
     onPhoneNumberChange: (String) -> Unit,
     onAddContact: () -> Unit,
+    onShowWarningMessage: (Boolean) -> Unit,
     warningMessage: Boolean
 ) {
     if (showContactDialog) {
@@ -193,7 +190,11 @@ fun AddContactDialog(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    onAddContact()
+                    if (firstName.isNotBlank() && lastName.isNotBlank() && phoneNumber.isNotBlank()) {
+                        onAddContact()
+                    } else {
+                        onShowWarningMessage(true)
+                    }
                 }) {
                     Text("Add")
                 }
