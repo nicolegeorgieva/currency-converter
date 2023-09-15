@@ -68,7 +68,7 @@ private fun ContactUi(
 
                 FilledIconButton(
                     onClick = {
-                        /* doSomething() */
+                        onEvent(ContactEvent.OnDeleteContact(contact))
                     }) {
                     Icon(
                         imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
@@ -78,7 +78,7 @@ private fun ContactUi(
         }
 
         FloatingActionButton(onClick = {
-            onEvent(ContactEvent.OnDismissContactDialog(false))
+            onEvent(ContactEvent.OnShowContactDialog(true))
         }) {
             Icon(
                 imageVector = Icons.Default.Create, contentDescription = "Add contact"
@@ -88,8 +88,8 @@ private fun ContactUi(
         if (uiState.showContactDialog) {
             AddContactDialog(
                 showContactDialog = uiState.showContactDialog,
-                onDismissContactDialog = {
-                    onEvent(ContactEvent.OnDismissContactDialog(it))
+                onShowContactDialog = {
+                    onEvent(ContactEvent.OnShowContactDialog(it))
                 },
                 firstName = uiState.firstName,
                 onFirstNameChange = {
@@ -102,6 +102,9 @@ private fun ContactUi(
                 phoneNumber = uiState.phoneNumber,
                 onPhoneNumberChange = {
                     onEvent(ContactEvent.OnPhoneNumberChange(it))
+                },
+                onAddContact = {
+                    onEvent(ContactEvent.OnAddContact)
                 }
             )
         }
@@ -112,18 +115,19 @@ private fun ContactUi(
 @Composable
 fun AddContactDialog(
     showContactDialog: Boolean,
-    onDismissContactDialog: (Boolean) -> Unit,
+    onShowContactDialog: (Boolean) -> Unit,
     firstName: String,
     onFirstNameChange: (String) -> Unit,
     lastName: String,
     onLastNameChange: (String) -> Unit,
     phoneNumber: String,
-    onPhoneNumberChange: (String) -> Unit
+    onPhoneNumberChange: (String) -> Unit,
+    onAddContact: () -> Unit
 ) {
     if (showContactDialog) {
         AlertDialog(
             onDismissRequest = {
-                onDismissContactDialog(true)
+                onShowContactDialog(false)
             },
             icon = {
                 Icon(
@@ -149,27 +153,35 @@ fun AddContactDialog(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(text = "Last name")
-                        TextField(value = lastName, onValueChange = { onLastNameChange(it) })
+                        TextField(
+                            value = lastName,
+                            onValueChange = {
+                                onLastNameChange(it)
+                            })
                     }
 
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(text = "Phone number")
-                        TextField(value = phoneNumber, onValueChange = { onPhoneNumberChange(it) })
+                        TextField(
+                            value = phoneNumber,
+                            onValueChange = {
+                                onPhoneNumberChange(it)
+                            })
                     }
                 }
             },
             confirmButton = {
                 TextButton(onClick = {
-                    onDismissContactDialog(true)
+                    onAddContact()
                 }) {
                     Text("Add")
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
-                    onDismissContactDialog(true)
+                    onShowContactDialog(false)
                 }) {
                     Text("Dismiss")
                 }

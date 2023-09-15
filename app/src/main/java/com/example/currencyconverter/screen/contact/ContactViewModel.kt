@@ -20,7 +20,7 @@ class ContactViewModel @Inject constructor(
     private val dao: ContactDao
 ) : ComposeViewModel<ContactState, ContactEvent>() {
 
-    private val showContactDialog = mutableStateOf(true)
+    private val showContactDialog = mutableStateOf(false)
     private val firstName = mutableStateOf("")
     private val lastName = mutableStateOf("")
     private val phoneNumber = mutableStateOf("")
@@ -75,7 +75,7 @@ class ContactViewModel @Inject constructor(
             is ContactEvent.OnFirstNameChange -> onFirstNameChange(event.firstName)
             is ContactEvent.OnLastNameChange -> onLastNameChange(event.lastName)
             is ContactEvent.OnPhoneNumberChange -> onPhoneNumberChange(event.phoneNumber)
-            is ContactEvent.OnDismissContactDialog -> onDismissContactDialog(event.toDismiss)
+            is ContactEvent.OnShowContactDialog -> onShowContactDialog(event.show)
             ContactEvent.OnAddContact -> viewModelScope.launch {
                 onAddContact()
             }
@@ -86,8 +86,8 @@ class ContactViewModel @Inject constructor(
         }
     }
 
-    private fun onDismissContactDialog(toDismiss: Boolean) {
-        showContactDialog.value = toDismiss
+    private fun onShowContactDialog(show: Boolean) {
+        showContactDialog.value = show
     }
 
     private fun onFirstNameChange(firstNameSet: String) {
