@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.ComposeViewModel
-import com.example.currencyconverter.database.MyDatabase
 import com.example.currencyconverter.database.contact.ContactDao
 import com.example.currencyconverter.database.contact.ContactEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContactViewModel @Inject constructor(
-    private val database: MyDatabase,
-    private val dao: ContactDao
+    private val contactDao: ContactDao
 ) : ComposeViewModel<ContactState, ContactEvent>() {
 
     private val showContactDialog = mutableStateOf(false)
@@ -42,21 +40,14 @@ class ContactViewModel @Inject constructor(
 
     @Composable
     private fun getContacts(): List<ContactEntity> {
-        val res = when (getContactsSortedBy()) {
-            SortedBy.FIRST_NAME -> remember {
-                database.contactDao.getContactsOrderedByFirstName()
-            }.collectAsState(initial = emptyList()).value
-
-            SortedBy.LAST_NAME -> remember {
-                database.contactDao.getContactsOrderedByLastName()
-            }.collectAsState(initial = emptyList()).value
-
-            SortedBy.PHONE_NUMBER -> remember {
-                database.contactDao.getContactsOrderedByPhoneNumber()
-            }.collectAsState(initial = emptyList()).value
-        }
-
-        return res
+        val sortedBy = getContactsSortedBy()
+        return remember(sortedBy) {
+            when (sortedBy) {
+                SortedBy.FIRST_NAME -> contactDao.getContactsOrderedByFirstName()
+                SortedBy.LAST_NAME -> contactDao.getContactsOrderedByLastName()
+                SortedBy.PHONE_NUMBER -> contactDao.getContactsOrderedByPhoneNumber()
+            }
+        }.collectAsState(initial = emptyList()).value
     }
 
     @Composable
@@ -104,9 +95,9 @@ class ContactViewModel @Inject constructor(
             }
 
             ContactEvent.OnAddWithBlankFields -> onAddWithBlankFields()
-            ContactEvent.OnFirstNameSort -> viewModelScope.launch { onFirstNameSort() }
-            ContactEvent.OnLastNameSort -> viewModelScope.launch { onLastNameSort() }
-            ContactEvent.OnPhoneNumberSort -> viewModelScope.launch { onPhoneNumberSort() }
+            ContactEvent.OnFirstNameSort -> onFirstNameSort()
+            ContactEvent.OnLastNameSort -> onLastNameSort()
+            ContactEvent.OnPhoneNumberSort -> onPhoneNumberSort()
         }
     }
 
@@ -139,7 +130,7 @@ class ContactViewModel @Inject constructor(
     }
 
     private suspend fun onAddContact() {
-        dao.upsertContact(
+        contactDao.upsertContact(
             ContactEntity(
                 id = UUID.randomUUID().toString(),
                 firstName = firstName.value,
@@ -155,7 +146,7 @@ class ContactViewModel @Inject constructor(
     }
 
     private suspend fun onDeleteContact(contact: ContactEntity) {
-        dao.deleteContact(
+        contactDao.deleteContact(
             contact
         )
     }
