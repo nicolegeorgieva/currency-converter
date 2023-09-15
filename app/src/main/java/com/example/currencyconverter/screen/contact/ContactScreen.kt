@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -20,6 +21,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -104,8 +106,16 @@ private fun ContactUi(
                     onEvent(ContactEvent.OnPhoneNumberChange(it))
                 },
                 onAddContact = {
-                    onEvent(ContactEvent.OnAddContact)
-                }
+                    if (uiState.firstName.isNotBlank() &&
+                        uiState.lastName.isNotBlank() &&
+                        uiState.phoneNumber.isNotBlank()
+                    ) {
+                        onEvent(ContactEvent.OnAddContact)
+                    } else {
+                        onEvent(ContactEvent.OnAddWithBlankFields)
+                    }
+                },
+                warningMessage = uiState.addWithBlankFields
             )
         }
     }
@@ -122,7 +132,8 @@ fun AddContactDialog(
     onLastNameChange: (String) -> Unit,
     phoneNumber: String,
     onPhoneNumberChange: (String) -> Unit,
-    onAddContact: () -> Unit
+    onAddContact: () -> Unit,
+    warningMessage: Boolean
 ) {
     if (showContactDialog) {
         AlertDialog(
@@ -169,6 +180,14 @@ fun AddContactDialog(
                             onValueChange = {
                                 onPhoneNumberChange(it)
                             })
+                    }
+
+                    if (warningMessage) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "All fields should be filled!",
+                            color = Color.Red
+                        )
                     }
                 }
             },

@@ -25,6 +25,7 @@ class ContactViewModel @Inject constructor(
     private val lastName = mutableStateOf("")
     private val phoneNumber = mutableStateOf("")
     private val sortedBy = mutableStateOf(ContactsSortedBy.FIRST_NAME)
+    private val addWithBlankFields = mutableStateOf(false)
 
     @Composable
     override fun uiState(): ContactState {
@@ -34,7 +35,8 @@ class ContactViewModel @Inject constructor(
             sortedBy = getContactsSortedBy(),
             firstName = getFirstName(),
             lastName = getLastName(),
-            phoneNumber = getPhoneNumber()
+            phoneNumber = getPhoneNumber(),
+            addWithBlankFields = getBlankFieldsState()
         )
     }
 
@@ -70,6 +72,11 @@ class ContactViewModel @Inject constructor(
         return sortedBy.value
     }
 
+    @Composable
+    private fun getBlankFieldsState(): Boolean {
+        return addWithBlankFields.value
+    }
+
     override fun onEvent(event: ContactEvent) {
         when (event) {
             is ContactEvent.OnFirstNameChange -> onFirstNameChange(event.firstName)
@@ -83,6 +90,8 @@ class ContactViewModel @Inject constructor(
             is ContactEvent.OnDeleteContact -> viewModelScope.launch {
                 onDeleteContact(event.contact)
             }
+
+            ContactEvent.OnAddWithBlankFields -> onAddWithBlankFields()
         }
     }
 
@@ -122,5 +131,9 @@ class ContactViewModel @Inject constructor(
         dao.deleteContact(
             contact
         )
+    }
+
+    private fun onAddWithBlankFields() {
+        addWithBlankFields.value = true
     }
 }

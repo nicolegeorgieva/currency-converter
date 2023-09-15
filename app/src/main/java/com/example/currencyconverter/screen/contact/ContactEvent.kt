@@ -9,4 +9,5 @@ sealed interface ContactEvent {
     data class OnPhoneNumberChange(val phoneNumber: String) : ContactEvent
     object OnAddContact : ContactEvent
     data class OnDeleteContact(val contact: ContactEntity) : ContactEvent
+    object OnAddWithBlankFields : ContactEvent
 }
