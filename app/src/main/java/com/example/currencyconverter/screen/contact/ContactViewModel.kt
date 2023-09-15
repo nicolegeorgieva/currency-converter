@@ -86,14 +86,8 @@ class ContactViewModel @Inject constructor(
             is ContactEvent.OnLastNameChange -> onLastNameChange(event.lastName)
             is ContactEvent.OnPhoneNumberChange -> onPhoneNumberChange(event.phoneNumber)
             is ContactEvent.OnShowContactDialog -> onShowContactDialog(event.show)
-            ContactEvent.OnAddContact -> viewModelScope.launch {
-                onAddContact()
-            }
-
-            is ContactEvent.OnDeleteContact -> viewModelScope.launch {
-                onDeleteContact(event.contact)
-            }
-
+            ContactEvent.OnAddContact -> onAddContact()
+            is ContactEvent.OnDeleteContact -> onDeleteContact(event.contact)
             ContactEvent.OnAddWithBlankFields -> onAddWithBlankFields()
             ContactEvent.OnFirstNameSort -> onFirstNameSort()
             ContactEvent.OnLastNameSort -> onLastNameSort()
@@ -129,15 +123,17 @@ class ContactViewModel @Inject constructor(
         phoneNumber.value = phoneNumberSet
     }
 
-    private suspend fun onAddContact() {
-        contactDao.upsertContact(
-            ContactEntity(
-                id = UUID.randomUUID().toString(),
-                firstName = firstName.value,
-                lastName = lastName.value,
-                phoneNumber = phoneNumber.value
+    private fun onAddContact() {
+        viewModelScope.launch {
+            contactDao.upsertContact(
+                ContactEntity(
+                    id = UUID.randomUUID().toString(),
+                    firstName = firstName.value,
+                    lastName = lastName.value,
+                    phoneNumber = phoneNumber.value
+                )
             )
-        )
+        }
 
         firstName.value = ""
         lastName.value = ""
@@ -145,10 +141,12 @@ class ContactViewModel @Inject constructor(
         showContactDialog.value = false
     }
 
-    private suspend fun onDeleteContact(contact: ContactEntity) {
-        contactDao.deleteContact(
-            contact
-        )
+    private fun onDeleteContact(contact: ContactEntity) {
+        viewModelScope.launch {
+            contactDao.deleteContact(
+                contact
+            )
+        }
     }
 
     private fun onAddWithBlankFields() {
