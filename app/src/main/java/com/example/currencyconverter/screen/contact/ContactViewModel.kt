@@ -76,7 +76,13 @@ class ContactViewModel @Inject constructor(
             is ContactEvent.OnLastNameChange -> onLastNameChange(event.lastName)
             is ContactEvent.OnPhoneNumberChange -> onPhoneNumberChange(event.phoneNumber)
             is ContactEvent.OnDismissContactDialog -> onDismissContactDialog(event.toDismiss)
-            ContactEvent.OnAddContact -> viewModelScope.launch { onAddContact() }
+            ContactEvent.OnAddContact -> viewModelScope.launch {
+                onAddContact()
+            }
+
+            is ContactEvent.OnDeleteContact -> viewModelScope.launch {
+                onDeleteContact(event.contact)
+            }
         }
     }
 
@@ -109,5 +115,11 @@ class ContactViewModel @Inject constructor(
         firstName.value = ""
         lastName.value = ""
         phoneNumber.value = ""
+    }
+
+    private suspend fun onDeleteContact(contact: ContactEntity) {
+        dao.deleteContact(
+            contact
+        )
     }
 }
