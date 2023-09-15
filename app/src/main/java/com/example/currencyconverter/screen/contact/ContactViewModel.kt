@@ -10,6 +10,7 @@ import com.example.currencyconverter.database.MyDatabase
 import com.example.currencyconverter.database.contact.ContactDao
 import com.example.currencyconverter.database.contact.ContactEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class ContactViewModel @Inject constructor(
     private val firstName = mutableStateOf("")
     private val lastName = mutableStateOf("")
     private val phoneNumber = mutableStateOf("")
-    private val sortedBy = mutableStateOf(ContactsSortedBy.FIRST_NAME)
+    private val sortedBy = mutableStateOf(SortedBy.FIRST_NAME)
     private val addWithBlankFields = mutableStateOf(false)
 
     @Composable
@@ -68,7 +69,7 @@ class ContactViewModel @Inject constructor(
     }
 
     @Composable
-    private fun getContactsSortedBy(): ContactsSortedBy {
+    private fun getContactsSortedBy(): SortedBy {
         return sortedBy.value
     }
 
@@ -92,7 +93,22 @@ class ContactViewModel @Inject constructor(
             }
 
             ContactEvent.OnAddWithBlankFields -> onAddWithBlankFields()
+            ContactEvent.OnFirstNameSort -> viewModelScope.launch { onFirstNameSort() }
+            ContactEvent.OnLastNameSort -> viewModelScope.launch { onLastNameSort() }
+            ContactEvent.OnPhoneNumberSort -> viewModelScope.launch { onPhoneNumberSort() }
         }
+    }
+
+    private suspend fun onFirstNameSort(): List<ContactEntity> {
+        return dao.getContactsOrderedByFirstName().firstOrNull() ?: emptyList()
+    }
+
+    private suspend fun onLastNameSort(): List<ContactEntity> {
+        return dao.getContactsOrderedByLastName().firstOrNull() ?: emptyList()
+    }
+
+    private suspend fun onPhoneNumberSort(): List<ContactEntity> {
+        return dao.getContactsOrderedByPhoneNumber().firstOrNull() ?: emptyList()
     }
 
     private fun onShowContactDialog(show: Boolean) {

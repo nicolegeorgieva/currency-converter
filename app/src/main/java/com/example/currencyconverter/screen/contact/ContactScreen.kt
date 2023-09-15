@@ -5,13 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
@@ -51,11 +53,19 @@ private fun ContactUi(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(text = "first name")
-            Text(text = "last name")
-            Text(text = "phone number")
+            SortOption(text = "first name") {
+                onEvent(ContactEvent.OnFirstNameSort)
+            }
+
+            SortOption(text = "last name") {
+                onEvent(ContactEvent.OnLastNameSort)
+            }
+
+            SortOption(text = "phone number") {
+                onEvent(ContactEvent.OnPhoneNumberSort)
+            }
         }
 
         for (contact in uiState.contacts) {
@@ -79,12 +89,19 @@ private fun ContactUi(
             }
         }
 
-        FloatingActionButton(onClick = {
-            onEvent(ContactEvent.OnShowContactDialog(true))
-        }) {
-            Icon(
-                imageVector = Icons.Default.Create, contentDescription = "Add contact"
-            )
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            FloatingActionButton(onClick = {
+                onEvent(ContactEvent.OnShowContactDialog(true))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add, contentDescription = "Add contact"
+                )
+            }
         }
 
         AddContactDialog(
@@ -112,6 +129,15 @@ private fun ContactUi(
             },
             warningMessage = uiState.addWithBlankFields,
         )
+    }
+}
+
+@Composable
+fun SortOption(text: String, action: () -> Unit) {
+    Button(onClick = {
+        action()
+    }) {
+        Text(text = text)
     }
 }
 

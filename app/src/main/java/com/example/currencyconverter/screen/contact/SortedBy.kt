@@ -1,6 +1,6 @@
 package com.example.currencyconverter.screen.contact
 
-enum class ContactsSortedBy {
+enum class SortedBy {
     FIRST_NAME,
     LAST_NAME,
     PHONE_NUMBER
