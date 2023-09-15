@@ -64,34 +64,22 @@ private fun ContactUi(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             SortOption(
-                text = "first name", selected =
-                when (uiState.sortedBy) {
-                    SortedBy.FIRST_NAME -> true
-                    SortedBy.LAST_NAME -> false
-                    SortedBy.PHONE_NUMBER -> false
-                }
+                text = "first name",
+                selected = uiState.sortedBy == SortedBy.FIRST_NAME
             ) {
                 onEvent(ContactEvent.OnFirstNameSort)
             }
 
             SortOption(
-                text = "last name", selected =
-                when (uiState.sortedBy) {
-                    SortedBy.FIRST_NAME -> false
-                    SortedBy.LAST_NAME -> true
-                    SortedBy.PHONE_NUMBER -> false
-                }
+                text = "last name",
+                selected = uiState.sortedBy == SortedBy.LAST_NAME
             ) {
                 onEvent(ContactEvent.OnLastNameSort)
             }
 
             SortOption(
-                text = "phone number", selected =
-                when (uiState.sortedBy) {
-                    SortedBy.FIRST_NAME -> false
-                    SortedBy.LAST_NAME -> false
-                    SortedBy.PHONE_NUMBER -> true
-                }
+                text = "phone number",
+                selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
             ) {
                 onEvent(ContactEvent.OnPhoneNumberSort)
             }
