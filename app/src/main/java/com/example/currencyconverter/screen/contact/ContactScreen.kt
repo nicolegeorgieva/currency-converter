@@ -28,6 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.currencyconverter.Screen
+import com.example.currencyconverter.component.BackButton
+import com.example.currencyconverter.screenState
 
 @Composable
 fun ContactScreen() {
@@ -53,6 +56,10 @@ private fun ContactUi(
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        BackButton {
+            screenState.value = Screen.MenuScreen
+        }
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
