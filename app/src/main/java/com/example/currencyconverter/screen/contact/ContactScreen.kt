@@ -42,9 +42,7 @@ fun ContactScreen() {
 
     ContactUi(
         uiState = uiState,
-        onEvent = {
-            viewModel.onEvent(it)
-        }
+        onEvent = viewModel::onEvent
     )
 }
 
