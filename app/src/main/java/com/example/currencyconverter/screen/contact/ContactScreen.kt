@@ -2,6 +2,7 @@ package com.example.currencyconverter.screen.contact
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -81,17 +82,9 @@ private fun ContactUi(
             }
         }
 
-        FloatingActionButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(12.dp),
-            onClick = {
-                onEvent(ContactEvent.OnShowContactDialog(true))
-            }) {
-            Icon(
-                imageVector = Icons.Default.Add, contentDescription = "Add contact"
-            )
-        }
+        AddContactFloatingActionButton(onShowContactDialog = {
+            onEvent(ContactEvent.OnShowContactDialog(it))
+        })
 
         AddContactDialog(
             showContactDialog = uiState.showContactDialog,
@@ -135,16 +128,21 @@ fun Contacts(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            FilledIconButton(
-                onClick = {
-                    onDeleteContact(contact)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
-                )
-            }
+            DeleteButton(onClick = {
+                onDeleteContact(contact)
+            })
         }
+    }
+}
+
+@Composable
+fun DeleteButton(
+    onClick: () -> Unit
+) {
+    FilledIconButton(onClick = onClick) {
+        Icon(
+            imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
+        )
     }
 }
 
@@ -176,6 +174,23 @@ fun SortOptions(
         ) {
             onSortBy(SortedBy.PHONE_NUMBER)
         }
+    }
+}
+
+@Composable
+fun BoxScope.AddContactFloatingActionButton(
+    onShowContactDialog: (Boolean) -> Unit
+) {
+    FloatingActionButton(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(12.dp),
+        onClick = {
+            onShowContactDialog(true)
+        }) {
+        Icon(
+            imageVector = Icons.Default.Add, contentDescription = "Add contact"
+        )
     }
 }
 
