@@ -194,7 +194,6 @@ fun SortOption(text: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddContactDialog(
     showContactDialog: Boolean,
@@ -223,51 +222,18 @@ fun AddContactDialog(
                 Text(text = "Add contact")
             },
             text = {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(text = "First name")
-                        TextField(value = firstName, onValueChange = { onFirstNameChange(it) })
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(text = "Last name")
-                        TextField(
-                            value = lastName,
-                            onValueChange = {
-                                onLastNameChange(it)
-                            })
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(text = "Phone number")
-                        TextField(
-                            value = phoneNumber,
-                            onValueChange = {
-                                onPhoneNumberChange(it)
-                            })
-                    }
-
-                    if (warningMessage) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = "All fields should be filled!",
-                            color = Color.Red
-                        )
-                    }
-                }
+                DialogContent(
+                    firstName = firstName,
+                    onFirstNameChange = onFirstNameChange,
+                    lastName = lastName,
+                    onLastNameChange = onLastNameChange,
+                    phoneNumber = phoneNumber,
+                    onPhoneNumberChange = onPhoneNumberChange,
+                    warningMessage = warningMessage
+                )
             },
             confirmButton = {
-                TextButton(onClick = {
-                    onAddContact()
-                }) {
+                TextButton(onClick = onAddContact) {
                     Text("Add")
                 }
             },
@@ -278,6 +244,60 @@ fun AddContactDialog(
                     Text("Dismiss")
                 }
             })
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DialogContent(
+    firstName: String,
+    onFirstNameChange: (String) -> Unit,
+    lastName: String,
+    onLastNameChange: (String) -> Unit,
+    phoneNumber: String,
+    onPhoneNumberChange: (String) -> Unit,
+    warningMessage: Boolean
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text = "First name")
+            TextField(
+                value = firstName,
+                onValueChange = onFirstNameChange
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text = "Last name")
+            TextField(
+                value = lastName,
+                onValueChange = onLastNameChange
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text = "Phone number")
+            TextField(
+                value = phoneNumber,
+                onValueChange = onPhoneNumberChange
+            )
+        }
+
+        if (warningMessage) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "All fields should be filled!",
+                color = Color.Red
+            )
+        }
     }
 }
 
