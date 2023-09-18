@@ -4,36 +4,36 @@ import javax.inject.Inject
 
 class CurrencyConverter @Inject constructor(
 ) {
-    fun exchangeUsdToBgn(
+    fun exchangeCurrencies(
         exchangeRatesResponse: ExchangeRatesDataSource.ExchangeRatesResponse?,
-        amount: Double?
+        from: CurrencyOptions,
+        to: CurrencyOptions,
+        amount: Double
     ): Double? {
-        if (amount == null) return null
-        val eurToUsd = exchangeRatesResponse?.eur?.usd ?: return null
+        if (exchangeRatesResponse == null) return null
 
-        val eurToBgn = exchangeRatesResponse.eur.bgn
-        val usdHourlyRateToEur = amount / eurToUsd
+        var fromTo = 0.0
 
-        return usdHourlyRateToEur * eurToBgn
-    }
+        when (from) {
+            CurrencyOptions.EUR -> fromTo = when (to) {
+                CurrencyOptions.EUR -> amount
+                CurrencyOptions.BGN -> exchangeRatesResponse.eur.bgn
+                CurrencyOptions.USD -> exchangeRatesResponse.eur.usd
+            }
 
-    fun exchangeEurToBgn(
-        exchangeRatesResponse: ExchangeRatesDataSource.ExchangeRatesResponse?,
-        amount: Double?
-    ): Double? {
-        if (amount == null || exchangeRatesResponse == null) return null
-        val eurToBgn = exchangeRatesResponse.eur.bgn
+            CurrencyOptions.BGN -> fromTo = when (to) {
+                CurrencyOptions.EUR -> 1 / exchangeRatesResponse.eur.bgn
+                CurrencyOptions.BGN -> amount
+                CurrencyOptions.USD -> (1 / exchangeRatesResponse.eur.bgn) * exchangeRatesResponse.eur.usd
+            }
 
-        return amount * eurToBgn
-    }
+            CurrencyOptions.USD -> fromTo = when (to) {
+                CurrencyOptions.EUR -> 1 / exchangeRatesResponse.eur.usd
+                CurrencyOptions.BGN -> (1 / exchangeRatesResponse.eur.usd) * exchangeRatesResponse.eur.bgn
+                CurrencyOptions.USD -> amount
+            }
+        }
 
-    fun exchangeBgnToEur(
-        exchangeRatesResponse: ExchangeRatesDataSource.ExchangeRatesResponse?,
-        amount: Double?
-    ): Double? {
-        if (amount == null || exchangeRatesResponse == null) return null
-        val eurToBgn = exchangeRatesResponse.eur.bgn
-
-        return amount / eurToBgn
+        return fromTo * amount
     }
 }

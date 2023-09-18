@@ -67,9 +67,11 @@ class HomeViewModel @Inject constructor(
 
     @Composable
     private fun getMonthlyBgnGrossSalary(): Double? {
-        val usdToBgn = currencyConverter.exchangeUsdToBgn(
-            exchangeRatesResponse.value,
-            hourlyRateInUsd.value.toDoubleOrZero()
+        val usdToBgn = currencyConverter.exchangeCurrencies(
+            exchangeRatesResponse = exchangeRatesResponse.value,
+            from = CurrencyOptions.USD,
+            to = CurrencyOptions.BGN,
+            amount = hourlyRateInUsd.value.toDoubleOrZero()
         ) ?: 0.0
 
         val monthlyGrossSalaryInBgn = monthlyGrossSalaryCalculator.calculateMonthlyGrossSalary(

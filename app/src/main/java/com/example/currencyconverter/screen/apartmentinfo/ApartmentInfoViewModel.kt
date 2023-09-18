@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.ComposeViewModel
 import com.example.currencyconverter.screen.home.CurrencyConverter
+import com.example.currencyconverter.screen.home.CurrencyOptions
 import com.example.currencyconverter.screen.home.ExchangeRatesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -83,15 +84,19 @@ class ApartmentInfoViewModel @Inject constructor(
         val res = when (realM2PriceCurrency.value) {
             ApartmentInfoCurrency.EUR -> when (totalM2PriceCurrency.value) {
                 ApartmentInfoCurrency.EUR -> price
-                ApartmentInfoCurrency.BGN -> currencyConverter.exchangeBgnToEur(
+                ApartmentInfoCurrency.BGN -> currencyConverter.exchangeCurrencies(
                     exchangeRatesResponse = exchangeRatesResponse.value,
+                    from = CurrencyOptions.BGN,
+                    to = CurrencyOptions.EUR,
                     amount = price
                 )
             }
 
             ApartmentInfoCurrency.BGN -> when (totalM2PriceCurrency.value) {
-                ApartmentInfoCurrency.EUR -> currencyConverter.exchangeEurToBgn(
+                ApartmentInfoCurrency.EUR -> currencyConverter.exchangeCurrencies(
                     exchangeRatesResponse = exchangeRatesResponse.value,
+                    from = CurrencyOptions.EUR,
+                    to = CurrencyOptions.BGN,
                     amount = price
                 )
 
@@ -119,8 +124,10 @@ class ApartmentInfoViewModel @Inject constructor(
 
         val res = when (totalM2PriceCurrency.value) {
             ApartmentInfoCurrency.EUR -> price
-            ApartmentInfoCurrency.BGN -> currencyConverter.exchangeEurToBgn(
+            ApartmentInfoCurrency.BGN -> currencyConverter.exchangeCurrencies(
                 exchangeRatesResponse = exchangeRatesResponse.value,
+                from = CurrencyOptions.EUR,
+                to = CurrencyOptions.BGN,
                 amount = price
             )
         } ?: 0.0
