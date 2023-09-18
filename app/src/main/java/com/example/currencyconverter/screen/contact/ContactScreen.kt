@@ -74,28 +74,12 @@ private fun ContactUi(
             }
 
             item(key = "Contacts") {
-                for (contact in uiState.contacts) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(text = contact.firstName, fontWeight = FontWeight.Bold)
-                            Text(text = contact.lastName, fontWeight = FontWeight.Bold)
-                            Text(text = contact.phoneNumber)
-                        }
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        FilledIconButton(
-                            onClick = {
-                                onEvent(ContactEvent.OnDeleteContact(contact))
-                            }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
-                            )
-                        }
+                Contacts(
+                    contacts = uiState.contacts,
+                    onDeleteContact = {
+                        onEvent(ContactEvent.OnDeleteContact(it))
                     }
-                }
+                )
             }
         }
 
@@ -133,6 +117,36 @@ private fun ContactUi(
             },
             warningMessage = uiState.showWarningMessage
         )
+    }
+}
+
+@Composable
+fun Contacts(
+    contacts: List<ContactEntity>,
+    onDeleteContact: (ContactEntity) -> Unit
+) {
+    for (contact in contacts) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(text = contact.firstName, fontWeight = FontWeight.Bold)
+                Text(text = contact.lastName, fontWeight = FontWeight.Bold)
+                Text(text = contact.phoneNumber)
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            FilledIconButton(
+                onClick = {
+                    onDeleteContact(contact)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Delete, contentDescription = "Delete"
+                )
+            }
+        }
     }
 }
 
