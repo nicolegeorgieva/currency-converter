@@ -88,7 +88,7 @@ class ContactViewModel @Inject constructor(
             is ContactEvent.OnShowContactDialog -> onShowContactDialog(event.show)
             ContactEvent.OnAddContact -> onAddContact()
             is ContactEvent.OnDeleteContact -> onDeleteContact(event.contact)
-            ContactEvent.ShowWarningMessage -> onAddWithBlankFields()
+            ContactEvent.ShowWarning -> showWarning()
             is ContactEvent.SortBy -> sortBy(event.sortedBy)
         }
     }
@@ -99,18 +99,6 @@ class ContactViewModel @Inject constructor(
             SortedBy.LAST_NAME -> sortedBy.value = SortedBy.LAST_NAME
             SortedBy.PHONE_NUMBER -> sortedBy.value = SortedBy.PHONE_NUMBER
         }
-    }
-
-    private fun onFirstNameSort() {
-        sortedBy.value = SortedBy.FIRST_NAME
-    }
-
-    private fun onLastNameSort() {
-        sortedBy.value = SortedBy.LAST_NAME
-    }
-
-    private fun onPhoneNumberSort() {
-        sortedBy.value = SortedBy.PHONE_NUMBER
     }
 
     private fun onShowContactDialog(show: Boolean) {
@@ -164,7 +152,7 @@ class ContactViewModel @Inject constructor(
         }
     }
 
-    private fun onAddWithBlankFields() {
+    private fun showWarning() {
         showWarningMessage.value = true
     }
 }
