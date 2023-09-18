@@ -72,21 +72,21 @@ private fun ContactUi(
                         text = "first name",
                         selected = uiState.sortedBy == SortedBy.FIRST_NAME
                     ) {
-                        onEvent(ContactEvent.OnFirstNameSort)
+                        onEvent(ContactEvent.SortBy(SortedBy.FIRST_NAME))
                     }
 
                     SortOption(
                         text = "last name",
                         selected = uiState.sortedBy == SortedBy.LAST_NAME
                     ) {
-                        onEvent(ContactEvent.OnLastNameSort)
+                        onEvent(ContactEvent.SortBy(SortedBy.LAST_NAME))
                     }
 
                     SortOption(
                         text = "phone number",
                         selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
                     ) {
-                        onEvent(ContactEvent.OnPhoneNumberSort)
+                        onEvent(ContactEvent.SortBy(SortedBy.PHONE_NUMBER))
                     }
                 }
             }

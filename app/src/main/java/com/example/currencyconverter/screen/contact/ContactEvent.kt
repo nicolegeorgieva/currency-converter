@@ -9,8 +9,6 @@ sealed interface ContactEvent {
     data class OnPhoneNumberChange(val phoneNumber: String) : ContactEvent
     object OnAddContact : ContactEvent
     data class OnDeleteContact(val contact: ContactEntity) : ContactEvent
-    object OnAddWithBlankFields : ContactEvent
-    object OnFirstNameSort : ContactEvent
-    object OnLastNameSort : ContactEvent
-    object OnPhoneNumberSort : ContactEvent
+    object ShowWarningMessage : ContactEvent
+    data class SortBy(val sortedBy: SortedBy) : ContactEvent
 }
