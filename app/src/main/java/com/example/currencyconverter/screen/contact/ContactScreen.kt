@@ -65,30 +65,12 @@ private fun ContactUi(
             }
 
             item(key = "Sorting options") {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    SortOption(
-                        text = "first name",
-                        selected = uiState.sortedBy == SortedBy.FIRST_NAME
-                    ) {
-                        onEvent(ContactEvent.SortBy(SortedBy.FIRST_NAME))
+                SortOptions(
+                    sortBy = uiState.sortedBy,
+                    onSortBy = {
+                        onEvent(ContactEvent.SortBy(it))
                     }
-
-                    SortOption(
-                        text = "last name",
-                        selected = uiState.sortedBy == SortedBy.LAST_NAME
-                    ) {
-                        onEvent(ContactEvent.SortBy(SortedBy.LAST_NAME))
-                    }
-
-                    SortOption(
-                        text = "phone number",
-                        selected = uiState.sortedBy == SortedBy.PHONE_NUMBER
-                    ) {
-                        onEvent(ContactEvent.SortBy(SortedBy.PHONE_NUMBER))
-                    }
-                }
+                )
             }
 
             item(key = "Contacts") {
@@ -155,11 +137,40 @@ private fun ContactUi(
 }
 
 @Composable
-fun SortOption(text: String, selected: Boolean, action: () -> Unit) {
+fun SortOptions(
+    sortBy: SortedBy,
+    onSortBy: (SortedBy) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        SortOption(
+            text = "first name",
+            selected = sortBy == SortedBy.FIRST_NAME
+        ) {
+            onSortBy(SortedBy.FIRST_NAME)
+        }
+
+        SortOption(
+            text = "last name",
+            selected = sortBy == SortedBy.LAST_NAME
+        ) {
+            onSortBy(SortedBy.LAST_NAME)
+        }
+
+        SortOption(
+            text = "phone number",
+            selected = sortBy == SortedBy.PHONE_NUMBER
+        ) {
+            onSortBy(SortedBy.PHONE_NUMBER)
+        }
+    }
+}
+
+@Composable
+fun SortOption(text: String, selected: Boolean, onClick: () -> Unit) {
     Button(
-        onClick = {
-            action()
-        },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = if (selected) Color.Blue else Color.DarkGray,
             contentColor = Color.White,
