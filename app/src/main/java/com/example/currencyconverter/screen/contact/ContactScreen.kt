@@ -245,7 +245,6 @@ fun AddContactDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogContent(
     firstName: String,
@@ -259,35 +258,9 @@ fun DialogContent(
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(text = "First name")
-            TextField(
-                value = firstName,
-                onValueChange = onFirstNameChange
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(text = "Last name")
-            TextField(
-                value = lastName,
-                onValueChange = onLastNameChange
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(text = "Phone number")
-            TextField(
-                value = phoneNumber,
-                onValueChange = onPhoneNumberChange
-            )
-        }
+        InputFieldRow(value = firstName, onValueChange = onFirstNameChange)
+        InputFieldRow(value = lastName, onValueChange = onLastNameChange)
+        InputFieldRow(value = phoneNumber, onValueChange = onPhoneNumberChange)
 
         if (warningMessage) {
             Spacer(modifier = Modifier.height(12.dp))
@@ -296,6 +269,23 @@ fun DialogContent(
                 color = Color.Red
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InputFieldRow(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(text = "First name")
+        TextField(
+            value = value,
+            onValueChange = onValueChange
+        )
     }
 }
 
