@@ -211,10 +211,7 @@ fun AddContactDialog(
                 onShowContactDialog(false)
             },
             icon = {
-                Icon(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "Add contact"
-                )
+                AddContactIcon()
             },
             title = {
                 Text(text = "Add contact")
@@ -231,18 +228,36 @@ fun AddContactDialog(
                 )
             },
             confirmButton = {
-                TextButton(onClick = onAddContact) {
-                    Text("Add")
-                }
+                ConfirmButton(onClick = onAddContact)
             },
             dismissButton = {
-                TextButton(onClick = {
-                    onShowContactDialog(false)
-                }) {
-                    Text("Dismiss")
-                }
+                DismissButton(onShowContactDialog = onShowContactDialog)
             })
     }
+}
+
+@Composable
+fun ConfirmButton(onClick: () -> Unit) {
+    TextButton(onClick = onClick) {
+        Text("Add")
+    }
+}
+
+@Composable
+fun DismissButton(onShowContactDialog: (Boolean) -> Unit) {
+    TextButton(onClick = {
+        onShowContactDialog(false)
+    }) {
+        Text("Dismiss")
+    }
+}
+
+@Composable
+fun AddContactIcon() {
+    Icon(
+        imageVector = Icons.Filled.AccountCircle,
+        contentDescription = "Add contact"
+    )
 }
 
 @Composable
