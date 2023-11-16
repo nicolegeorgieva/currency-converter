@@ -36,7 +36,8 @@ fun ChartsScreen() {
                 Pair(5, 20),
                 Pair(6, 10),
                 Pair(8, 100),
-                Pair(9, 72)
+                Pair(9, 72),
+                Pair(60, 50)
             )
         )
     }
