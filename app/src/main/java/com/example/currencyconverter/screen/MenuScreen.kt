@@ -31,6 +31,7 @@ fun MenuScreen() {
         menuItem("Tasks", Screen.RequestPlaygroundScreen)
         menuItem("Demo", Screen.DemoScreen)
         menuItem("Contact", Screen.ContactScreen)
+        menuItem("Charts", Screen.ChartsScreen)
     }
 }
 

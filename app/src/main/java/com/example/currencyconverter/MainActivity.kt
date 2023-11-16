@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.example.currencyconverter.screen.MenuScreen
 import com.example.currencyconverter.screen.age.AgeScreen
 import com.example.currencyconverter.screen.apartmentinfo.ApartmentInfoScreen
+import com.example.currencyconverter.screen.charts.ChartsScreen
 import com.example.currencyconverter.screen.contact.ContactScreen
 import com.example.currencyconverter.screen.demo.DemoScreen
 import com.example.currencyconverter.screen.home.HomeScreen
@@ -30,6 +31,7 @@ sealed interface Screen {
     object AgeScreen : Screen
     object ApartmentInfoScreen : Screen
     object ContactScreen : Screen
+    object ChartsScreen : Screen
 }
 
 @AndroidEntryPoint
@@ -52,6 +54,7 @@ class MainActivity : ComponentActivity() {
                         Screen.AgeScreen -> AgeScreen()
                         Screen.ApartmentInfoScreen -> ApartmentInfoScreen()
                         Screen.ContactScreen -> ContactScreen()
+                        Screen.ChartsScreen -> ChartsScreen()
                     }
                 }
             }
